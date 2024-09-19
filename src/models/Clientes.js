@@ -1,11 +1,12 @@
 import mongoose from "mongoose";
 
 const modelclie= new mongoose.Schema({
-    clienteID: { type: Number, trim: true, unique: true, required: true },
-    nombre: { type: String, required: true, trim: true},
-    apellido: { type: String, required: true, trim: true},
-    email: { type: String, required: true, trim: true, unique: true },
-    telefono: { type: String, required: true, trim: true }
+    nombre: { type: String, required: true },
+    correo: { type: String, required: true },
+    telefono: { type: String, required: true },
+    cargo: { type: String, required: true },
+    codigoUsuario: { type: String, required: true, unique: true },
+    estado: { type: String, enum: ['Activo', 'Inactivo'], default: 'Activo' },
 },{
     timestamps: true
 })
