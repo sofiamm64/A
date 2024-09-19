@@ -227,14 +227,14 @@ export const crearservicios = async (req, res) => {
         Precio,
         Tipo,
         Duracion
-    });
+        });
 
     await nuevoServicio.save();
     res.status(201).json(nuevoServicio);
-} catch (error) {
-    console.error(error);
+  } catch (error) {
+    console.error('Error al agregar el servicio:', error);
     res.status(500).json({ error: 'Error al agregar el servicio' });
-}
+  }
 };
 
 // 
