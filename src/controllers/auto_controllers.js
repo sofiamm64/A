@@ -216,28 +216,25 @@ export const crearservicios = async (req, res) => {
   try {
     const { ServicioID, Nombre, Descripción, Precio, Tipo, Duracion } = req.body;
 
-    console.log('Datos recibidos:', { ServicioID, Nombre, Descripción, Precio, Tipo, Duracion });
-
-    if (isNaN(parseFloat(Precio)) || isNaN(parseInt(Duracion, 10))) {
-        return res.status(400).json({ error: 'Precio y duración deben ser números válidos' });
+    if (!ServicioID || !Nombre || !Descripción || !Precio || !Tipo || !Duracion) {
+        return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
 
     const nuevoServicio = new Servicio({
         ServicioID,
         Nombre,
         Descripción,
-        Precio: parseFloat(Precio),
+        Precio,
         Tipo,
-        Duracion: parseInt(Duracion),
-        Total: parseFloat(Precio) * parseInt(Duracion, 10)  // Calcular Total en el servidor
+        Duracion
     });
 
     await nuevoServicio.save();
     res.status(201).json(nuevoServicio);
-  } catch (error) {
-    console.error('Error al crear servicio:', error); 
-    res.status(500).json({ mensaje: error.message });
-  }
+} catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al agregar el servicio' });
+}
 };
 
 // 
