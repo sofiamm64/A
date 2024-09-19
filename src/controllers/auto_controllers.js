@@ -214,15 +214,15 @@ export const getsservicios = async (req, res) => {
 //
 export const crearservicios = async (req, res) => {
   try {
-    const { ServicioID, Nombre, Descripción, Precio, Tipo, Duracionn } = req.body;
+    const { ServicioID, Nombre, Descripción, Precio, Tipo, Duracion, Total } = req.body;
 
-    // Verificar que todos los campos obligatorios estén presentes
-    if (!ServicioID || !Nombre || !Descripción || !Precio || !Tipo || Duracionn === undefined || Duracionn === null) {
+    // Verifica que todos los campos obligatorios estén presentes
+    if (!ServicioID || !Nombre || !Descripción || !Precio || !Tipo || Duracion === undefined || Duracion === null) {
         return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
 
-    // Asegurarse de que Duracionn sea un número válido
-    if (isNaN(Duracionn) || Duracionn < 0) {
+    // Asegúrate de que Duracion sea un número válido
+    if (isNaN(Duracion) || Duracion < 0) {
       return res.status(400).json({ error: 'La duración debe ser un número positivo' });
     }
 
@@ -230,19 +230,19 @@ export const crearservicios = async (req, res) => {
         ServicioID,
         Nombre,
         Descripción,
-        Precio: Number(Precio),
+        Precio,
         Tipo,
-        Duracionn: Number(Duracionn), // Duracionn con el mismo nombre
+        Duracion: Number(Duracion), // Asegúrate de convertir Duracion a número
+        Total
     });
 
     await nuevoServicio.save();
     res.status(201).json(nuevoServicio);
   } catch (error) {
-    console.error('Error al agregar el servicio:', error.message);
+    console.error('Error al agregar el servicio:', error.message); // Mensaje detallado
     res.status(500).json({ error: 'Error interno del servidor', details: error.message });
   }
 };
-
 // 
 export const getservicios = async (req, res) => {
   try {
