@@ -57,11 +57,11 @@ router.post('/proveedor',autenticacion, crearproveedor);
 router.delete('/proveedor/:id',autenticacion, eliminarproveedor);
 router.put('/proveedor/:id',autenticacion, modificarproveedor);
 
-router.get('/servicios',autenticacion,getsservicios);
-router.get('/servicios/:id',autenticacion, getservicios);
-router.post('/servicios',autenticacion, crearservicios);
-router.delete('/servicios/:id',autenticacion, eliminarservicios);
-router.put('/servicios/:id',autenticacion, modificarservicios);
+router.get('/servicios', autenticacion, getsservicios);
+router.get('/servicios/:id', autenticacion, getservicios);
+router.post('/servicios', autenticacion, crearservicios);
+router.delete('/servicios/:id', autenticacion, eliminarservicios);
+router.put('/servicios/:id', autenticacion, modificarservicios);
 
 router.get('/ventas',autenticacion,getsventas);
 router.get('/ventas/:id',autenticacion, getventas);

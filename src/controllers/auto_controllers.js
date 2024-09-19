@@ -208,33 +208,35 @@ export const getsservicios = async (req, res) => {
     res.json(servicios);
   } catch (error) {
     res.status(500).json({ mensaje: error.message });
-
   }
 };
 
+// Crear un nuevo servicio
 export const crearservicios = async (req, res) => {
   try {
-    const { ServicioID, nombre, descripcion, precio, tipo, duracion } = req.body;
+    const { ServicioID, Nombre, Descripción, Precio, Tipo, Duracion } = req.body;
 
-    if (isNaN(parseFloat(precio)) || isNaN(parseInt(duracion, 10))) {
+    if (isNaN(parseFloat(Precio)) || isNaN(parseInt(Duracion, 10))) {
         return res.status(400).json({ error: 'Precio y duración deben ser números válidos' });
     }
 
     const nuevoServicio = new Servicio({
         ServicioID,
-        nombre,
-        descripcion,
-        precio: parseFloat(precio),
-        tipo,
-        duracion: parseInt(duracion)
+        Nombre,
+        Descripción,
+        Precio: parseFloat(Precio),
+        Tipo,
+        Duracion: parseInt(Duracion)
     });
 
     await nuevoServicio.save();
     res.status(201).json(nuevoServicio);
-} catch (error) {
+  } catch (error) {
     res.status(500).json({ mensaje: error.message });
-}
-  };
+  }
+};
+
+// Obtener un servicio por ID
 export const getservicios = async (req, res) => {
   try {
     const servicio = await Servicio.findById(req.params.id);
@@ -242,19 +244,21 @@ export const getservicios = async (req, res) => {
     res.json(servicio);
   } catch (error) {
     res.status(500).json({ mensaje: error.message });
-  }}
+  }
+};
 
+// Eliminar un servicio por ID
 export const eliminarservicios = async (req, res) => {
   try {
     const servicio = await Servicio.findByIdAndDelete(req.params.id);
     if (!servicio) return res.status(404).json({ mensaje: 'Servicio no encontrado' });
-    res.sendStatus(204); 
+    res.sendStatus(204);
   } catch (error) {
     res.status(500).json({ mensaje: error.message });
-
   }
 };
 
+// Modificar un servicio por ID
 export const modificarservicios = async (req, res) => {
   try {
     const servicio = await Servicio.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -262,7 +266,6 @@ export const modificarservicios = async (req, res) => {
     res.json(servicio);
   } catch (error) {
     res.status(500).json({ mensaje: error.message });
-
   }
 };
 
