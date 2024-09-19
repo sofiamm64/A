@@ -1,6 +1,6 @@
 import express from 'express';
 import morgan from 'morgan';
-import cors from 'cors';  // Cambiar 'require' a 'import'
+import cors from 'cors'; 
 import autorouter from './routers/auto_routers.js';
 
 const app = express();
