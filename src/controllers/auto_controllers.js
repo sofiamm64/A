@@ -233,8 +233,8 @@ export const crearservicios = async (req, res) => {
     await nuevoServicio.save();
     res.status(201).json(nuevoServicio);
 } catch (error) {
-    console.error('Error al agregar el servicio:', error); 
-    res.status(500).json({ error: 'Error interno del servidor' });
+  console.error('Error al agregar el servicio:', error.message); // Mensaje detallado
+  res.status(500).json({ error: 'Error interno del servidor', details: error.message });
 }
 };
 
