@@ -14,6 +14,10 @@ app.use(cors({
   credentials: true,
 }));
 
+app.get('/', (req, res) => {
+  res.send('Bienvenido a la API'); 
+});
+
 app.use(autorouter);
 
 export default app;
