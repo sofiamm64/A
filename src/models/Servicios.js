@@ -7,6 +7,7 @@ const modelserv = new mongoose.Schema({
     Precio: { type: Number, required: true },
     Tipo: { type: String, required: true },
     Duracionn: { type: Number, required: true }, 
+    Estado: { type: String, enum: ['activo', 'inactivo'], default: 'activo' }
 }, {
     timestamps: true
 });
