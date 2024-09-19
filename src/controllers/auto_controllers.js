@@ -213,28 +213,27 @@ export const getsservicios = async (req, res) => {
 };
 
 export const crearservicios = async (req, res) => {
-    try {
-      const { ServicioID, nombre, descripcion, precio, tipo, duracion } = req.body;
-  
-      if (isNaN(parseFloat(precio)) || isNaN(parseInt(duracion, 10))) {
+  try {
+    const { ServicioID, nombre, descripcion, precio, tipo, duracion } = req.body;
+
+    if (isNaN(parseFloat(precio)) || isNaN(parseInt(duracion, 10))) {
         return res.status(400).json({ error: 'Precio y duración deben ser números válidos' });
-      }
-  
-      const nuevoServicio = new Servicio({
+    }
+
+    const nuevoServicio = new Servicio({
         ServicioID,
         nombre,
         descripcion,
         precio: parseFloat(precio),
         tipo,
         duracion: parseInt(duracion)
-      });
-  
-      await nuevoServicio.save();
-      res.status(201).json(nuevoServicio);
-    } catch (error) {
-      res.status(500).json({ mensaje: error.message });
+    });
 
-    }
+    await nuevoServicio.save();
+    res.status(201).json(nuevoServicio);
+} catch (error) {
+    res.status(500).json({ mensaje: error.message });
+}
   };
 export const getservicios = async (req, res) => {
   try {
