@@ -207,7 +207,8 @@ export const getsservicios = async (req, res) => {
     const servicios = await Servicio.find();
     res.json(servicios);
   } catch (error) {
-    res.status(500).json({mesaje: error.mesaje})
+    res.status(500).json({ mensaje: error.message });
+
   }
 };
 
@@ -231,7 +232,8 @@ export const crearservicios = async (req, res) => {
       await nuevoServicio.save();
       res.status(201).json(nuevoServicio);
     } catch (error) {
-      res.status(500).json({mesaje: error.mesaje})
+      res.status(500).json({ mensaje: error.message });
+
     }
   };
 export const getservicios = async (req, res) => {
@@ -240,7 +242,7 @@ export const getservicios = async (req, res) => {
     if (!servicio) return res.status(404).json({ mensaje: 'Servicio no encontrado' });
     res.json(servicio);
   } catch (error) {
-    res.status(500).json({mesaje: error.mesaje})
+    res.status(500).json({ mensaje: error.message });
   }}
 
 export const eliminarservicios = async (req, res) => {
@@ -249,7 +251,8 @@ export const eliminarservicios = async (req, res) => {
     if (!servicio) return res.status(404).json({ mensaje: 'Servicio no encontrado' });
     res.sendStatus(204); 
   } catch (error) {
-    res.status(500).json({mesaje: error.mesaje})
+    res.status(500).json({ mensaje: error.message });
+
   }
 };
 
@@ -259,7 +262,8 @@ export const modificarservicios = async (req, res) => {
     if (!servicio) return res.status(404).json({ mensaje: 'Servicio no encontrado' });
     res.json(servicio);
   } catch (error) {
-    res.status(500).json({mesaje: error.mesaje})
+    res.status(500).json({ mensaje: error.message });
+
   }
 };
 
