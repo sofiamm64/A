@@ -217,7 +217,7 @@ export const crearservicios = async (req, res) => {
     const { ServicioID, Nombre, Descripción, Precio, Tipo, Duracionn } = req.body;
 
     // Verifica que todos los campos obligatorios estén presentes
-    if (!ServicioID || !Nombre || !Descripción || !Precio || !Tipo || Duracion === undefined || Duracionn === null) {
+    if (!ServicioID || !Nombre || !Descripción || !Precio || !Tipo || Duracionn === undefined || Duracionn === null) {
         return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
 
