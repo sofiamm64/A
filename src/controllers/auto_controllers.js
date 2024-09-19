@@ -91,7 +91,6 @@ export const profile = async (req, res) => {
 
 //tareas 
 
-// Obtener todos los clientes
 export const getsclientes = async (req, res) => {
   try {
     const clientes = await Clientes.find();
@@ -102,79 +101,62 @@ export const getsclientes = async (req, res) => {
   }
 };
 
-// Crear un nuevo cliente
 export const crearclientes = async (req, res) => {
   try {
     const { clienteID, nombre, apellido, telefono, email } = req.body;
 
-    // Verificar que todos los campos requeridos están presentes
-    if (!nombre || !email || !telefono) {
-      return res.status(400).json({ mensaje: 'Todos los campos son obligatorios' });
+    if (!clienteID || !nombre || !apellido || !telefono || !email) {
+      return res.status(400).json({ mensaje: 'Todos los campos son obligatorios.' });
     }
 
-    // Verificar si el cliente ya existe
-    const clienteExistente = await Clientes.findOne({ email });
-    if (clienteExistente) {
-      return res.status(400).json({ mensaje: 'El cliente ya existe' });
-    }
+    const newCliente = new Clientes({
+      clienteID,
+      nombre,
+      apellido,
+      telefono,
+      email,
+    });
 
-    // Crear un nuevo cliente
-    const cliente = new Clientes({ clienteID, nombre, email, telefono });
-    await cliente.save();
-    res.status(201).json(cliente);
+    const saveCliente = await newCliente.save();
+    res.json(saveCliente);
   } catch (error) {
     console.error('Error en crearclientes:', error);
     res.status(500).json({ mensaje: error.message });
   }
 };
 
-// Actualizar un cliente existente
-export const actualizarclientes = async (req, res) => {
+export const getclientes = async (req, res) => {
   try {
-    const { clienteID } = req.params;
-    const { nombre, email, telefono } = req.body;
-
-    // Verificar que todos los campos requeridos están presentes
-    if (!nombre || !email || !telefono) {
-      return res.status(400).json({ mensaje: 'Todos los campos son obligatorios' });
-    }
-
-    // Buscar y actualizar el cliente
-    const cliente = await Clientes.findByIdAndUpdate(
-      clienteID,
-      { nombre, email, telefono },
-      { new: true }
-    );
-
-    if (!cliente) {
-      return res.status(404).json({ mensaje: 'Cliente no encontrado' });
-    }
-
+    const cliente = await Clientes.findOne({ clienteID: req.params.clienteID });
+    if (!cliente) return res.status(404).json({ mensaje: "Cliente no encontrado" });
     res.json(cliente);
   } catch (error) {
-    console.error('Error en actualizarclientes:', error);
+    console.error('Error en getclientes:', error);
     res.status(500).json({ mensaje: error.message });
   }
 };
 
-// Eliminar un cliente
 export const eliminarclientes = async (req, res) => {
   try {
-    const { clienteID } = req.params;
-
-    // Buscar y eliminar el cliente
-    const cliente = await Clientes.findByIdAndDelete(clienteID);
-
-    if (!cliente) {
-      return res.status(404).json({ mensaje: 'Cliente no encontrado' });
-    }
-
-    res.json({ mensaje: 'Cliente eliminado con éxito' });
+    const cliente = await Clientes.findOneAndDelete({ clienteID: req.params.clienteID });
+    if (!cliente) return res.status(404).json({ mensaje: "Cliente no encontrado" });
+    return res.sendStatus(204);
   } catch (error) {
     console.error('Error en eliminarclientes:', error);
     res.status(500).json({ mensaje: error.message });
   }
 };
+
+export const modificarclientes = async (req, res) => {
+  try {
+    const cliente = await Clientes.findOneAndUpdate({ clienteID: req.params.clienteID }, req.body, { new: true });
+    if (!cliente) return res.status(404).json({ mensaje: "Cliente no encontrado" });
+    res.json(cliente);
+  } catch (error) {
+    console.error('Error en modificarclientes:', error);
+    res.status(500).json({ mensaje: error.message });
+  }
+}
 
 //
 export const getsproveedor = async (req, res) => {
