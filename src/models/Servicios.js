@@ -1,5 +1,3 @@
-import mongoose from 'mongoose';
-
 const modelserv = new mongoose.Schema({
     ServicioID: { type: Number, required: true, unique: true },
     Nombre: { type: String, required: true },

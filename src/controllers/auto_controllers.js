@@ -221,7 +221,7 @@ export const crearservicios = async (req, res) => {
         return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
 
-    // Asegúrate de que Duracion sea un número válido
+    // Asegurarse de que Duracionn sea un número válido
     if (isNaN(Duracionn) || Duracionn < 0) {
       return res.status(400).json({ error: 'La duración debe ser un número positivo' });
     }
@@ -232,13 +232,13 @@ export const crearservicios = async (req, res) => {
         Descripción,
         Precio: Number(Precio),
         Tipo,
-        Duracion: Number(Duracionn), // Convertir Duracionn a número
+        Duracionn: Number(Duracionn), // Duracionn con el mismo nombre
     });
 
     await nuevoServicio.save();
     res.status(201).json(nuevoServicio);
   } catch (error) {
-    console.error('Error al agregar el servicio:', error.message); // Mensaje detallado
+    console.error('Error al agregar el servicio:', error.message);
     res.status(500).json({ error: 'Error interno del servidor', details: error.message });
   }
 };
