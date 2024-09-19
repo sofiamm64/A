@@ -216,7 +216,7 @@ export const crearservicios = async (req, res) => {
   try {
     const { ServicioID, Nombre, Descripción, Precio, Tipo, Duracion } = req.body;
 
-    console.log('Datos recibidos:', { ServicioID, Nombre, Descripción, Precio, Tipo, Duracion, total});
+    console.log('Datos recibidos:', { ServicioID, Nombre, Descripción, Precio, Tipo, Duracion });
 
     if (isNaN(parseFloat(Precio)) || isNaN(parseInt(Duracion, 10))) {
         return res.status(400).json({ error: 'Precio y duración deben ser números válidos' });
@@ -229,7 +229,7 @@ export const crearservicios = async (req, res) => {
         Precio: parseFloat(Precio),
         Tipo,
         Duracion: parseInt(Duracion),
-        Total: parseFloat(Precio) * parseInt(Duracion, 10),
+        Total: parseFloat(Precio) * parseInt(Duracion, 10)  // Calcular Total en el servidor
     });
 
     await nuevoServicio.save();
