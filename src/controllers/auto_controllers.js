@@ -233,7 +233,6 @@ export const crearservicios = async (req, res) => {
         Precio,
         Tipo,
         Duracion,
-        Total
     });
 
     await nuevoServicio.save();
