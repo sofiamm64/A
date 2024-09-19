@@ -211,7 +211,7 @@ export const getsservicios = async (req, res) => {
   }
 };
 
-// Crear un nuevo servicio
+//
 export const crearservicios = async (req, res) => {
   try {
     const { ServicioID, Nombre, Descripción, Precio, Tipo, Duracion } = req.body;
@@ -234,26 +234,24 @@ export const crearservicios = async (req, res) => {
     await nuevoServicio.save();
     res.status(201).json(nuevoServicio);
   } catch (error) {
-    console.error('Error al crear servicio:', error); // Añadido para depuración
+    console.error('Error al crear servicio:', error); 
     res.status(500).json({ mensaje: error.message });
   }
 };
 
-// Obtener un servicio por ID
+// 
 export const getservicios = async (req, res) => {
   try {
-    const servicio = await Servicio.findById(req.params.id);
+    const servicio = await Servicio.findOne({ ServicioID: req.params.ServicioID });
     if (!servicio) return res.status(404).json({ mensaje: 'Servicio no encontrado' });
     res.json(servicio);
   } catch (error) {
     res.status(500).json({ mensaje: error.message });
   }
 };
-
-// Eliminar un servicio por ID
 export const eliminarservicios = async (req, res) => {
   try {
-    const servicio = await Servicio.findByIdAndDelete(req.params.id);
+    const servicio = await Servicio.findOneAndDelete({ ServicioID: req.params.ServicioID });
     if (!servicio) return res.status(404).json({ mensaje: 'Servicio no encontrado' });
     res.sendStatus(204);
   } catch (error) {
@@ -261,10 +259,9 @@ export const eliminarservicios = async (req, res) => {
   }
 };
 
-// Modificar un servicio por ID
 export const modificarservicios = async (req, res) => {
   try {
-    const servicio = await Servicio.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const servicio = await Servicio.findOneAndUpdate({ ServicioID: req.params.ServicioID }, req.body, { new: true });
     if (!servicio) return res.status(404).json({ mensaje: 'Servicio no encontrado' });
     res.json(servicio);
   } catch (error) {
