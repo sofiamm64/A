@@ -131,7 +131,6 @@ export const getclientes = async (req, res) => {
     if (!cliente) return res.status(404).json({ mensaje: "Cliente no encontrado" });
     res.json(cliente);
   } catch (error) {
-    console.error('Error en getclientes:', error);
     res.status(500).json({ mensaje: error.message });
   }
 };
@@ -142,7 +141,6 @@ export const eliminarclientes = async (req, res) => {
     if (!cliente) return res.status(404).json({ mensaje: "Cliente no encontrado" });
     return res.sendStatus(204);
   } catch (error) {
-    console.error('Error en eliminarclientes:', error);
     res.status(500).json({ mensaje: error.message });
   }
 };
@@ -153,10 +151,9 @@ export const modificarclientes = async (req, res) => {
     if (!cliente) return res.status(404).json({ mensaje: "Cliente no encontrado" });
     res.json(cliente);
   } catch (error) {
-    console.error('Error en modificarclientes:', error);
     res.status(500).json({ mensaje: error.message });
   }
-}
+};
 
 //
 export const getsproveedor = async (req, res) => {
