@@ -214,7 +214,7 @@ export const getsservicios = async (req, res) => {
 //
 export const crearservicios = async (req, res) => {
   try {
-    const { ServicioID, Nombre, Descripción, Precio, Tipo, Duracion, Total } = req.body;
+    const { ServicioID, Nombre, Descripción, Precio, Tipo, Duracion } = req.body;
 
     // Verifica que todos los campos obligatorios estén presentes
     if (!ServicioID || !Nombre || !Descripción || !Precio || !Tipo || Duracion === undefined || Duracion === null) {
@@ -232,7 +232,7 @@ export const crearservicios = async (req, res) => {
         Descripción,
         Precio,
         Tipo,
-        Duracion,
+        Duracion: Number(Duracion) // Asegúrate de convertir Duracion a número
     });
 
     await nuevoServicio.save();
