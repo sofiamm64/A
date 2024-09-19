@@ -216,29 +216,25 @@ export const crearservicios = async (req, res) => {
   try {
     const { ServicioID, Nombre, Descripción, Precio, Tipo, Duracion } = req.body;
 
-    // Validar que todos los campos obligatorios estén presentes
     if (!ServicioID || !Nombre || !Descripción || !Precio || !Tipo || !Duracion) {
         return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
 
-    // Crear un nuevo servicio con los datos proporcionados
     const nuevoServicio = new Servicio({
         ServicioID,
         Nombre,
         Descripción,
         Precio,
         Tipo,
-        Duracion
-        // El campo 'Total' se asigna por defecto como 'cero' en el esquema
+        Duracion,
     });
 
-    // Guardar el nuevo servicio en la base de datos
     await nuevoServicio.save();
     res.status(201).json(nuevoServicio);
-  } catch (error) {
-    console.error('Error al agregar el servicio:', error);
-    res.status(500).json({ error: 'Error al agregar el servicio' });
-  }
+} catch (error) {
+    console.error('Error al agregar el servicio:', error); // Mejora el mensaje de error
+    res.status(500).json({ error: 'Error interno del servidor' });
+}
 };
 
 // 
