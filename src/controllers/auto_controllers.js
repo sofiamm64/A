@@ -96,6 +96,7 @@ export const getsclientes = async (req, res) => {
     const clientes = await Clientes.find();
     res.json(clientes);
   } catch (error) {
+    console.error('Error en getsclientes:', error);
     res.status(500).json({ mensaje: error.message });
   }
 };
@@ -103,6 +104,11 @@ export const getsclientes = async (req, res) => {
 export const crearclientes = async (req, res) => {
   try {
     const { clienteID, nombre, apellido, telefono, email } = req.body;
+
+    if (!clienteID || !nombre || !apellido || !telefono || !email) {
+      return res.status(400).json({ mensaje: 'Todos los campos son obligatorios.' });
+    }
+
     const newCliente = new Clientes({
       clienteID,
       nombre,
@@ -110,9 +116,11 @@ export const crearclientes = async (req, res) => {
       telefono,
       email,
     });
+
     const saveCliente = await newCliente.save();
     res.json(saveCliente);
   } catch (error) {
+    console.error('Error en crearclientes:', error);
     res.status(500).json({ mensaje: error.message });
   }
 };
@@ -123,6 +131,7 @@ export const getclientes = async (req, res) => {
     if (!cliente) return res.status(404).json({ mensaje: "Cliente no encontrado" });
     res.json(cliente);
   } catch (error) {
+    console.error('Error en getclientes:', error);
     res.status(500).json({ mensaje: error.message });
   }
 };
@@ -133,6 +142,7 @@ export const eliminarclientes = async (req, res) => {
     if (!cliente) return res.status(404).json({ mensaje: "Cliente no encontrado" });
     return res.sendStatus(204);
   } catch (error) {
+    console.error('Error en eliminarclientes:', error);
     res.status(500).json({ mensaje: error.message });
   }
 };
@@ -143,6 +153,7 @@ export const modificarclientes = async (req, res) => {
     if (!cliente) return res.status(404).json({ mensaje: "Cliente no encontrado" });
     res.json(cliente);
   } catch (error) {
+    console.error('Error en modificarclientes:', error);
     res.status(500).json({ mensaje: error.message });
   }
 };
