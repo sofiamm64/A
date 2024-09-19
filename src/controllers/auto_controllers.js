@@ -119,7 +119,7 @@ export const crearclientes = async (req, res) => {
 
 export const getclientes = async (req, res) => {
   try {
-    const cliente = await Clientes.findById(req.params.id);
+    const cliente = await Clientes.findOne({ clienteID: req.params.clienteID });
     if (!cliente) return res.status(404).json({ mensaje: "Cliente no encontrado" });
     res.json(cliente);
   } catch (error) {
@@ -129,7 +129,7 @@ export const getclientes = async (req, res) => {
 
 export const eliminarclientes = async (req, res) => {
   try {
-    const cliente = await Clientes.findByIdAndDelete(req.params.id);
+    const cliente = await Clientes.findOneAndDelete({ clienteID: req.params.clienteID });
     if (!cliente) return res.status(404).json({ mensaje: "Cliente no encontrado" });
     return res.sendStatus(204);
   } catch (error) {
@@ -139,7 +139,7 @@ export const eliminarclientes = async (req, res) => {
 
 export const modificarclientes = async (req, res) => {
   try {
-    const cliente = await Clientes.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const cliente = await Clientes.findOneAndUpdate({ clienteID: req.params.clienteID }, req.body, { new: true });
     if (!cliente) return res.status(404).json({ mensaje: "Cliente no encontrado" });
     res.json(cliente);
   } catch (error) {
