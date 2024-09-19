@@ -304,7 +304,7 @@ export const modificarservicios = async (req, res) => {
 };
 
 //
-export const getsventas = async (req, res) => {
+export const getssventas = async (req, res) => {
   try{
   const Ventas = await Ventas.find()
   res.json(Ventas)
