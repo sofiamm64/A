@@ -93,81 +93,80 @@ export const profile = async (req, res) => {
 
 export const getsclientes = async (req, res) => {
   try {
-      const clientes = await Clientes.find();
-      res.json(clientes);
+    const clientes = await Clientes.find();
+    res.json(clientes);
   } catch (error) {
-      res.status(500).json({ mensaje: error.message });
+    res.status(500).json({ mensaje: 'Error al obtener los clientes: ' + error.message });
   }
 };
 
 // Crear un nuevo cliente
 export const crearclientes = async (req, res) => {
   try {
-      console.log('Datos recibidos en el cuerpo de la petición:', req.body);
+    console.log('Datos recibidos en el cuerpo de la petición:', req.body);
 
-      const { clienteID, nombre, apellido, email, telefono } = req.body;
+    const { clienteID, nombre, apellido, email, telefono } = req.body;
 
-      // Validar que todos los campos estén presentes
-      if (!clienteID || !nombre || !apellido || !email || !telefono) {
-          console.log('Faltan campos en la petición');
-          return res.status(400).json({ error: 'Todos los campos son obligatorios' });
-      }
+    // Validar que todos los campos estén presentes
+    if (!clienteID || !nombre || !apellido || !email || !telefono) {
+      console.log('Faltan campos en la petición');
+      return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+    }
 
-      // Verificar si el cliente ya existe
-      const existingCliente = await Clientes.findOne({ clienteID });
-      if (existingCliente) {
-          console.log('El cliente ya existe');
-          return res.status(400).json({ error: 'El clienteID ya está en uso.' });
-      }
+    // Verificar si el cliente ya existe
+    const existingCliente = await Clientes.findOne({ clienteID });
+    if (existingCliente) {
+      console.log('El cliente ya existe');
+      return res.status(400).json({ error: 'El clienteID ya está en uso.' });
+    }
 
-      // Crear y guardar el nuevo cliente
-      const cliente = new Clientes({ clienteID, nombre, apellido, email, telefono });
-      console.log('Nuevo cliente creado:', cliente);
+    // Crear y guardar el nuevo cliente
+    const cliente = new Clientes({ clienteID, nombre, apellido, email, telefono });
+    console.log('Nuevo cliente creado:', cliente);
 
-      await cliente.save();
-      res.status(201).json(cliente);
+    await cliente.save();
+    res.status(201).json({ mensaje: 'Cliente creado con éxito', cliente });
   } catch (error) {
-      console.error('Error al crear el cliente:', error); // Ver el error exacto en la consola
-      res.status(500).json({ error: 'Error interno del servidor' });
+    console.error('Error al crear el cliente:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
 
 // Obtener un cliente por clienteID
 export const getclientes = async (req, res) => {
   try {
-      const cliente = await Clientes.findOne({ clienteID: req.params.clienteID });
-      if (!cliente) return res.status(404).json({ mensaje: 'Cliente no encontrado' });
-      res.json(cliente);
+    const cliente = await Clientes.findOne({ clienteID: req.params.clienteID });
+    if (!cliente) return res.status(404).json({ mensaje: 'Cliente no encontrado' });
+    res.json(cliente);
   } catch (error) {
-      res.status(500).json({ mensaje: error.message });
+    res.status(500).json({ mensaje: 'Error al obtener el cliente: ' + error.message });
   }
 };
 
 // Eliminar cliente
 export const eliminarclientes = async (req, res) => {
   try {
-      const cliente = await Clientes.findOneAndDelete({ clienteID: req.params.clienteID });
-      if (!cliente) return res.status(404).json({ mensaje: 'Cliente no encontrado' });
-      res.sendStatus(204);
+    const cliente = await Clientes.findOneAndDelete({ clienteID: req.params.clienteID });
+    if (!cliente) return res.status(404).json({ mensaje: 'Cliente no encontrado' });
+    res.status(204).send(); // Específicamente indica que no hay contenido tras eliminar
   } catch (error) {
-      res.status(500).json({ mensaje: error.message });
+    res.status(500).json({ mensaje: 'Error al eliminar el cliente: ' + error.message });
   }
 };
 
 // Modificar cliente
 export const modificarclientes = async (req, res) => {
   try {
-      const cliente = await Clientes.findOneAndUpdate(
-          { clienteID: req.params.clienteID },
-          req.body,
-          { new: true } // Devolver el cliente actualizado
-      );
-      if (!cliente) return res.status(404).json({ mensaje: 'Cliente no encontrado' });
-      res.json(cliente);
+    const cliente = await Clientes.findOneAndUpdate(
+      { clienteID: req.params.clienteID },
+      req.body,
+      { new: true } // Devolver el cliente actualizado
+    );
+    if (!cliente) return res.status(404).json({ mensaje: 'Cliente no encontrado' });
+    res.json({ mensaje: 'Cliente actualizado con éxito', cliente });
   } catch (error) {
-      res.status(500).json({ mensaje: error.message });
-  }
-};
+    res.status(500).json({ mensaje: 'Error al actualizar el cliente: ' + error.message });
+  }}
 
 
 //
