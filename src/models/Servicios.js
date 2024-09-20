@@ -13,7 +13,6 @@ const modelserv = new mongoose.Schema({
     },
     Duracion: { 
         type: Number, 
-        required: true, 
         default: 0 
     },
 }, {
