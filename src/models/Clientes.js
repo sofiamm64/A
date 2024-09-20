@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const modelclie = new mongoose.Schema({
-    clienteID: { type: Number, unique: true },
+    clienteID: { type: Number, unique: true, required: true },
     nombre: { type: String, required: true },
     email: { type: String, required: true },
     telefono: { type: String, required: true },

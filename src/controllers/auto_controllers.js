@@ -103,8 +103,9 @@ export const getsclientes = async (req, res) => {
 // Crear un nuevo cliente
 export const crearclientes = async (req, res) => {
   try {
-    const { nombre, email, telefono } = req.body; // Eliminar codigoUsuario
+    const { clienteID, nombre, email, telefono } = req.body; // Incluyendo clienteID
     const newCliente = new Clientes({
+      clienteID,
       nombre,
       email,
       telefono,
@@ -120,7 +121,7 @@ export const crearclientes = async (req, res) => {
 // Obtener un cliente por ID
 export const getclientes = async (req, res) => {
   try {
-    const cliente = await Clientes.findById(req.params.ServicioID);
+    const cliente = await Clientes.findOne({ clienteID: req.params.id }); // Cambiado a clienteID
     if (!cliente) return res.status(404).json({ mensaje: "Cliente no encontrado" });
     res.json(cliente);
   } catch (error) {
@@ -131,7 +132,7 @@ export const getclientes = async (req, res) => {
 // Eliminar cliente
 export const eliminarclientes = async (req, res) => {
   try {
-    const cliente = await Clientes.findByIdAndDelete(req.params.ServicioID);
+    const cliente = await Clientes.findOneAndDelete({ clienteID: req.params.id }); // Cambiado a clienteID
     if (!cliente) return res.status(404).json({ mensaje: "Cliente no encontrado" });
     return res.sendStatus(204);
   } catch (error) {
@@ -142,7 +143,7 @@ export const eliminarclientes = async (req, res) => {
 // Modificar cliente
 export const modificarclientes = async (req, res) => {
   try {
-    const cliente = await Clientes.findByIdAndUpdate(req.params.ServicioID, req.body, { new: true });
+    const cliente = await Clientes.findOneAndUpdate({ clienteID: req.params.id }, req.body, { new: true }); // Cambiado a clienteID
     if (!cliente) return res.status(404).json({ mensaje: "Cliente no encontrado" });
     res.json(cliente);
   } catch (error) {
