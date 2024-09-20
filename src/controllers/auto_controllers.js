@@ -103,19 +103,37 @@ export const getsclientes = async (req, res) => {
 // Crear un nuevo cliente
 export const crearclientes = async (req, res) => {
   try {
-    const { clienteID, nombre, email, telefono } = req.body;
-    
-    // Validación de los campos requeridos
-    if (!clienteID || !nombre || !email || !telefono) {
-      return res.status(400).json({ mensaje: "Todos los campos son requeridos." });
+    const { ServicioID, Nombre, Descripción, Precio, Tipo, Duracion } = req.body;
+
+    // Verifica que todos los campos obligatorios estén presentes
+    if (!ServicioID || !Nombre || !Descripción || !Precio || !Tipo || Duracion === undefined || Duracion === null) {
+      return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
 
-    const newCliente = new Clientes({ clienteID, nombre, email, telefono });
-    const saveCliente = await newCliente.save();
-    res.status(201).json(saveCliente);
+    // Asegúrate de que Duracion y Precio sean números válidos
+    if (isNaN(Duracion) || Duracion < 0) {
+      return res.status(400).json({ error: 'La duración debe ser un número positivo' });
+    }
+
+    if (isNaN(Precio) || Precio < 0) {
+      return res.status(400).json({ error: 'El precio debe ser un número positivo' });
+    }
+
+    // Crear un nuevo cliente
+    const cliente = new Cliente({
+      ServicioID,
+      Nombre,
+      Descripción,
+      Precio,
+      Tipo,
+      Duracion
+    });
+
+    await cliente.save();
+    res.status(201).json(cliente);
   } catch (error) {
-    console.error("Error al crear el cliente:", error);
-    res.status(500).json({ mensaje: error.message });
+    console.error(error);
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
 
