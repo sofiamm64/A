@@ -1,13 +1,13 @@
 import mongoose from "mongoose";
 
 const modelclie = new mongoose.Schema({
-    clienteID: { Type: Number, unique: true },
-    nombre: { type: String, required: true },
-    apellido: { type: String, required: true },
-    email: { type: String, required: true },
-    telefono: { type: Number },
+    clienteID: { type: Number, unique: true, required: true }, 
+  nombre: { type: String, required: true },
+  apellido: { type: String, required: true },
+  email: { type: String, required: true },
+  telefono: { type: Number, required: true }, 
 }, {
-    timestamps: true
+  timestamps: true
 });
 
 export default mongoose.model('Clientes', modelclie);
