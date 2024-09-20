@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from "mongoose"; 
 
 const modelclie = new mongoose.Schema({
   clienteID: { type: String, required: true, unique: true },

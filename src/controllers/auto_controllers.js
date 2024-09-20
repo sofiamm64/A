@@ -103,10 +103,10 @@ export const getsclientes = async (req, res) => {
 // Crear un nuevo cliente
 export const crearclientes = async (req, res) => {
   try {
-    const { clienteID, nombre, apellido, email, telefono } = req.body; // Agregado 'apellido'
+    const { clienteID, nombre, apellido, email, telefono } = req.body;
 
     // Verifica que todos los campos obligatorios estén presentes
-    if (!clienteID || !nombre || !apellido || !email || !telefono) { // Incluido 'apellido'
+    if (!clienteID || !nombre || !apellido || !email || !telefono) {
       return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
 
@@ -117,7 +117,7 @@ export const crearclientes = async (req, res) => {
     }
 
     // Crear un nuevo cliente
-    const cliente = new Clientes({ clienteID, nombre, apellido, email, telefono }); // Agregado 'apellido'
+    const cliente = new Clientes({ clienteID, nombre, apellido, email, telefono });
     await cliente.save();
     res.status(201).json(cliente);
   } catch (error) {
@@ -126,10 +126,10 @@ export const crearclientes = async (req, res) => {
   }
 };
 
-// Obtener un cliente por clienteID
+// Obtener un cliente por ServicioID
 export const getclientes = async (req, res) => {
   try {
-    const cliente = await Clientes.findOne({ clienteID: req.params.id });
+    const cliente = await Clientes.findOne({ clienteID: req.params.ServicioID }); // Cambiado a ServicioID
     if (!cliente) return res.status(404).json({ mensaje: 'Cliente no encontrado' });
     res.json(cliente);
   } catch (error) {
@@ -140,7 +140,7 @@ export const getclientes = async (req, res) => {
 // Eliminar cliente
 export const eliminarclientes = async (req, res) => {
   try {
-    const cliente = await Clientes.findOneAndDelete({ clienteID: req.params.id });
+    const cliente = await Clientes.findOneAndDelete({ clienteID: req.params.ServicioID }); // Cambiado a ServicioID
     if (!cliente) return res.status(404).json({ mensaje: 'Cliente no encontrado' });
     res.sendStatus(204);
   } catch (error) {
@@ -152,7 +152,7 @@ export const eliminarclientes = async (req, res) => {
 export const modificarclientes = async (req, res) => {
   try {
     const cliente = await Clientes.findOneAndUpdate(
-      { clienteID: req.params.id },
+      { clienteID: req.params.ServicioID }, // Cambiado a ServicioID
       req.body,
       { new: true }
     );
