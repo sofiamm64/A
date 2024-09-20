@@ -110,13 +110,14 @@ export const crearclientes = async (req, res) => {
       return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
 
+    // Verifica que el clienteID sea único
+    const existingCliente = await Clientes.findOne({ clienteID });
+    if (existingCliente) {
+      return res.status(400).json({ error: 'El clienteID ya está en uso.' });
+    }
+
     // Crear un nuevo cliente
-    const cliente = new Clientes({
-      clienteID,
-      nombre,
-      email,
-      telefono
-    });
+    const cliente = new Clientes({ clienteID, nombre, email, telefono });
 
     await cliente.save();
     res.status(201).json(cliente);
