@@ -171,13 +171,13 @@ export const modificarclientes = async (req, res) => {
 
 //
 export const getsproveedor = async (req, res) => {
-  try{
-  const proveedor = await Proveedor.find()
-  res.json(proveedor)
-  } catch {
-    res.status(500).json({mesaje: error.mesaje})
+  try {
+    const proveedor = await Proveedor.find();
+    res.json(proveedor);
+  } catch (error) {
+    res.status(500).json({ mensaje: error.message });
   }
-}
+};
 export const crearproveedor = async (req, res) => {
   try{
     const { ProveedorID, nombre, apellido, telefono, email, Dirección } = req.body;
@@ -187,7 +187,7 @@ export const crearproveedor = async (req, res) => {
     apellido,
     telefono,
     email,
-    Dirección
+    Direccion
   });
   const saveproveedor = await newproveedor.save();
   res.json(saveproveedor);
@@ -224,6 +224,9 @@ export const modificarproveedor = async (req, res) => {
     }
 }
 //
+
+
+
 export const getsservicios = async (req, res) => {
   try {
     const servicios = await Servicio.find();
