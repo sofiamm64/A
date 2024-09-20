@@ -165,6 +165,14 @@ export const getsproveedor = async (req, res) => {
   }
 }
 export const crearproveedor = async (req, res) => {
+  console.log({
+    ProductoServicioID: parseInt(ProductoServicioID, 10),
+    Nombre: nombre,
+    Descripción: descripcion,
+    Precio: parseFloat(precio),
+    Tipo: tipo,
+  });
+  
   try{
     const { ProveedorID, nombre, apellido, telefono, email, Dirección } = req.body;
   const newproveedor = new Proveedor({
