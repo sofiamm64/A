@@ -231,23 +231,24 @@ export const crearservicios = async (req, res) => {
       return res.status(400).json({ error: 'La duración debe ser un número positivo' });
     }
 
-    // Crear un nuevo servicio
-    const servicio = new Servicio({
-      ServicioID,
-      Nombre,
-      Descripción,
-      Precio,
-      Tipo,
-      Duracion
+    const nuevoServicio = new Servicio({
+        ServicioID,
+        Nombre,
+        Descripción,
+        Precio,
+        Tipo,
+        Duracion: Number(Duracion),
+        Total
     });
 
-    await servicio.save();
-    res.status(201).json(servicio);
+    await nuevoServicio.save();
+    res.status(201).json(nuevoServicio);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error interno del servidor' });
+    console.error('Error al agregar el servicio:', error.message); 
+    res.status(500).json({ error: 'Error interno del servidor', details: error.message });
   }
 };
+
 // 
 export const getservicios = async (req, res) => {
   try {
