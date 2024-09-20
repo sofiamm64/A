@@ -11,6 +11,11 @@ const modelserv = new mongoose.Schema({
         enum: ['Producto', 'Servicio'], 
         default: 'Producto'
     },
+    Duracion: { 
+        type: Number, 
+        required: true, 
+        default: 0 
+    },
 }, {
     timestamps: true,
 });
