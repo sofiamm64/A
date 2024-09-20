@@ -179,22 +179,15 @@ export const getsproveedor = async (req, res) => {
   }
 };
 export const crearproveedor = async (req, res) => {
-  try{
-    const { ProveedorID, nombre, apellido, telefono, email, Direccion } = req.body;
-  const newproveedor = new Proveedor({
-    ProveedorID,
-    nombre,
-    apellido,
-    telefono,
-    email,
-    Direccion
-  });
-  const saveproveedor = await newproveedor.save();
-  res.json(saveproveedor);
-} catch {
-    res.status(500).json({mesaje: error.mesaje})
-  }
+  try {
+    const { ProveedorID, nombre, apellido, email, telefono } = req.body;
+    const newProveedor = new Proveedor({ ProveedorID, nombre, apellido, email, telefono });
+    await newProveedor.save();
+    res.status(201).json(newProveedor);
+} catch (error) {
+    res.status(400).json({ mensaje: 'Error al crear el proveedor.' });
 }
+};
 
 export const getproveedor = async (req, res) => {
   try{
@@ -215,14 +208,18 @@ export const eliminarproveedor = async (req, res) => {
   }
 }
 export const modificarproveedor = async (req, res) => {
-  try{
-  const proveedor = await Proveedor.findByIdAndUpdate(req.params.id, req.body,{new: true});
-    if (!proveedor) return res.status(404).json({ mensaje: "Provedor no encontrado" });
-    res.json(proveedor);
-    } catch {
-    res.status(500).json({mesaje: error.mesaje})
-    }
+  try {
+    const { nombre, apellido, email, telefono } = req.body;
+    const updatedProveedor = await Proveedor.findByIdAndUpdate(
+        req.params.id,
+        { nombre, apellido, email, telefono },
+        { new: true }
+    );
+    res.json(updatedProveedor);
+} catch (error) {
+    res.status(400).json({ mensaje: 'Error al actualizar el proveedor.' });
 }
+};
 //
 
 
