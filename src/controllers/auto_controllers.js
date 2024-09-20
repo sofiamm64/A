@@ -118,7 +118,6 @@ export const crearclientes = async (req, res) => {
 
     // Crear un nuevo cliente
     const cliente = new Clientes({ clienteID, nombre, email, telefono });
-
     await cliente.save();
     res.status(201).json(cliente);
   } catch (error) {
@@ -157,7 +156,6 @@ export const modificarclientes = async (req, res) => {
       req.body,
       { new: true }
     );
-
     if (!cliente) return res.status(404).json({ mensaje: 'Cliente no encontrado' });
     res.json(cliente);
   } catch (error) {
