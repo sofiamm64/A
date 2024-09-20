@@ -228,81 +228,75 @@ export const modificarproveedor = async (req, res) => {
     }
 }
 //
-export const getServicios = async (req, res) => {
+export const getsservicios = async (req, res) => {
   try {
     const servicios = await Servicio.find();
     res.json(servicios);
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+    res.status(500).json({ mensaje: error.message });
   }
 };
 
-export const crearServicio = async (req, res) => {
+//
+export const crearservicios = async (req, res) => {
   try {
-    const { ProductoServicioID, Nombre, Descripción, Precio, Tipo } = req.body;
+    const { ServicioID, Nombre, Descripción, Precio, Tipo, Duracion, Total } = req.body;
 
-    // Verificar campos obligatorios
-    if (!ProductoServicioID || !Nombre || !Descripción || !Precio || !Tipo) {
-      return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+    // Verifica que todos los campos obligatorios estén presentes
+    if (!ServicioID || !Nombre || !Descripción || !Precio || !Tipo || Duracion === undefined || Duracion === null) {
+        return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
 
-    // Verificar tipo y valor de Precio
-    if (typeof Precio !== 'number' || Precio <= 0) {
-      return res.status(400).json({ error: 'Precio debe ser un número positivo' });
+    // Asegúrate de que Duracion sea un número válido
+    if (isNaN(Duracion) || Duracion < 0) {
+      return res.status(400).json({ error: 'La duración debe ser un número positivo' });
     }
 
-    // Crear el nuevo servicio
+    // Crear un nuevo servicio
     const servicio = new Servicio({
-      ProductoServicioID,
+      ServicioID,
       Nombre,
       Descripción,
       Precio,
       Tipo,
+      Duracion
     });
 
     await servicio.save();
     res.status(201).json(servicio);
   } catch (error) {
-    console.error('Error al crear el servicio:', error);
-    return res.status(500).json({ mensaje: 'Error interno del servidor', error: error.message });
+    console.error(error);
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
-
-export const getServicioByID = async (req, res) => {
+// 
+export const getservicios = async (req, res) => {
   try {
-    const servicio = await Servicio.findOne({ ProductoServicioID: req.params.id });
+    const servicio = await Servicio.findOne({ ServicioID: req.params.ServicioID });
     if (!servicio) return res.status(404).json({ mensaje: 'Servicio no encontrado' });
     res.json(servicio);
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+    res.status(500).json({ mensaje: error.message });
   }
 };
-
-export const eliminarServicio = async (req, res) => {
+export const eliminarservicios = async (req, res) => {
   try {
-    const servicio = await Servicio.findOneAndDelete({ ProductoServicioID: req.params.id });
+    const servicio = await Servicio.findOneAndDelete({ ServicioID: req.params.ServicioID });
     if (!servicio) return res.status(404).json({ mensaje: 'Servicio no encontrado' });
     res.sendStatus(204);
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+    res.status(500).json({ mensaje: error.message });
   }
 };
 
-export const modificarServicio = async (req, res) => {
+
+export const modificarservicios = async (req, res) => {
   try {
-    const servicio = await Servicio.findOneAndUpdate(
-      { ProductoServicioID: req.params.id },
-      req.body,
-      { new: true }
-    );
+    const servicio = await Servicio.findOneAndUpdate({ ServicioID: req.params.ServicioID }, req.body, { new: true });
     if (!servicio) return res.status(404).json({ mensaje: 'Servicio no encontrado' });
     res.json(servicio);
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+    res.status(500).json({ mensaje: error.message });
   }
 };
 
