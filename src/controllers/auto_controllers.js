@@ -105,23 +105,19 @@ export const crearclientes = async (req, res) => {
   try {
     const { clienteID, nombre, apellido, email, telefono } = req.body;
 
-    // Verifica que todos los campos obligatorios estén presentes
     if (!clienteID || !nombre || !apellido || !email || !telefono) {
       return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
 
-    // Verifica que el clienteID sea único
     const existingCliente = await Clientes.findOne({ clienteID });
     if (existingCliente) {
       return res.status(400).json({ error: 'El clienteID ya está en uso.' });
     }
 
-    // Crear un nuevo cliente
     const cliente = new Clientes({ clienteID, nombre, apellido, email, telefono });
     await cliente.save();
     res.status(201).json(cliente);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
