@@ -103,30 +103,19 @@ export const getsclientes = async (req, res) => {
 // Crear un nuevo cliente
 export const crearclientes = async (req, res) => {
   try {
-    const { ServicioID, Nombre, Descripción, Precio, Tipo, Duracion } = req.body;
+    const { clienteID, nombre, email, telefono } = req.body;
 
     // Verifica que todos los campos obligatorios estén presentes
-    if (!ServicioID || !Nombre || !Descripción || !Precio || !Tipo || Duracion === undefined || Duracion === null) {
+    if (!clienteID || !nombre || !email || !telefono) {
       return res.status(400).json({ error: 'Todos los campos son obligatorios' });
-    }
-
-    // Asegúrate de que Duracion y Precio sean números válidos
-    if (isNaN(Duracion) || Duracion < 0) {
-      return res.status(400).json({ error: 'La duración debe ser un número positivo' });
-    }
-
-    if (isNaN(Precio) || Precio < 0) {
-      return res.status(400).json({ error: 'El precio debe ser un número positivo' });
     }
 
     // Crear un nuevo cliente
     const cliente = new Clientes({
-      ServicioID,
-      Nombre,
-      Descripción,
-      Precio,
-      Tipo,
-      Duracion
+      clienteID,
+      nombre,
+      email,
+      telefono
     });
 
     await cliente.save();
@@ -140,8 +129,8 @@ export const crearclientes = async (req, res) => {
 // Obtener un cliente por ID
 export const getclientes = async (req, res) => {
   try {
-    const cliente = await Clientes.findOne({ clienteID: req.params.id }); // Cambiado a clienteID
-    if (!cliente) return res.status(404).json({ mensaje: "Cliente no encontrado" });
+    const cliente = await Clientes.findOne({ clienteID: req.params.id });
+    if (!cliente) return res.status(404).json({ mensaje: 'Cliente no encontrado' });
     res.json(cliente);
   } catch (error) {
     res.status(500).json({ mensaje: error.message });
@@ -151,9 +140,9 @@ export const getclientes = async (req, res) => {
 // Eliminar cliente
 export const eliminarclientes = async (req, res) => {
   try {
-    const cliente = await Clientes.findOneAndDelete({ clienteID: req.params.id }); // Cambiado a clienteID
-    if (!cliente) return res.status(404).json({ mensaje: "Cliente no encontrado" });
-    return res.sendStatus(204);
+    const cliente = await Clientes.findOneAndDelete({ clienteID: req.params.id });
+    if (!cliente) return res.status(404).json({ mensaje: 'Cliente no encontrado' });
+    res.sendStatus(204);
   } catch (error) {
     res.status(500).json({ mensaje: error.message });
   }
@@ -162,8 +151,13 @@ export const eliminarclientes = async (req, res) => {
 // Modificar cliente
 export const modificarclientes = async (req, res) => {
   try {
-    const cliente = await Clientes.findOneAndUpdate({ clienteID: req.params.id }, req.body, { new: true }); // Cambiado a clienteID
-    if (!cliente) return res.status(404).json({ mensaje: "Cliente no encontrado" });
+    const cliente = await Clientes.findOneAndUpdate(
+      { clienteID: req.params.id },
+      req.body,
+      { new: true }
+    );
+
+    if (!cliente) return res.status(404).json({ mensaje: 'Cliente no encontrado' });
     res.json(cliente);
   } catch (error) {
     res.status(500).json({ mensaje: error.message });
