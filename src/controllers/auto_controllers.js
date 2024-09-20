@@ -180,7 +180,7 @@ export const getsproveedor = async (req, res) => {
 };
 export const crearproveedor = async (req, res) => {
   try{
-    const { ProveedorID, nombre, apellido, telefono, email, Dirección } = req.body;
+    const { ProveedorID, nombre, apellido, telefono, email, Direccion } = req.body;
   const newproveedor = new Proveedor({
     ProveedorID,
     nombre,
