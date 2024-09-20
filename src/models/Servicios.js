@@ -1,15 +1,18 @@
 import mongoose from 'mongoose';
 
 const modelserv = new mongoose.Schema({
-    ServicioID: { type: Number, required: true, unique: true },
+    ProductoServicioID: { type: Number, required: true, unique: true },
     Nombre: { type: String, required: true },
     Descripción: { type: String, required: true },
-    Precio: { type: Number, required: true },
-    Tipo: { type: String, required: true },
-    Duracion: { type: Number},
-    Total: { type: String, default: 'cero' },
+    Precio: { type: Number, required: true, default: 0 }, 
+    Tipo: { 
+        type: String, 
+        required: true, 
+        enum: ['Producto', 'Servicio'], 
+        default: 'Producto'
+    },
 }, {
-    timestamps: true
+    timestamps: true,
 });
 
 export default mongoose.model('Servicio', modelserv);

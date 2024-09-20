@@ -18,11 +18,11 @@ import { login,
         eliminarproveedor,
         modificarproveedor,
 
-        getsservicios,
-        getservicios,
-        crearservicios,
-        eliminarservicios,
-        modificarservicios,
+        getServicios,
+        getServicioByID,
+        crearServicio,
+        eliminarServicio,
+        modificarServicio,
 
         getssventas,
         getventas,
@@ -58,11 +58,11 @@ router.post('/proveedor',autenticacion, crearproveedor);
 router.delete('/proveedor/:id',autenticacion, eliminarproveedor);
 router.put('/proveedor/:id',autenticacion, modificarproveedor);
 
-router.get('/servicios', autenticacion, getsservicios);
-router.get('/servicios/:id', autenticacion, getservicios);
-router.post('/servicios', autenticacion, crearservicios);
-router.delete('/servicios/:id', autenticacion, eliminarservicios);
-router.put('/servicios/:id', autenticacion, modificarservicios);
+router.get('/servicios', autenticacion, getServicios);
+router.get('/servicios/:id', autenticacion, getServicioByID);
+router.post('/servicios', autenticacion, crearServicio);
+router.delete('/servicios/:id', autenticacion, eliminarServicio);
+router.put('/servicios/:id', autenticacion, modificarServicio);
 
 router.get('/ventas',autenticacion,getssventas);
 router.get('/ventas/:id',autenticacion, getventas);

@@ -210,7 +210,7 @@ export const modificarproveedor = async (req, res) => {
     }
 }
 //
-export const getsservicios = async (req, res) => {
+export const getServicios = async (req, res) => {
   try {
     const servicios = await Servicio.find();
     res.json(servicios);
@@ -219,29 +219,23 @@ export const getsservicios = async (req, res) => {
   }
 };
 
-//
-export const crearservicios = async (req, res) => {
+// Crear un nuevo servicio
+export const crearServicio = async (req, res) => {
   try {
-    const { ServicioID, Nombre, Descripción, Precio, Tipo, Duracion, Total } = req.body;
+    const { ProductoServicioID, Nombre, Descripción, Precio, Tipo } = req.body;
 
     // Verifica que todos los campos obligatorios estén presentes
-    if (!ServicioID || !Nombre || !Descripción || !Precio || !Tipo || Duracion === undefined || Duracion === null) {
-        return res.status(400).json({ error: 'Todos los campos son obligatorios' });
-    }
-
-    // Asegúrate de que Duracion sea un número válido
-    if (isNaN(Duracion) || Duracion < 0) {
-      return res.status(400).json({ error: 'La duración debe ser un número positivo' });
+    if (!ProductoServicioID || !Nombre || !Descripción || !Precio || !Tipo) {
+      return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
 
     // Crear un nuevo servicio
     const servicio = new Servicio({
-      ServicioID,
+      ProductoServicioID,
       Nombre,
       Descripción,
       Precio,
       Tipo,
-      Duracion
     });
 
     await servicio.save();
@@ -251,19 +245,22 @@ export const crearservicios = async (req, res) => {
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
-// 
-export const getservicios = async (req, res) => {
+
+// Obtener un servicio por ProductoServicioID
+export const getServicioByID = async (req, res) => {
   try {
-    const servicio = await Servicio.findOne({ ServicioID: req.params.ServicioID });
+    const servicio = await Servicio.findOne({ ProductoServicioID: req.params.ProductoServicioID });
     if (!servicio) return res.status(404).json({ mensaje: 'Servicio no encontrado' });
     res.json(servicio);
   } catch (error) {
     res.status(500).json({ mensaje: error.message });
   }
 };
-export const eliminarservicios = async (req, res) => {
+
+// Eliminar un servicio por ProductoServicioID
+export const eliminarServicio = async (req, res) => {
   try {
-    const servicio = await Servicio.findOneAndDelete({ ServicioID: req.params.ServicioID });
+    const servicio = await Servicio.findOneAndDelete({ ProductoServicioID: req.params.ProductoServicioID });
     if (!servicio) return res.status(404).json({ mensaje: 'Servicio no encontrado' });
     res.sendStatus(204);
   } catch (error) {
@@ -271,10 +268,10 @@ export const eliminarservicios = async (req, res) => {
   }
 };
 
-
-export const modificarservicios = async (req, res) => {
+// Modificar un servicio por ProductoServicioID
+export const modificarServicio = async (req, res) => {
   try {
-    const servicio = await Servicio.findOneAndUpdate({ ServicioID: req.params.ServicioID }, req.body, { new: true });
+    const servicio = await Servicio.findOneAndUpdate({ ProductoServicioID: req.params.ProductoServicioID }, req.body, { new: true });
     if (!servicio) return res.status(404).json({ mensaje: 'Servicio no encontrado' });
     res.json(servicio);
   } catch (error) {
