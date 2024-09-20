@@ -103,13 +103,14 @@ export const getsclientes = async (req, res) => {
 // Crear un nuevo cliente
 export const crearclientes = async (req, res) => {
   try {
-    const { clienteID, nombre, email, telefono } = req.body; // Incluyendo clienteID
-    const newCliente = new Clientes({
-      clienteID,
-      nombre,
-      email,
-      telefono,
-    });
+    const { clienteID, nombre, email, telefono } = req.body;
+    
+    // Validación de los campos requeridos
+    if (!clienteID || !nombre || !email || !telefono) {
+      return res.status(400).json({ mensaje: "Todos los campos son requeridos." });
+    }
+
+    const newCliente = new Clientes({ clienteID, nombre, email, telefono });
     const saveCliente = await newCliente.save();
     res.status(201).json(saveCliente);
   } catch (error) {
