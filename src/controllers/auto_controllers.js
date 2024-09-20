@@ -237,14 +237,14 @@ export const crearservicios = async (req, res) => {
         Descripción,
         Precio,
         Tipo,
-        Duracion: Number(Duracion),
+        Duracion: Number(Duracion), // Asegúrate de convertir Duracion a número
         Total
     });
 
     await nuevoServicio.save();
     res.status(201).json(nuevoServicio);
   } catch (error) {
-    console.error('Error al agregar el servicio:', error.message); 
+    console.error('Error al agregar el servicio:', error.message); // Mensaje detallado
     res.status(500).json({ error: 'Error interno del servidor', details: error.message });
   }
 };
