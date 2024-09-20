@@ -126,10 +126,10 @@ export const crearclientes = async (req, res) => {
   }
 };
 
-// Obtener un cliente por ServicioID
+// Obtener un cliente por clienteID
 export const getclientes = async (req, res) => {
   try {
-    const cliente = await Clientes.findOne({ clienteID: req.params.ServicioID }); // Cambiado a ServicioID
+    const cliente = await Clientes.findOne({ clienteID: req.params.ServicioID });
     if (!cliente) return res.status(404).json({ mensaje: 'Cliente no encontrado' });
     res.json(cliente);
   } catch (error) {
@@ -140,7 +140,7 @@ export const getclientes = async (req, res) => {
 // Eliminar cliente
 export const eliminarclientes = async (req, res) => {
   try {
-    const cliente = await Clientes.findOneAndDelete({ clienteID: req.params.ServicioID }); // Cambiado a ServicioID
+    const cliente = await Clientes.findOneAndDelete({ clienteID: req.params.ServicioID });
     if (!cliente) return res.status(404).json({ mensaje: 'Cliente no encontrado' });
     res.sendStatus(204);
   } catch (error) {
@@ -152,7 +152,7 @@ export const eliminarclientes = async (req, res) => {
 export const modificarclientes = async (req, res) => {
   try {
     const cliente = await Clientes.findOneAndUpdate(
-      { clienteID: req.params.ServicioID }, // Cambiado a ServicioID
+      { clienteID: req.params.ServicioID },
       req.body,
       { new: true }
     );
