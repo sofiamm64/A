@@ -219,17 +219,18 @@ export const getServicios = async (req, res) => {
   }
 };
 
-// Crear un nuevo servicio
 export const crearServicio = async (req, res) => {
   try {
     const { ProductoServicioID, Nombre, Descripción, Precio, Tipo } = req.body;
 
-    // Verifica que todos los campos obligatorios estén presentes
     if (!ProductoServicioID || !Nombre || !Descripción || !Precio || !Tipo) {
       return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
 
-    // Crear un nuevo servicio
+    if (typeof Precio !== 'number' || Precio <= 0) {
+      return res.status(400).json({ error: 'Precio debe ser un número positivo' });
+    }
+
     const servicio = new Servicio({
       ProductoServicioID,
       Nombre,
@@ -242,14 +243,13 @@ export const crearServicio = async (req, res) => {
     res.status(201).json(servicio);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Error interno del servidor' });
+    res.status(500).json({ error: error.message });
   }
 };
 
-// Obtener un servicio por ProductoServicioID
 export const getServicioByID = async (req, res) => {
   try {
-    const servicio = await Servicio.findOne({ ProductoServicioID: req.params.ProductoServicioID });
+    const servicio = await Servicio.findOne({ ProductoServicioID: req.params.id });
     if (!servicio) return res.status(404).json({ mensaje: 'Servicio no encontrado' });
     res.json(servicio);
   } catch (error) {
@@ -257,10 +257,9 @@ export const getServicioByID = async (req, res) => {
   }
 };
 
-// Eliminar un servicio por ProductoServicioID
 export const eliminarServicio = async (req, res) => {
   try {
-    const servicio = await Servicio.findOneAndDelete({ ProductoServicioID: req.params.ProductoServicioID });
+    const servicio = await Servicio.findOneAndDelete({ ProductoServicioID: req.params.id });
     if (!servicio) return res.status(404).json({ mensaje: 'Servicio no encontrado' });
     res.sendStatus(204);
   } catch (error) {
@@ -268,10 +267,13 @@ export const eliminarServicio = async (req, res) => {
   }
 };
 
-// Modificar un servicio por ProductoServicioID
 export const modificarServicio = async (req, res) => {
   try {
-    const servicio = await Servicio.findOneAndUpdate({ ProductoServicioID: req.params.ProductoServicioID }, req.body, { new: true });
+    const servicio = await Servicio.findOneAndUpdate(
+      { ProductoServicioID: req.params.id },
+      req.body,
+      { new: true }
+    );
     if (!servicio) return res.status(404).json({ mensaje: 'Servicio no encontrado' });
     res.json(servicio);
   } catch (error) {
