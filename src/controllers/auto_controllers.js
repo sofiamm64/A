@@ -179,22 +179,22 @@ export const getsproveedor = async (req, res) => {
   }
 };
 export const crearproveedor = async (req, res) => {
-  try{
+  try {
     const { ProveedorID, nombre, apellido, telefono, email, Direccion } = req.body;
-  const newproveedor = new Proveedor({
-    ProveedorID,
-    nombre,
-    apellido,
-    telefono,
-    email,
-    Direccion
-  });
-  const saveproveedor = await newproveedor.save();
-  res.json(saveproveedor);
-} catch {
-    res.status(500).json({mesaje: error.mesaje})
+    const newproveedor = new Proveedor({
+      ProveedorID,
+      nombre,
+      apellido,
+      telefono,
+      email,
+      Direccion
+    });
+    const saveproveedor = await newproveedor.save();
+    res.json(saveproveedor);
+  } catch (error) { // Capture the error here
+    res.status(500).json({ mensaje: error.message });
   }
-}
+};
 
 export const getproveedor = async (req, res) => {
   try{
