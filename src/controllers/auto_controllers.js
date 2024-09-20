@@ -209,84 +209,85 @@ export const modificarproveedor = async (req, res) => {
 //
 export const getsservicios = async (req, res) => {
   try {
-    const servicios = await Servicio.find();
-    res.json(servicios);
+      const servicios = await Servicio.find();
+      res.status(200).json(servicios);
   } catch (error) {
-    res.status(500).json({ mensaje: error.message });
+      res.status(500).json({ mensaje: 'Error al obtener servicios', error });
+  }
+};
+
+// Obtener un servicio por ID
+export const getservicios = async (req, res) => {
+  const { id } = req.params;
+  try {
+      const servicio = await Servicio.findOne({ ServicioID: id });
+      if (!servicio) {
+          return res.status(404).json({ mensaje: 'Servicio no encontrado' });
+      }
+      res.status(200).json(servicio);
+  } catch (error) {
+      res.status(500).json({ mensaje: 'Error al obtener el servicio', error });
   }
 };
 
 // Crear un nuevo servicio
 export const crearservicios = async (req, res) => {
-  try {
-    const { ServicioID, Nombre, Descripción, Precio, Tipo, Duracion, Total } = req.body;
-
-    if (!ServicioID || !Nombre || !Descripción || !Precio || !Tipo || Duracion === undefined || Total === undefined) {
+  const { ServicioID, Nombre, Descripción, Precio, Tipo, Duracion, Total } = req.body;
+  if (!ServicioID || !Nombre || !Descripción || !Precio || !Tipo || !Duracion) {
       return res.status(400).json({ mensaje: 'Todos los campos son obligatorios' });
-    }
+  }
 
-    const nuevoServicio = new Servicio({
+  const nuevoServicio = new Servicio({
       ServicioID,
       Nombre,
       Descripción,
       Precio,
       Tipo,
       Duracion,
-      Total,
-    });
+      Total: Total || 0, // Si no se proporciona, se asigna 0
+  });
 
-    const servicioGuardado = await nuevoServicio.save();
-    res.status(201).json(servicioGuardado);
+  try {
+      const servicioGuardado = await nuevoServicio.save();
+      res.status(201).json(servicioGuardado);
   } catch (error) {
-    res.status(500).json({ mensaje: error.message });
+      res.status(500).json({ mensaje: 'Error al crear el servicio', error });
   }
 };
 
-// Obtener un servicio por ID
-export const getServicioById = async (req, res) => {
-  const { ServicioID } = req.params;
-  try {
-    const servicio = await Servicio.findOne({ ServicioID });
-    if (!servicio) {
-      return res.status(404).json({ mensaje: 'Servicio no encontrado' });
-    }
-    res.json(servicio);
-  } catch (error) {
-    res.status(500).json({ mensaje: error.message });
-  }
-};
+// Modificar un servicio
+export const modificarservicios = async (req, res) => {
+  const { id } = req.params;
+  const { Nombre, Descripción, Precio, Tipo, Duracion } = req.body;
 
-// Actualizar un servicio
-export const actualizarservicio = async (req, res) => {
-  const { ServicioID } = req.params;
   try {
-    const servicioActualizado = await Servicio.findOneAndUpdate(
-      { ServicioID },
-      req.body,
-      { new: true }
-    );
+      const servicioActualizado = await Servicio.findOneAndUpdate(
+          { ServicioID: id },
+          { Nombre, Descripción, Precio, Tipo, Duracion },
+          { new: true, runValidators: true }
+      );
 
-    if (!servicioActualizado) {
-      return res.status(404).json({ mensaje: 'Servicio no encontrado' });
-    }
-    res.json(servicioActualizado);
+      if (!servicioActualizado) {
+          return res.status(404).json({ mensaje: 'Servicio no encontrado' });
+      }
+
+      res.status(200).json(servicioActualizado);
   } catch (error) {
-    res.status(500).json({ mensaje: error.message });
+      res.status(500).json({ mensaje: 'Error al modificar el servicio', error });
   }
 };
 
 // Eliminar un servicio
-export const eliminarservicio = async (req, res) => {
-  const { ServicioID } = req.params;
+export const eliminarservicios = async (req, res) => {
+  const { id } = req.params;
   try {
-    const servicioEliminado = await Servicio.findOneAndDelete({ ServicioID });
-
-    if (!servicioEliminado) {
-      return res.status(404).json({ mensaje: 'Servicio no encontrado' });
-    }
-    res.status(204).send();
+      const servicioEliminado = await Servicio.findOneAndDelete({ ServicioID: id });
+      if (!servicioEliminado) {
+          return res.status(404).json({ mensaje: 'Servicio no encontrado' });
+      }
+      res.status(200).json({ mensaje: 'Servicio eliminado' });
   } catch (error) {
-    res.status(500).json({ mensaje: error.message });
+      res.status(500).json({ mensaje: 'Error al eliminar el servicio', error });
   }
 };
 

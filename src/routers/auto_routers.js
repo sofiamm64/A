@@ -19,10 +19,10 @@ import { login,
         modificarproveedor,
 
         getsservicios,
-        getServicioById,
+        getservicios,
         crearservicios,
-        eliminarservicio,
-        actualizarservicio,
+        eliminarservicios,
+        modificarservicios,
 
         getsventas,
         getventas,
@@ -58,10 +58,10 @@ router.delete('/proveedor/:id',autenticacion, eliminarproveedor);
 router.put('/proveedor/:id',autenticacion, modificarproveedor);
 
 router.get('/servicios', autenticacion, getsservicios);
-router.get('/servicios/:ServicioID', autenticacion, getServicioById); 
+router.get('/servicios/:ServicioID', autenticacion, getservicios); 
 router.post('/servicios', autenticacion, crearservicios);
-router.delete('/servicios/:ServicioID', autenticacion, eliminarservicio); 
-router.put('/servicios/:ServicioID', autenticacion, actualizarservicio); 
+router.delete('/servicios/:ServicioID', autenticacion, eliminarservicios); 
+router.put('/servicios/:ServicioID', autenticacion, modificarservicios); 
 
 router.get('/ventas',autenticacion,getsventas);
 router.get('/ventas/:id',autenticacion, getventas);
