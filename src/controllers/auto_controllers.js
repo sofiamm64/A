@@ -120,7 +120,7 @@ export const crearclientes = async (req, res) => {
     }
 
     // Crear un nuevo cliente
-    const cliente = new Cliente({
+    const cliente = new Clientes({
       ServicioID,
       Nombre,
       Descripción,
