@@ -265,8 +265,14 @@ export const eliminarservicios = async (req, res) => {
 
 
 export const modificarservicios = async (req, res) => {
+  console.log('Received update request for ServicioID:', req.params.ServicioID); // Agrega este log
   try {
-    const servicio = await Servicio.findOneAndUpdate({ ServicioID: req.params.ServicioID }, req.body, { new: true });
+    const servicio = await Servicio.findOneAndUpdate(
+      { ServicioID: req.params.ServicioID },
+      req.body,
+      { new: true }
+    );
+
     if (!servicio) return res.status(404).json({ mensaje: 'Servicio no encontrado' });
     res.json(servicio);
   } catch (error) {
