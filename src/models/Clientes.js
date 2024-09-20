@@ -1,11 +1,14 @@
-import mongoose from "mongoose"; 
+import mongoose from "mongoose";
 
 const modelclie = new mongoose.Schema({
-    clienteID: { type: Number, required: true, unique: true },
     nombre: { type: String, required: true },
-    apellido: { type: String, required: true },
-    email: { type: String, required: true },
-    telefono: { type: String }
-}, { timestamps: true });
+    correo: { type: String, required: true },
+    telefono: { type: String, required: true },
+    cargo: { type: String, required: true },
+    codigoUsuario: { type: String, required: true, unique: true },
+    estado: { type: String, enum: ['Activo', 'Inactivo'], default: 'Activo' },
+}, {
+    timestamps: true
+});
 
 export default mongoose.model('Clientes', modelclie);
