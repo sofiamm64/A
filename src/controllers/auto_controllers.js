@@ -242,14 +242,17 @@ export const crearServicio = async (req, res) => {
   try {
     const { ProductoServicioID, Nombre, Descripción, Precio, Tipo } = req.body;
 
+    // Verificar campos obligatorios
     if (!ProductoServicioID || !Nombre || !Descripción || !Precio || !Tipo) {
       return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
 
+    // Verificar tipo y valor de Precio
     if (typeof Precio !== 'number' || Precio <= 0) {
       return res.status(400).json({ error: 'Precio debe ser un número positivo' });
     }
 
+    // Crear el nuevo servicio
     const servicio = new Servicio({
       ProductoServicioID,
       Nombre,
@@ -261,8 +264,8 @@ export const crearServicio = async (req, res) => {
     await servicio.save();
     res.status(201).json(servicio);
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+    console.error('Error al crear el servicio:', error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor', error: error.message });
   }
 };
 
