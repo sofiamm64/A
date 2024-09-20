@@ -61,7 +61,7 @@ router.get('/servicios', autenticacion, getsservicios);
 router.get('/servicios/:id', autenticacion, getservicios);
 router.post('/servicios', autenticacion, crearservicios);
 router.delete('/servicios/:id', autenticacion, eliminarservicios);
-router.put('/servicios/:id', autenticacion, modificarservicios);
+router.put('/servicios/:ServicioID', autenticacion, modificarservicios);
 
 router.get('/ventas',autenticacion,getsventas);
 router.get('/ventas/:id',autenticacion, getventas);
