@@ -127,7 +127,7 @@ export const crearclientes = async (req, res) => {
   }
 };
 
-// Obtener un cliente por ID
+// Obtener un cliente por clienteID
 export const getclientes = async (req, res) => {
   try {
     const cliente = await Clientes.findOne({ clienteID: req.params.id });
