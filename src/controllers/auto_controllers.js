@@ -103,24 +103,31 @@ export const getsclientes = async (req, res) => {
 // Crear un nuevo cliente
 export const crearclientes = async (req, res) => {
   try {
+    console.log('Datos recibidos en el cuerpo de la petición:', req.body); // Verificar datos recibidos
+
     const { clienteID, nombre, apellido, email, telefono } = req.body;
 
-    // Validación: asegurar que todos los campos están presentes
+    // Validar que todos los campos estén presentes
     if (!clienteID || !nombre || !apellido || !email || !telefono) {
+      console.log('Faltan campos en la petición');
       return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
 
-    // Verificación de si el clienteID ya está en uso
+    // Verificar si el cliente ya existe
     const existingCliente = await Clientes.findOne({ clienteID });
     if (existingCliente) {
+      console.log('El cliente ya existe');
       return res.status(400).json({ error: 'El clienteID ya está en uso.' });
     }
 
     // Crear y guardar el nuevo cliente
     const cliente = new Clientes({ clienteID, nombre, apellido, email, telefono });
+    console.log('Nuevo cliente creado:', cliente);
+
     await cliente.save();
     res.status(201).json(cliente);
   } catch (error) {
+    console.error('Error al crear el cliente:', error); // Ver el error exacto en la consola
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
