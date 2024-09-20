@@ -103,7 +103,7 @@ export const getsclientes = async (req, res) => {
 // Crear un nuevo cliente
 export const crearclientes = async (req, res) => {
   try {
-      console.log('Datos recibidos en el cuerpo de la petición:', req.body); // Verificar datos recibidos
+      console.log('Datos recibidos en el cuerpo de la petición:', req.body);
 
       const { clienteID, nombre, apellido, email, telefono } = req.body;
 
