@@ -1,3 +1,5 @@
+import mongoose from 'mongoose';
+
 const modelserv = new mongoose.Schema({
     ProductoServicioID: { type: Number, required: true, unique: true },
     Nombre: { type: String, required: true },
@@ -9,8 +11,9 @@ const modelserv = new mongoose.Schema({
       enum: ['Producto', 'Servicio'],
       default: 'Producto'
     },
-    Duracion: { type: Number, default: 0 }
+    Duracion: { type: Number, default: 0 } // Agregar Duración con valor por defecto
   }, {
     timestamps: true,
   });
-  
+
+export default mongoose.model('Servicio', modelserv);
