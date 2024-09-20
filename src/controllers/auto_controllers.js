@@ -34,7 +34,8 @@ export const register = async (req, res) => {
           token
       });
   } catch (error) {
-      res.status(500).json({ mensaje: error.message });
+    console.error(error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
   }
 };
 
@@ -59,8 +60,8 @@ export const login = async (req, res) => {
           token
       });
   } catch (error) {
-      console.error('Error en login:', error);
-      res.status(500).json({ mensaje: "Error interno del servidor" });
+    console.error(error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
   }
 };
 
@@ -85,7 +86,8 @@ export const profile = async (req, res) => {
           updatedAt: buscarp.updatedAt
       });
   } catch (error) {
-      res.status(500).json({ mensaje: error.message });
+    console.error(error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
   }
 };
 
@@ -120,8 +122,8 @@ export const crearclientes = async (req, res) => {
     const saveCliente = await newCliente.save();
     res.json(saveCliente);
   } catch (error) {
-    console.error('Error en crearclientes:', error);
-    res.status(500).json({ mensaje: error.message });
+    console.error(error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
   }
 };
 
@@ -131,7 +133,8 @@ export const getclientes = async (req, res) => {
     if (!cliente) return res.status(404).json({ mensaje: "Cliente no encontrado" });
     res.json(cliente);
   } catch (error) {
-    res.status(500).json({ mensaje: error.message });
+    console.error(error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
   }
 };
 
@@ -141,7 +144,8 @@ export const eliminarclientes = async (req, res) => {
     if (!cliente) return res.status(404).json({ mensaje: "Cliente no encontrado" });
     return res.sendStatus(204);
   } catch (error) {
-    res.status(500).json({ mensaje: error.message });
+    console.error(error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
   }
 };
 
@@ -151,7 +155,8 @@ export const modificarclientes = async (req, res) => {
     if (!cliente) return res.status(404).json({ mensaje: "Cliente no encontrado" });
     res.json(cliente);
   } catch (error) {
-    res.status(500).json({ mensaje: error.message });
+    console.error(error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
   }
 };
 
@@ -161,7 +166,8 @@ export const getsproveedor = async (req, res) => {
   const proveedor = await Proveedor.find()
   res.json(proveedor)
   } catch {
-    res.status(500).json({mesaje: error.mesaje})
+    console.error(error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
   }
 }
 export const crearproveedor = async (req, res) => {
@@ -186,7 +192,8 @@ export const crearproveedor = async (req, res) => {
   const saveproveedor = await newproveedor.save();
   res.json(saveproveedor);
 } catch {
-    res.status(500).json({mesaje: error.mesaje})
+  console.error(error);
+  return res.status(500).json({ mensaje: 'Error interno del servidor' });
   }
 }
 
@@ -196,7 +203,8 @@ export const getproveedor = async (req, res) => {
   if (!proveedor) return res.status(404).json({ mensaje: "Provedor no encontrado" });
   res.json(proveedor);
   } catch {
-    res.status(500).json({mesaje: error.mesaje})
+    console.error(error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
   }
 }
 export const eliminarproveedor = async (req, res) => {
@@ -205,7 +213,8 @@ export const eliminarproveedor = async (req, res) => {
   if (!proveedor) return res.status(404).json({ mensaje: "Provedor no encontrado" });
   return res.sendStatus(204);
   } catch {
-    res.status(500).json({mesaje: error.mesaje})
+    console.error(error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
   }
 }
 export const modificarproveedor = async (req, res) => {
@@ -214,7 +223,8 @@ export const modificarproveedor = async (req, res) => {
     if (!proveedor) return res.status(404).json({ mensaje: "Provedor no encontrado" });
     res.json(proveedor);
     } catch {
-    res.status(500).json({mesaje: error.mesaje})
+      console.error(error);
+      return res.status(500).json({ mensaje: 'Error interno del servidor' });
     }
 }
 //
@@ -223,7 +233,8 @@ export const getServicios = async (req, res) => {
     const servicios = await Servicio.find();
     res.json(servicios);
   } catch (error) {
-    res.status(500).json({ mensaje: error.message });
+    console.error(error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
   }
 };
 
@@ -251,7 +262,7 @@ export const crearServicio = async (req, res) => {
     res.status(201).json(servicio);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: error.message });
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
   }
 };
 
@@ -261,7 +272,8 @@ export const getServicioByID = async (req, res) => {
     if (!servicio) return res.status(404).json({ mensaje: 'Servicio no encontrado' });
     res.json(servicio);
   } catch (error) {
-    res.status(500).json({ mensaje: error.message });
+    console.error(error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
   }
 };
 
@@ -271,7 +283,8 @@ export const eliminarServicio = async (req, res) => {
     if (!servicio) return res.status(404).json({ mensaje: 'Servicio no encontrado' });
     res.sendStatus(204);
   } catch (error) {
-    res.status(500).json({ mensaje: error.message });
+    console.error(error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
   }
 };
 
@@ -285,7 +298,8 @@ export const modificarServicio = async (req, res) => {
     if (!servicio) return res.status(404).json({ mensaje: 'Servicio no encontrado' });
     res.json(servicio);
   } catch (error) {
-    res.status(500).json({ mensaje: error.message });
+    console.error(error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
   }
 };
 
@@ -295,7 +309,8 @@ export const getssventas = async (req, res) => {
   const Ventas = await Ventas.find()
   res.json(Ventas)
 } catch{
-    res.status(500).json({mesaje: error.mesaje})
+  console.error(error);
+  return res.status(500).json({ mensaje: 'Error interno del servidor' });
   }
 }
 export const crearventas = async (req, res) => {
@@ -314,7 +329,8 @@ export const crearventas = async (req, res) => {
     await nuevaVenta.save();
     res.status(201).json(nuevaVenta);
   } catch (error) {
-    res.status(500).json({mesaje: error.mesaje})
+    console.error(error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
   }
 }
 export const getventas = async (req, res) => {
@@ -323,7 +339,8 @@ export const getventas = async (req, res) => {
   if (!Ventas) return res.status(404).json({ mensaje: "venta no encontrada" });
   res.json(Ventas);
   } catch {
-    res.status(500).json({mesaje: error.mesaje})
+    console.error(error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
   }
 }
 export const eliminarventas = async (req, res) => {
@@ -332,7 +349,8 @@ export const eliminarventas = async (req, res) => {
   if (!venta) return res.status(404).json({ mensaje: "venta no encontrada" });
   return res.sendStatus(204);
   } catch {
-    res.status(500).json({mesaje: error.mesaje})
+    console.error(error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
 }}
 
 export const modificarventas = async (req, res) => {
@@ -341,7 +359,8 @@ export const modificarventas = async (req, res) => {
     if (!venta) return res.status(404).json({ mensaje: "venta no encontrada" });
     res.json(venta);
     } catch {
-    res.status(500).json({mesaje: error.mesaje})
+      console.error(error);
+      return res.status(500).json({ mensaje: 'Error interno del servidor' });
     }
 }
 //
@@ -350,7 +369,8 @@ export const getscompras = async (req, res) => {
     const compras = await Compras.find()
   res.json(compras)
   } catch{
-    res.status(500).json({mesaje: error.mesaje})
+    console.error(error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
   }
 
 }
@@ -367,7 +387,8 @@ export const crearcompras = async (req, res) => {
   const savecompras = await newcompras.save();
   res.json(savecompras);
   } catch{
-    res.status(500).json({mesaje: error.mesaje})
+    console.error(error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
   }
 }
 export const getcompras = async (req, res) => {
@@ -376,7 +397,8 @@ export const getcompras = async (req, res) => {
   if (!compra) return res.status(404).json({ mensaje: "compra no encontrada" });
   res.json(compra);
   } catch{
-    res.status(500).json({mesaje: error.mesaje})
+    console.error(error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
   }
 }
 export const eliminarcompras = async (req, res) => {
@@ -385,7 +407,8 @@ export const eliminarcompras = async (req, res) => {
   if (!compra) return res.status(404).json({ mensaje: "compra no encontrada" });
   return res.sendStatus(204);
   } catch{
-    res.status(500).json({mesaje: error.mesaje})
+    console.error(error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
   }
 }
 export const modificarcompras = async (req, res) => {
@@ -394,7 +417,8 @@ export const modificarcompras = async (req, res) => {
     if (!compra) return res.status(404).json({ mensaje: "compra no encontrada" });
     res.json(compra);
     } catch{
-    res.status(500).json({mesaje: error.mesaje})
+      console.error(error);
+      return res.status(500).json({ mensaje: 'Error interno del servidor' });
     }
 }
 
