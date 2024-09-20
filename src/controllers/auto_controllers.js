@@ -34,8 +34,7 @@ export const register = async (req, res) => {
           token
       });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+      res.status(500).json({ mensaje: error.message });
   }
 };
 
@@ -60,8 +59,8 @@ export const login = async (req, res) => {
           token
       });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+      console.error('Error en login:', error);
+      res.status(500).json({ mensaje: "Error interno del servidor" });
   }
 };
 
@@ -86,8 +85,7 @@ export const profile = async (req, res) => {
           updatedAt: buscarp.updatedAt
       });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+      res.status(500).json({ mensaje: error.message });
   }
 };
 
@@ -98,7 +96,6 @@ export const getsclientes = async (req, res) => {
     const clientes = await Clientes.find();
     res.json(clientes);
   } catch (error) {
-    console.error('Error en getsclientes:', error);
     res.status(500).json({ mensaje: error.message });
   }
 };
@@ -106,11 +103,6 @@ export const getsclientes = async (req, res) => {
 export const crearclientes = async (req, res) => {
   try {
     const { clienteID, nombre, apellido, telefono, email } = req.body;
-
-    if (!clienteID || !nombre || !apellido || !telefono || !email) {
-      return res.status(400).json({ mensaje: 'Todos los campos son obligatorios.' });
-    }
-
     const newCliente = new Clientes({
       clienteID,
       nombre,
@@ -118,45 +110,40 @@ export const crearclientes = async (req, res) => {
       telefono,
       email,
     });
-
     const saveCliente = await newCliente.save();
     res.json(saveCliente);
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+    res.status(500).json({ mensaje: error.message });
   }
 };
 
 export const getclientes = async (req, res) => {
   try {
-    const cliente = await Clientes.findOne({ clienteID: req.params.clienteID });
+    const cliente = await Clientes.findById(req.params.id);
     if (!cliente) return res.status(404).json({ mensaje: "Cliente no encontrado" });
     res.json(cliente);
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+    res.status(500).json({ mensaje: error.message });
   }
 };
 
 export const eliminarclientes = async (req, res) => {
   try {
-    const cliente = await Clientes.findOneAndDelete({ clienteID: req.params.clienteID });
+    const cliente = await Clientes.findByIdAndDelete(req.params.id);
     if (!cliente) return res.status(404).json({ mensaje: "Cliente no encontrado" });
     return res.sendStatus(204);
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+    res.status(500).json({ mensaje: error.message });
   }
 };
 
 export const modificarclientes = async (req, res) => {
   try {
-    const cliente = await Clientes.findOneAndUpdate({ clienteID: req.params.clienteID }, req.body, { new: true });
+    const cliente = await Clientes.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!cliente) return res.status(404).json({ mensaje: "Cliente no encontrado" });
     res.json(cliente);
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+    res.status(500).json({ mensaje: error.message });
   }
 };
 
@@ -166,19 +153,10 @@ export const getsproveedor = async (req, res) => {
   const proveedor = await Proveedor.find()
   res.json(proveedor)
   } catch {
-    console.error(error);
-    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+    res.status(500).json({mesaje: error.mesaje})
   }
 }
 export const crearproveedor = async (req, res) => {
-  console.log({
-    ProductoServicioID: parseInt(ProductoServicioID, 10),
-    Nombre: nombre,
-    Descripción: descripcion,
-    Precio: parseFloat(precio),
-    Tipo: tipo,
-  });
-  
   try{
     const { ProveedorID, nombre, apellido, telefono, email, Dirección } = req.body;
   const newproveedor = new Proveedor({
@@ -192,8 +170,7 @@ export const crearproveedor = async (req, res) => {
   const saveproveedor = await newproveedor.save();
   res.json(saveproveedor);
 } catch {
-  console.error(error);
-  return res.status(500).json({ mensaje: 'Error interno del servidor' });
+    res.status(500).json({mesaje: error.mesaje})
   }
 }
 
@@ -203,8 +180,7 @@ export const getproveedor = async (req, res) => {
   if (!proveedor) return res.status(404).json({ mensaje: "Provedor no encontrado" });
   res.json(proveedor);
   } catch {
-    console.error(error);
-    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+    res.status(500).json({mesaje: error.mesaje})
   }
 }
 export const eliminarproveedor = async (req, res) => {
@@ -213,8 +189,7 @@ export const eliminarproveedor = async (req, res) => {
   if (!proveedor) return res.status(404).json({ mensaje: "Provedor no encontrado" });
   return res.sendStatus(204);
   } catch {
-    console.error(error);
-    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+    res.status(500).json({mesaje: error.mesaje})
   }
 }
 export const modificarproveedor = async (req, res) => {
@@ -223,8 +198,7 @@ export const modificarproveedor = async (req, res) => {
     if (!proveedor) return res.status(404).json({ mensaje: "Provedor no encontrado" });
     res.json(proveedor);
     } catch {
-      console.error(error);
-      return res.status(500).json({ mensaje: 'Error interno del servidor' });
+    res.status(500).json({mesaje: error.mesaje})
     }
 }
 //
@@ -240,11 +214,16 @@ export const getsservicios = async (req, res) => {
 //
 export const crearservicios = async (req, res) => {
   try {
-    const { ServicioID, Nombre, Descripción, Precio, Tipo } = req.body;
+    const { ServicioID, Nombre, Descripción, Precio, Tipo, Duracion, Total } = req.body;
 
     // Verifica que todos los campos obligatorios estén presentes
-    if (!ServicioID || !Nombre || !Descripción || !Precio || !Tipo) {
-      return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+    if (!ServicioID || !Nombre || !Descripción || !Precio || !Tipo || Duracion === undefined || Duracion === null) {
+        return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+    }
+
+    // Asegúrate de que Duracion sea un número válido
+    if (isNaN(Duracion) || Duracion < 0) {
+      return res.status(400).json({ error: 'La duración debe ser un número positivo' });
     }
 
     // Crear un nuevo servicio
@@ -254,14 +233,14 @@ export const crearservicios = async (req, res) => {
       Descripción,
       Precio,
       Tipo,
-      Duracion: 0, // Duración predeterminada
+      Duracion
     });
 
     await servicio.save();
     res.status(201).json(servicio);
   } catch (error) {
-    console.error('Error al crear el servicio:', error); // Log detallado del error
-    res.status(500).json({ error: 'Error interno del servidor', mensaje: error.message });
+    console.error(error);
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
 // 
@@ -296,13 +275,12 @@ export const modificarservicios = async (req, res) => {
 };
 
 //
-export const getssventas = async (req, res) => {
+export const getsventas = async (req, res) => {
   try{
   const Ventas = await Ventas.find()
   res.json(Ventas)
 } catch{
-  console.error(error);
-  return res.status(500).json({ mensaje: 'Error interno del servidor' });
+    res.status(500).json({mesaje: error.mesaje})
   }
 }
 export const crearventas = async (req, res) => {
@@ -321,8 +299,7 @@ export const crearventas = async (req, res) => {
     await nuevaVenta.save();
     res.status(201).json(nuevaVenta);
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+    res.status(500).json({mesaje: error.mesaje})
   }
 }
 export const getventas = async (req, res) => {
@@ -331,8 +308,7 @@ export const getventas = async (req, res) => {
   if (!Ventas) return res.status(404).json({ mensaje: "venta no encontrada" });
   res.json(Ventas);
   } catch {
-    console.error(error);
-    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+    res.status(500).json({mesaje: error.mesaje})
   }
 }
 export const eliminarventas = async (req, res) => {
@@ -341,8 +317,7 @@ export const eliminarventas = async (req, res) => {
   if (!venta) return res.status(404).json({ mensaje: "venta no encontrada" });
   return res.sendStatus(204);
   } catch {
-    console.error(error);
-    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+    res.status(500).json({mesaje: error.mesaje})
 }}
 
 export const modificarventas = async (req, res) => {
@@ -351,8 +326,7 @@ export const modificarventas = async (req, res) => {
     if (!venta) return res.status(404).json({ mensaje: "venta no encontrada" });
     res.json(venta);
     } catch {
-      console.error(error);
-      return res.status(500).json({ mensaje: 'Error interno del servidor' });
+    res.status(500).json({mesaje: error.mesaje})
     }
 }
 //
@@ -361,8 +335,7 @@ export const getscompras = async (req, res) => {
     const compras = await Compras.find()
   res.json(compras)
   } catch{
-    console.error(error);
-    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+    res.status(500).json({mesaje: error.mesaje})
   }
 
 }
@@ -379,8 +352,7 @@ export const crearcompras = async (req, res) => {
   const savecompras = await newcompras.save();
   res.json(savecompras);
   } catch{
-    console.error(error);
-    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+    res.status(500).json({mesaje: error.mesaje})
   }
 }
 export const getcompras = async (req, res) => {
@@ -389,8 +361,7 @@ export const getcompras = async (req, res) => {
   if (!compra) return res.status(404).json({ mensaje: "compra no encontrada" });
   res.json(compra);
   } catch{
-    console.error(error);
-    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+    res.status(500).json({mesaje: error.mesaje})
   }
 }
 export const eliminarcompras = async (req, res) => {
@@ -399,8 +370,7 @@ export const eliminarcompras = async (req, res) => {
   if (!compra) return res.status(404).json({ mensaje: "compra no encontrada" });
   return res.sendStatus(204);
   } catch{
-    console.error(error);
-    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+    res.status(500).json({mesaje: error.mesaje})
   }
 }
 export const modificarcompras = async (req, res) => {
@@ -409,8 +379,7 @@ export const modificarcompras = async (req, res) => {
     if (!compra) return res.status(404).json({ mensaje: "compra no encontrada" });
     res.json(compra);
     } catch{
-      console.error(error);
-      return res.status(500).json({ mensaje: 'Error interno del servidor' });
+    res.status(500).json({mesaje: error.mesaje})
     }
 }
 

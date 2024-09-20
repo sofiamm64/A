@@ -24,7 +24,7 @@ import { login,
         eliminarservicios,
         modificarservicios,
 
-        getssventas,
+        getsventas,
         getventas,
         crearventas,
         eliminarventas,
@@ -46,11 +46,10 @@ router.post('/logout', logout) ;
 router.get("/permisos", autenticacion , profile)
 
 router.get('/clientes', autenticacion, getsclientes);
-router.get('/clientes/:clienteID', autenticacion, getclientes);
+router.get('/clientes/:id', autenticacion, getclientes);
 router.post('/clientes', autenticacion, crearclientes);
-router.delete('/clientes/:clienteID', autenticacion, eliminarclientes);
-router.put('/clientes/:clienteID', autenticacion, modificarclientes);
-
+router.delete('/clientes/:id', autenticacion, eliminarclientes);
+router.put('/clientes/:id', autenticacion, modificarclientes);
 
 router.get('/proveedor',autenticacion,getsproveedor);
 router.get('/proveedor/:id',autenticacion, getproveedor);
@@ -64,7 +63,7 @@ router.post('/servicios', autenticacion, crearservicios);
 router.delete('/servicios/:id', autenticacion, eliminarservicios);
 router.put('/servicios/:id', autenticacion, modificarservicios);
 
-router.get('/ventas',autenticacion,getssventas);
+router.get('/ventas',autenticacion,getsventas);
 router.get('/ventas/:id',autenticacion, getventas);
 router.post('/ventas',autenticacion, crearventas);
 router.delete('/ventas/:id',autenticacion, eliminarventas);
