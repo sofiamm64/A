@@ -103,10 +103,10 @@ export const getsclientes = async (req, res) => {
 // Crear un nuevo cliente
 export const crearclientes = async (req, res) => {
   try {
-    const { clienteID, nombre, email, telefono } = req.body;
+    const { clienteID, nombre, apellido, email, telefono } = req.body; // Agregado 'apellido'
 
     // Verifica que todos los campos obligatorios estén presentes
-    if (!clienteID || !nombre || !email || !telefono) {
+    if (!clienteID || !nombre || !apellido || !email || !telefono) { // Incluido 'apellido'
       return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
 
@@ -117,7 +117,7 @@ export const crearclientes = async (req, res) => {
     }
 
     // Crear un nuevo cliente
-    const cliente = new Clientes({ clienteID, nombre, email, telefono });
+    const cliente = new Clientes({ clienteID, nombre, apellido, email, telefono }); // Agregado 'apellido'
     await cliente.save();
     res.status(201).json(cliente);
   } catch (error) {
