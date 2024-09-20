@@ -100,10 +100,12 @@ export const getsclientes = async (req, res) => {
   }
 };
 
+// Crear un nuevo cliente
 export const crearclientes = async (req, res) => {
   try {
-      const { nombre, email, telefono, codigoUsuario } = req.body;
+      const { clienteID, nombre, email, telefono, codigoUsuario } = req.body;
       const newCliente = new Clientes({
+          clienteID, // Usamos el clienteID al crear el cliente
           nombre,
           email,
           telefono,
@@ -116,9 +118,10 @@ export const crearclientes = async (req, res) => {
   }
 };
 
+// Obtener un cliente por clienteID
 export const getclientes = async (req, res) => {
   try {
-      const cliente = await Clientes.findById(req.params.id);
+      const cliente = await Clientes.findOne({ clienteID: req.params.clienteID }); // Usamos clienteID para buscar
       if (!cliente) return res.status(404).json({ mensaje: "Cliente no encontrado" });
       res.json(cliente);
   } catch (error) {
@@ -126,9 +129,10 @@ export const getclientes = async (req, res) => {
   }
 };
 
+// Eliminar un cliente por clienteID
 export const eliminarclientes = async (req, res) => {
   try {
-      const cliente = await Clientes.findByIdAndDelete(req.params.id);
+      const cliente = await Clientes.findOneAndDelete({ clienteID: req.params.clienteID }); // Usamos clienteID para eliminar
       if (!cliente) return res.status(404).json({ mensaje: "Cliente no encontrado" });
       return res.sendStatus(204);
   } catch (error) {
@@ -136,9 +140,10 @@ export const eliminarclientes = async (req, res) => {
   }
 };
 
+// Modificar un cliente por clienteID
 export const modificarclientes = async (req, res) => {
   try {
-      const cliente = await Clientes.findByIdAndUpdate(req.params.id, req.body, { new: true });
+      const cliente = await Clientes.findOneAndUpdate({ clienteID: req.params.clienteID }, req.body, { new: true }); // Usamos clienteID para actualizar
       if (!cliente) return res.status(404).json({ mensaje: "Cliente no encontrado" });
       res.json(cliente);
   } catch (error) {
