@@ -93,61 +93,60 @@ export const profile = async (req, res) => {
 
 export const getsclientes = async (req, res) => {
   try {
-      const clientes = await Clientes.find();
-      res.json(clientes);
+    const clientes = await Clientes.find();
+    res.json(clientes);
   } catch (error) {
-      res.status(500).json({ mensaje: error.message });
+    res.status(500).json({ mensaje: error.message });
   }
 };
 
 // Crear un nuevo cliente
 export const crearclientes = async (req, res) => {
   try {
-      const { clienteID, nombre, email, telefono, codigoUsuario } = req.body;
-      const newCliente = new Clientes({
-          clienteID, // Usamos el clienteID al crear el cliente
-          nombre,
-          email,
-          telefono,
-          codigoUsuario,
-      });
-      const saveCliente = await newCliente.save();
-      res.status(201).json(saveCliente);
+    const { nombre, email, telefono } = req.body; // Eliminar codigoUsuario
+    const newCliente = new Clientes({
+      nombre,
+      email,
+      telefono,
+    });
+    const saveCliente = await newCliente.save();
+    res.status(201).json(saveCliente);
   } catch (error) {
-      res.status(500).json({ mensaje: error.message });
+    console.error("Error al crear el cliente:", error);
+    res.status(500).json({ mensaje: error.message });
   }
 };
 
-// Obtener un cliente por clienteID
+// Obtener un cliente por ID
 export const getclientes = async (req, res) => {
   try {
-      const cliente = await Clientes.findOne({ clienteID: req.params.clienteID }); // Usamos clienteID para buscar
-      if (!cliente) return res.status(404).json({ mensaje: "Cliente no encontrado" });
-      res.json(cliente);
+    const cliente = await Clientes.findById(req.params.ServicioID);
+    if (!cliente) return res.status(404).json({ mensaje: "Cliente no encontrado" });
+    res.json(cliente);
   } catch (error) {
-      res.status(500).json({ mensaje: error.message });
+    res.status(500).json({ mensaje: error.message });
   }
 };
 
-// Eliminar un cliente por clienteID
+// Eliminar cliente
 export const eliminarclientes = async (req, res) => {
   try {
-      const cliente = await Clientes.findOneAndDelete({ clienteID: req.params.clienteID }); // Usamos clienteID para eliminar
-      if (!cliente) return res.status(404).json({ mensaje: "Cliente no encontrado" });
-      return res.sendStatus(204);
+    const cliente = await Clientes.findByIdAndDelete(req.params.ServicioID);
+    if (!cliente) return res.status(404).json({ mensaje: "Cliente no encontrado" });
+    return res.sendStatus(204);
   } catch (error) {
-      res.status(500).json({ mensaje: error.message });
+    res.status(500).json({ mensaje: error.message });
   }
 };
 
-// Modificar un cliente por clienteID
+// Modificar cliente
 export const modificarclientes = async (req, res) => {
   try {
-      const cliente = await Clientes.findOneAndUpdate({ clienteID: req.params.clienteID }, req.body, { new: true }); // Usamos clienteID para actualizar
-      if (!cliente) return res.status(404).json({ mensaje: "Cliente no encontrado" });
-      res.json(cliente);
+    const cliente = await Clientes.findByIdAndUpdate(req.params.ServicioID, req.body, { new: true });
+    if (!cliente) return res.status(404).json({ mensaje: "Cliente no encontrado" });
+    res.json(cliente);
   } catch (error) {
-      res.status(500).json({ mensaje: error.message });
+    res.status(500).json({ mensaje: error.message });
   }
 };
 

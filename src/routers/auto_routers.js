@@ -46,10 +46,10 @@ router.post('/logout', logout) ;
 router.get("/permisos", autenticacion , profile)
 
 router.get('/clientes', autenticacion, getsclientes);
-router.get('/clientes/:clienteID', autenticacion, getclientes); 
+router.get('/clientes/:ServicioID', autenticacion, getclientes);
 router.post('/clientes', autenticacion, crearclientes);
-router.delete('/clientes/:clienteID', autenticacion, eliminarclientes); 
-router.put('/clientes/:clienteID', autenticacion, modificarclientes);
+router.delete('/clientes/:ServicioID', autenticacion, eliminarclientes);
+router.put('/clientes/:ServicioID', autenticacion, modificarclientes);
 
 router.get('/proveedor',autenticacion,getsproveedor);
 router.get('/proveedor/:id',autenticacion, getproveedor);
