@@ -303,58 +303,76 @@ export const modificarservicios = async (req, res) => {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export const getsventas = async (req, res) => {
-  try{
-  const Ventas = await Ventas.find()
-  res.json(Ventas)
-} catch{
-    res.status(500).json({mesaje: error.mesaje})
+  try {
+    const ventas = await Ventas.find();
+    res.json(ventas);
+  } catch (error) {
+    res.status(500).json({ mensaje: error.message });
   }
 };
+
 export const crearventas = async (req, res) => {
   try {
     console.log(req.body);
-    const { VentaID, ClienteID, ServicioID, FechaVenta, Total } = req.body;
+    const { VentaID, ClienteID, ServicioID, FechaVenta, Cantidad, PrecioU, Total, Estado } = req.body;
 
     const nuevaVenta = new Ventas({
       VentaID,
       ClienteID,
       ServicioID,
       FechaVenta: new Date(FechaVenta),
-      Total: parseFloat(Total)
+      Cantidad: Cantidad || 0, 
+      PrecioU: PrecioU || 0, 
+      Total: Total || 0, 
+      Estado: Estado || 'pendiente', 
     });
 
     await nuevaVenta.save();
     res.status(201).json(nuevaVenta);
   } catch (error) {
-    res.status(500).json({mesaje: error.mesaje})
+    res.status(500).json({ mensaje: error.message });
   }
 };
+
 export const getventas = async (req, res) => {
-  try{
-  const Ventas = await Ventas.findById(req.params.id);
-  if (!Ventas) return res.status(404).json({ mensaje: "venta no encontrada" });
-  res.json(Ventas);
-  } catch {
-    res.status(500).json({mesaje: error.mesaje})
+  try {
+    const venta = await Ventas.findOne({ VentaID: req.params.VentaID }); // Cambié a VentaID
+    if (!venta) return res.status(404).json({ mensaje: "Venta no encontrada" });
+    res.json(venta);
+  } catch (error) {
+    res.status(500).json({ mensaje: error.message });
   }
 };
+
 export const eliminarventas = async (req, res) => {
-  try{
-  const venta = await Ventas.findByIdAndDelete(req.params.id);
-  if (!venta) return res.status(404).json({ mensaje: "venta no encontrada" });
-  return res.sendStatus(204);
-  } catch {
-    res.status(500).json({mesaje: error.mesaje})
-}
+  try {
+    const venta = await Ventas.findOneAndDelete({ VentaID: req.params.VentaID }); // Cambié a VentaID
+    if (!venta) return res.status(404).json({ mensaje: "Venta no encontrada" });
+    return res.sendStatus(204);
+  } catch (error) {
+    res.status(500).json({ mensaje: error.message });
+  }
 };
+
 export const modificarventas = async (req, res) => {
-  try{
-    const venta = await Ventas.findByIdAndUpdate(req.params.id, req.body,{new: true});
-    if (!venta) return res.status(404).json({ mensaje: "venta no encontrada" });
+  try {
+    const { Cantidad, PrecioU, Estado } = req.body;
+    const venta = await Ventas.findOneAndUpdate(
+      { VentaID: req.params.VentaID },
+      {
+        ...req.body,
+        Cantidad: Cantidad || 0, 
+        PrecioU: PrecioU || 0, 
+        Total: Total || 0, 
+        Estado: Estado || 'pendiente', 
+      },
+      { new: true }
+    );
+    if (!venta) return res.status(404).json({ mensaje: "Venta no encontrada" });
     res.json(venta);
-    } catch {
-    res.status(500).json({mesaje: error.mesaje})
-    }
+  } catch (error) {
+    res.status(500).json({ mensaje: error.message });
+  }
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

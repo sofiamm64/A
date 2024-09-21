@@ -65,10 +65,10 @@ router.delete('/servicios/:ServicioID', autenticacion, eliminarservicios);
 router.put('/servicios/:ServicioID', autenticacion, modificarservicios);
 
 router.get('/ventas',autenticacion,getsventas);
-router.get('/ventas/:id',autenticacion, getventas);
+router.get('/ventas/:VentaID',autenticacion, getventas);
 router.post('/ventas',autenticacion, crearventas);
-router.delete('/ventas/:id',autenticacion, eliminarventas);
-router.put('/ventas/:id',autenticacion, modificarventas);
+router.delete('/ventas/:VentaID',autenticacion, eliminarventas);
+router.put('/ventas/:VentaID',autenticacion, modificarventas);
 
 router.get('/compras',autenticacion,getscompras);
 router.get('/compras/:id',autenticacion, getcompras);
