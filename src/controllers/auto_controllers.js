@@ -239,34 +239,35 @@ export const getsservicios = async (req, res) => {
 //
 export const crearservicios = async (req, res) => {
   try {
-    const { ServicioID, Nombre, Descripción, Precio, Tipo, Duracion, Total } = req.body;
+    const { ServicioID, Nombre, Descripción, Precio, Tipo, Duracion } = req.body;
 
     // Verifica que todos los campos obligatorios estén presentes
-    if (!ServicioID || !Nombre || !Descripción || !Precio || !Tipo || Duracion === undefined || Duracion === null) {
+    if (!ServicioID || !Nombre || !Descripción || !Precio || !Tipo) {
         return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
 
     // Asegúrate de que Duracion sea un número válido
-    if (isNaN(Duracion) || Duracion < 0) {
-      return res.status(400).json({ error: 'La duración debe ser un número positivo' });
+    if (Duracion !== undefined && (isNaN(Duracion) || Duracion < 0)) {
+        return res.status(400).json({ error: 'La duración debe ser un número positivo' });
     }
 
     // Crear un nuevo servicio
     const servicio = new Servicio({
-      ServicioID,
-      Nombre,
-      Descripción,
-      Precio,
-      Tipo,
-      Duracion
+        ServicioID,
+        Nombre,
+        Descripción,
+        Precio,
+        Tipo,
+        Duracion,
+        Total: Precio * (Duracion || 1) // Calcular el Total como Precio * Duracion
     });
 
     await servicio.save();
     res.status(201).json(servicio);
-  } catch (error) {
+} catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error interno del servidor' });
-  }
+}
 };
 // 
 export const getservicios = async (req, res) => {
