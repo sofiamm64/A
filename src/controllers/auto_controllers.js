@@ -91,6 +91,8 @@ export const profile = async (req, res) => {
 
 //tareas 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 export const getsclientes = async (req, res) => {
   try {
     const clientes = await Clientes.find();
@@ -168,8 +170,7 @@ export const modificarclientes = async (req, res) => {
     res.status(500).json({ mensaje: 'Error al actualizar el cliente: ' + error.message });
   }}
 
-
-//
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const getsproveedor = async (req, res) => {
   try {
     const proveedor = await Proveedor.find();
@@ -223,8 +224,7 @@ export const modificarproveedor = async (req, res) => {
     res.status(500).json({mesaje: error.mesaje})
     }
 }
-//
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 export const getsservicios = async (req, res) => {
@@ -236,36 +236,36 @@ export const getsservicios = async (req, res) => {
   }
 };
 
-//
+// Crear un nuevo servicio
 export const crearservicios = async (req, res) => {
   try {
-    const { ServicioID, Nombre, Descripción, Precio, Tipo } = req.body;
+    const { ServicioID, Nombre, Descripcion, Precio, Tipo, Cantidad, Estado } = req.body;
 
     // Verifica que todos los campos obligatorios estén presentes
-    if (!ServicioID || !Nombre || !Descripción || !Precio || !Tipo) {
-        return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+    if (!ServicioID || !Nombre || !Descripcion || !Precio || !Tipo) {
+      return res.status(400).json({ error: 'Todos los campos obligatorios deben estar presentes' });
     }
 
-    const duracion = 1; // Valor predeterminado para Duración
-
-    // Crear un nuevo servicio
+    // Crear un nuevo servicio con los valores proporcionados
     const servicio = new Servicio({
-        ServicioID,
-        Nombre,
-        Descripción,
-        Precio,
-        Tipo,
-        Total: Precio * duracion // Calcular el Total como Precio * Duración
+      ServicioID,
+      Nombre,
+      Descripcion,
+      Precio,
+      Tipo,
+      Cantidad: Cantidad || 0, 
+      Estado: Estado || 'activo' 
     });
 
     await servicio.save();
     res.status(201).json(servicio);
-} catch (error) {
+  } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error interno del servidor' });
-}
+  }
 };
-// 
+
+// Obtener un servicio por su ServicioID
 export const getservicios = async (req, res) => {
   try {
     const servicio = await Servicio.findOne({ ServicioID: req.params.ServicioID });
@@ -275,24 +275,37 @@ export const getservicios = async (req, res) => {
     res.status(500).json({ mensaje: error.message });
   }
 };
+
+// Eliminar un servicio por su ServicioID
 export const eliminarservicios = async (req, res) => {
   try {
     const servicio = await Servicio.findOneAndDelete({ ServicioID: req.params.ServicioID });
     if (!servicio) return res.status(404).json({ mensaje: 'Servicio no encontrado' });
-    res.sendStatus(204);
+    res.sendStatus(204); // Eliminar correctamente, sin contenido
   } catch (error) {
     res.status(500).json({ mensaje: error.message });
   }
 };
 
-
+// Modificar un servicio por su ServicioID
 export const modificarservicios = async (req, res) => {
-  console.log('Received update request for ServicioID:', req.params.ServicioID); // Agrega este log
+  console.log('Received update request for ServicioID:', req.params.ServicioID); // Log para seguimiento
   try {
+    const { ServicioID, Nombre, Descripcion, Precio, Tipo, Cantidad, Estado } = req.body;
+
     const servicio = await Servicio.findOneAndUpdate(
       { ServicioID: req.params.ServicioID },
-      req.body,
-      { new: true }
+      {
+        $set: {
+          Nombre,
+          Descripcion,
+          Precio,
+          Tipo,
+          Cantidad: Cantidad !== undefined ? Cantidad : 0, // Actualizar solo si es proporcionado
+          Estado: Estado || 'activo' // Si no se proporciona, se usa el valor por defecto
+        }
+      },
+      { new: true } // Devolver el documento actualizado
     );
 
     if (!servicio) return res.status(404).json({ mensaje: 'Servicio no encontrado' });
@@ -302,7 +315,8 @@ export const modificarservicios = async (req, res) => {
   }
 };
 
-//
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 export const getsventas = async (req, res) => {
   try{
   const Ventas = await Ventas.find()
@@ -357,7 +371,9 @@ export const modificarventas = async (req, res) => {
     res.status(500).json({mesaje: error.mesaje})
     }
 }
-//
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 export const getscompras = async (req, res) => {
   try{
     const compras = await Compras.find()
