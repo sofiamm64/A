@@ -5,9 +5,9 @@ const modelserv = new mongoose.Schema({
     Nombre: { type: String, required: true },
     Descripción: { type: String, required: true },
     Precio: { type: Number, required: true },
-    Tipo: { type: String, required: true },
+    Tipo: { type: String, enum: ['Producto', 'Servicio'], default: 'Servicio' },
     Duracion: { type: Number, required: true },
-    Cantidad: { type: Number, default: 0 }, // Campo cantidad con valor inicial 0
+    Cantidad: { type: Number, default: 0 },
     Estado: { type: String, enum: ['activo', 'inactivo'], default: 'activo' }
     }, { timestamps: true });
 
