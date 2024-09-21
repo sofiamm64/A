@@ -89,7 +89,7 @@ export const profile = async (req, res) => {
   }
 };
 
-//tareas 
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -101,8 +101,6 @@ export const getsclientes = async (req, res) => {
     res.status(500).json({ mensaje: 'Error al obtener los clientes: ' + error.message });
   }
 };
-
-// Crear un nuevo cliente
 export const crearclientes = async (req, res) => {
   try {
     console.log('Datos recibidos en el cuerpo de la petición:', req.body);
@@ -133,8 +131,6 @@ export const crearclientes = async (req, res) => {
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
-
-// Obtener un cliente por clienteID
 export const getclientes = async (req, res) => {
   try {
     const cliente = await Clientes.findOne({ clienteID: req.params.clienteID });
@@ -144,8 +140,6 @@ export const getclientes = async (req, res) => {
     res.status(500).json({ mensaje: 'Error al obtener el cliente: ' + error.message });
   }
 };
-
-// Eliminar cliente
 export const eliminarclientes = async (req, res) => {
   try {
     const cliente = await Clientes.findOneAndDelete({ clienteID: req.params.clienteID });
@@ -155,8 +149,6 @@ export const eliminarclientes = async (req, res) => {
     res.status(500).json({ mensaje: 'Error al eliminar el cliente: ' + error.message });
   }
 };
-
-// Modificar cliente
 export const modificarclientes = async (req, res) => {
   try {
     const cliente = await Clientes.findOneAndUpdate(
@@ -168,9 +160,11 @@ export const modificarclientes = async (req, res) => {
     res.json({ mensaje: 'Cliente actualizado con éxito', cliente });
   } catch (error) {
     res.status(500).json({ mensaje: 'Error al actualizar el cliente: ' + error.message });
-  }}
+  }
+};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 export const getsproveedor = async (req, res) => {
   try {
     const proveedor = await Proveedor.find();
@@ -196,7 +190,6 @@ export const crearproveedor = async (req, res) => {
     res.status(500).json({ mensaje: error.message });
   }
 };
-
 export const getproveedor = async (req, res) => {
   try{
   const proveedor = await Proveedor.findById(req.params.id);
@@ -205,7 +198,7 @@ export const getproveedor = async (req, res) => {
   } catch {
     res.status(500).json({mesaje: error.mesaje})
   }
-}
+};
 export const eliminarproveedor = async (req, res) => {
   try{
   const proveedor = await Proveedor.findByIdAndDelete(req.params.id);
@@ -214,7 +207,7 @@ export const eliminarproveedor = async (req, res) => {
   } catch {
     res.status(500).json({mesaje: error.mesaje})
   }
-}
+};
 export const modificarproveedor = async (req, res) => {
   try{
   const proveedor = await Proveedor.findByIdAndUpdate(req.params.id, req.body,{new: true});
@@ -223,9 +216,9 @@ export const modificarproveedor = async (req, res) => {
     } catch {
     res.status(500).json({mesaje: error.mesaje})
     }
-}
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+};
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export const getsservicios = async (req, res) => {
   try {
@@ -235,8 +228,6 @@ export const getsservicios = async (req, res) => {
     res.status(500).json({ mensaje: error.message });
   }
 };
-
-// Crear un nuevo servicio
 export const crearservicios = async (req, res) => {
   try {
     const { ServicioID, Nombre, Descripcion, Precio, Tipo, Cantidad, Estado } = req.body;
@@ -264,8 +255,6 @@ export const crearservicios = async (req, res) => {
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
-
-// Obtener un servicio por su ServicioID
 export const getservicios = async (req, res) => {
   try {
     const servicio = await Servicio.findOne({ ServicioID: req.params.ServicioID });
@@ -275,8 +264,6 @@ export const getservicios = async (req, res) => {
     res.status(500).json({ mensaje: error.message });
   }
 };
-
-// Eliminar un servicio por su ServicioID
 export const eliminarservicios = async (req, res) => {
   try {
     const servicio = await Servicio.findOneAndDelete({ ServicioID: req.params.ServicioID });
@@ -286,8 +273,6 @@ export const eliminarservicios = async (req, res) => {
     res.status(500).json({ mensaje: error.message });
   }
 };
-
-// Modificar un servicio por su ServicioID
 export const modificarservicios = async (req, res) => {
   console.log('Received update request for ServicioID:', req.params.ServicioID); // Log para seguimiento
   try {
@@ -324,7 +309,7 @@ export const getsventas = async (req, res) => {
 } catch{
     res.status(500).json({mesaje: error.mesaje})
   }
-}
+};
 export const crearventas = async (req, res) => {
   try {
     console.log(req.body);
@@ -343,7 +328,7 @@ export const crearventas = async (req, res) => {
   } catch (error) {
     res.status(500).json({mesaje: error.mesaje})
   }
-}
+};
 export const getventas = async (req, res) => {
   try{
   const Ventas = await Ventas.findById(req.params.id);
@@ -352,7 +337,7 @@ export const getventas = async (req, res) => {
   } catch {
     res.status(500).json({mesaje: error.mesaje})
   }
-}
+};
 export const eliminarventas = async (req, res) => {
   try{
   const venta = await Ventas.findByIdAndDelete(req.params.id);
@@ -360,8 +345,8 @@ export const eliminarventas = async (req, res) => {
   return res.sendStatus(204);
   } catch {
     res.status(500).json({mesaje: error.mesaje})
-}}
-
+}
+};
 export const modificarventas = async (req, res) => {
   try{
     const venta = await Ventas.findByIdAndUpdate(req.params.id, req.body,{new: true});
@@ -370,7 +355,7 @@ export const modificarventas = async (req, res) => {
     } catch {
     res.status(500).json({mesaje: error.mesaje})
     }
-}
+};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -382,7 +367,7 @@ export const getscompras = async (req, res) => {
     res.status(500).json({mesaje: error.mesaje})
   }
 
-}
+};
 export const crearcompras = async (req, res) => {
   try{
   const { compraID, ProveedorID, servicioID, Fechacomp, Total } = req.body;
@@ -398,7 +383,7 @@ export const crearcompras = async (req, res) => {
   } catch{
     res.status(500).json({mesaje: error.mesaje})
   }
-}
+};
 export const getcompras = async (req, res) => {
   try{
   const compra = await Compras.findById(req.params.id);
@@ -407,7 +392,7 @@ export const getcompras = async (req, res) => {
   } catch{
     res.status(500).json({mesaje: error.mesaje})
   }
-}
+};
 export const eliminarcompras = async (req, res) => {
   try{
     const compra = await Compras.findByIdAndDelete(req.params.id);
@@ -416,7 +401,7 @@ export const eliminarcompras = async (req, res) => {
   } catch{
     res.status(500).json({mesaje: error.mesaje})
   }
-}
+};
 export const modificarcompras = async (req, res) => {
   try{
   const compra = await Compras.findByIdAndUpdate(req.params.id, req.body,{new: true});
@@ -425,5 +410,5 @@ export const modificarcompras = async (req, res) => {
     } catch{
     res.status(500).json({mesaje: error.mesaje})
     }
-}
+};
 
