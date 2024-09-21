@@ -236,19 +236,13 @@ export const getsservicios = async (req, res) => {
   }
 };
 
-//
 export const crearservicios = async (req, res) => {
   try {
-    const { ServicioID, Nombre, Descripción, Precio, Tipo, Duracion, Total } = req.body;
+    const { ServicioID, Nombre, Descripción, Precio, Tipo, Cantidad } = req.body;
 
     // Verifica que todos los campos obligatorios estén presentes
-    if (!ServicioID || !Nombre || !Descripción || !Precio || !Tipo || Duracion === undefined || Duracion === null) {
-        return res.status(400).json({ error: 'Todos los campos son obligatorios' });
-    }
-
-    // Asegúrate de que Duracion sea un número válido
-    if (isNaN(Duracion) || Duracion < 0) {
-      return res.status(400).json({ error: 'La duración debe ser un número positivo' });
+    if (!ServicioID || !Nombre || !Descripción || !Precio || !Tipo) {
+      return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
 
     // Crear un nuevo servicio
@@ -258,7 +252,7 @@ export const crearservicios = async (req, res) => {
       Descripción,
       Precio,
       Tipo,
-      Duracion
+      Cantidad, // duracion se guarda automáticamente como 0
     });
 
     await servicio.save();
@@ -268,7 +262,7 @@ export const crearservicios = async (req, res) => {
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
-// 
+
 export const getservicios = async (req, res) => {
   try {
     const servicio = await Servicio.findOne({ ServicioID: req.params.ServicioID });
@@ -278,6 +272,7 @@ export const getservicios = async (req, res) => {
     res.status(500).json({ mensaje: error.message });
   }
 };
+
 export const eliminarservicios = async (req, res) => {
   try {
     const servicio = await Servicio.findOneAndDelete({ ServicioID: req.params.ServicioID });
@@ -287,7 +282,6 @@ export const eliminarservicios = async (req, res) => {
     res.status(500).json({ mensaje: error.message });
   }
 };
-
 
 export const modificarservicios = async (req, res) => {
   console.log('Received update request for ServicioID:', req.params.ServicioID); // Agrega este log

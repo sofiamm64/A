@@ -5,11 +5,10 @@ const modelserv = new mongoose.Schema({
     Nombre: { type: String, required: true },
     Descripción: { type: String, required: true },
     Precio: { type: Number, required: true },
-    Tipo: { type: String, required: true },
-    Duracion: { type: Number},
-    Total: { type: String, default: 'cero' },
-}, {
-    timestamps: true
-});
+    Tipo: { type: String, enum: ['Producto', 'Servicio'], default: 'Producto' },
+    duracion: { type: Number, default: 0 },
+    Cantidad: { type: Number, default: 0 }, 
+    Estado: { type: String, enum: ['activo', 'inactivo'], default: 'activo' }
+    }, { timestamps: true });
 
 export default mongoose.model('Servicio', modelserv);
