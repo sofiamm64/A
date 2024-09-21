@@ -239,25 +239,26 @@ export const getsservicios = async (req, res) => {
 //
 export const crearservicios = async (req, res) => {
   try {
-    const { ServicioID, Nombre, Descripción, Precio, Tipo, Duracion } = req.body;
+    const { ServicioID, Nombre, Descripción, Precio, Tipo, Duracion, Total } = req.body;
 
+    // Verifica que todos los campos obligatorios estén presentes
     if (!ServicioID || !Nombre || !Descripción || !Precio || !Tipo || Duracion === undefined || Duracion === null) {
         return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
 
+    // Asegúrate de que Duracion sea un número válido
     if (isNaN(Duracion) || Duracion < 0) {
       return res.status(400).json({ error: 'La duración debe ser un número positivo' });
     }
 
-    // Crear el nuevo servicio con cantidad inicial 0
+    // Crear un nuevo servicio
     const servicio = new Servicio({
       ServicioID,
       Nombre,
       Descripción,
       Precio,
       Tipo,
-      Duracion,
-      Cantidad: 0
+      Duracion
     });
 
     await servicio.save();
@@ -306,14 +307,13 @@ export const modificarservicios = async (req, res) => {
 
 //
 export const getsventas = async (req, res) => {
-  try {
-    const ventas = await Ventas.find();
-    res.json(ventas);
-  } catch (error) {
-    res.status(500).json({ mensaje: error.message });
+  try{
+  const Ventas = await Ventas.find()
+  res.json(Ventas)
+} catch{
+    res.status(500).json({mesaje: error.mesaje})
   }
-};
-
+}
 export const crearventas = async (req, res) => {
   try {
     console.log(req.body);
@@ -324,45 +324,42 @@ export const crearventas = async (req, res) => {
       ClienteID,
       ServicioID,
       FechaVenta: new Date(FechaVenta),
-      Total: parseFloat(Total),
+      Total: parseFloat(Total)
     });
 
     await nuevaVenta.save();
     res.status(201).json(nuevaVenta);
   } catch (error) {
-    res.status(500).json({ mensaje: error.message });
+    res.status(500).json({mesaje: error.mesaje})
   }
-};
-
+}
 export const getventas = async (req, res) => {
-  try {
-    const venta = await Ventas.findById(req.params.id);
-    if (!venta) return res.status(404).json({ mensaje: "Venta no encontrada" });
-    res.json(venta);
-  } catch (error) {
-    res.status(500).json({ mensaje: error.message });
+  try{
+  const Ventas = await Ventas.findById(req.params.id);
+  if (!Ventas) return res.status(404).json({ mensaje: "venta no encontrada" });
+  res.json(Ventas);
+  } catch {
+    res.status(500).json({mesaje: error.mesaje})
   }
-};
-
+}
 export const eliminarventas = async (req, res) => {
-  try {
-    const venta = await Ventas.findByIdAndDelete(req.params.id);
-    if (!venta) return res.status(404).json({ mensaje: "Venta no encontrada" });
-    return res.sendStatus(204);
-  } catch (error) {
-    res.status(500).json({ mensaje: error.message });
-  }
-};
+  try{
+  const venta = await Ventas.findByIdAndDelete(req.params.id);
+  if (!venta) return res.status(404).json({ mensaje: "venta no encontrada" });
+  return res.sendStatus(204);
+  } catch {
+    res.status(500).json({mesaje: error.mesaje})
+}}
 
 export const modificarventas = async (req, res) => {
-  try {
-    const venta = await Ventas.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!venta) return res.status(404).json({ mensaje: "Venta no encontrada" });
+  try{
+    const venta = await Ventas.findByIdAndUpdate(req.params.id, req.body,{new: true});
+    if (!venta) return res.status(404).json({ mensaje: "venta no encontrada" });
     res.json(venta);
-  } catch (error) {
-    res.status(500).json({ mensaje: error.message });
-  }
-};
+    } catch {
+    res.status(500).json({mesaje: error.mesaje})
+    }
+}
 //
 export const getscompras = async (req, res) => {
   try{
@@ -417,43 +414,3 @@ export const modificarcompras = async (req, res) => {
     }
 }
 
-export const incrementarCantidad = async (req, res) => {
-  try {
-    const { ServicioID, cantidadComprada } = req.body;
-
-    const servicio = await Servicio.findOne({ ServicioID });
-
-    if (!servicio) {
-      return res.status(404).json({ mensaje: 'Servicio no encontrado' });
-    }
-
-    servicio.Cantidad += cantidadComprada;
-    await servicio.save();
-
-    res.status(200).json(servicio);
-  } catch (error) {
-    res.status(500).json({ mensaje: error.message });
-  }
-};
-export const disminuirCantidad = async (req, res) => {
-  try {
-    const { ServicioID, cantidadVendida } = req.body;
-
-    const servicio = await Servicio.findOne({ ServicioID });
-
-    if (!servicio) {
-      return res.status(404).json({ mensaje: 'Servicio no encontrado' });
-    }
-
-    if (servicio.Cantidad < cantidadVendida) {
-      return res.status(400).json({ error: 'No hay suficiente cantidad disponible' });
-    }
-
-    servicio.Cantidad -= cantidadVendida;
-    await servicio.save();
-
-    res.status(200).json(servicio);
-  } catch (error) {
-    res.status(500).json({ mensaje: error.message });
-  }
-};

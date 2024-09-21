@@ -23,8 +23,6 @@ import { login,
         crearservicios,
         eliminarservicios,
         modificarservicios,
-        incrementarCantidad,
-        disminuirCantidad,
 
         getsventas,
         getventas,
@@ -65,9 +63,6 @@ router.get('/servicios/:id', autenticacion, getservicios);
 router.post('/servicios', autenticacion, crearservicios);
 router.delete('/servicios/:ServicioID', autenticacion, eliminarservicios);
 router.put('/servicios/:ServicioID', autenticacion, modificarservicios);
-router.put('/servicios/:ServicioID/aumentar', autenticacion, incrementarCantidad);
-router.put('/servicios/:ServicioID/disminuir', autenticacion, disminuirCantidad);
-
 
 router.get('/ventas',autenticacion,getsventas);
 router.get('/ventas/:id',autenticacion, getventas);
