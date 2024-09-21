@@ -239,26 +239,25 @@ export const getsservicios = async (req, res) => {
 //
 export const crearservicios = async (req, res) => {
   try {
-    const { ServicioID, Nombre, Descripción, Precio, Tipo, Duracion, Total } = req.body;
+    const { ServicioID, Nombre, Descripción, Precio, Tipo, Duracion } = req.body;
 
-    // Verifica que todos los campos obligatorios estén presentes
     if (!ServicioID || !Nombre || !Descripción || !Precio || !Tipo || Duracion === undefined || Duracion === null) {
         return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
 
-    // Asegúrate de que Duracion sea un número válido
     if (isNaN(Duracion) || Duracion < 0) {
       return res.status(400).json({ error: 'La duración debe ser un número positivo' });
     }
 
-    // Crear un nuevo servicio
+    // Crear el nuevo servicio con cantidad inicial 0
     const servicio = new Servicio({
       ServicioID,
       Nombre,
       Descripción,
       Precio,
       Tipo,
-      Duracion
+      Duracion,
+      Cantidad: 0
     });
 
     await servicio.save();
@@ -418,3 +417,43 @@ export const modificarcompras = async (req, res) => {
     }
 }
 
+export const incrementarCantidad = async (req, res) => {
+  try {
+    const { ServicioID, cantidadComprada } = req.body;
+
+    const servicio = await Servicio.findOne({ ServicioID });
+
+    if (!servicio) {
+      return res.status(404).json({ mensaje: 'Servicio no encontrado' });
+    }
+
+    servicio.Cantidad += cantidadComprada;
+    await servicio.save();
+
+    res.status(200).json(servicio);
+  } catch (error) {
+    res.status(500).json({ mensaje: error.message });
+  }
+};
+export const disminuirCantidad = async (req, res) => {
+  try {
+    const { ServicioID, cantidadVendida } = req.body;
+
+    const servicio = await Servicio.findOne({ ServicioID });
+
+    if (!servicio) {
+      return res.status(404).json({ mensaje: 'Servicio no encontrado' });
+    }
+
+    if (servicio.Cantidad < cantidadVendida) {
+      return res.status(400).json({ error: 'No hay suficiente cantidad disponible' });
+    }
+
+    servicio.Cantidad -= cantidadVendida;
+    await servicio.save();
+
+    res.status(200).json(servicio);
+  } catch (error) {
+    res.status(500).json({ mensaje: error.message });
+  }
+};
