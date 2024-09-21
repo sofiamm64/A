@@ -23,6 +23,6 @@ app.get('/', (req, res) => {
   res.send('Bienvenido a la API'); 
 });
 
-app.use('/api', autorouter);
+app.use(autorouter);
 
 export default app;
