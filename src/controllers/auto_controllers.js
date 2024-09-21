@@ -90,7 +90,6 @@ export const profile = async (req, res) => {
 };
 
 
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export const getsclientes = async (req, res) => {
@@ -107,20 +106,20 @@ export const crearclientes = async (req, res) => {
 
     const { clienteID, nombre, apellido, email, telefono } = req.body;
 
-    // Validar que todos los campos estén presentes
+    
     if (!clienteID || !nombre || !apellido || !email || !telefono) {
       console.log('Faltan campos en la petición');
       return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
 
-    // Verificar si el cliente ya existe
+    
     const existingCliente = await Clientes.findOne({ clienteID });
     if (existingCliente) {
       console.log('El cliente ya existe');
       return res.status(400).json({ error: 'El clienteID ya está en uso.' });
     }
 
-    // Crear y guardar el nuevo cliente
+    
     const cliente = new Clientes({ clienteID, nombre, apellido, email, telefono });
     console.log('Nuevo cliente creado:', cliente);
 
@@ -154,7 +153,7 @@ export const modificarclientes = async (req, res) => {
     const cliente = await Clientes.findOneAndUpdate(
       { clienteID: req.params.clienteID },
       req.body,
-      { new: true } // Devolver el cliente actualizado
+      { new: true } 
     );
     if (!cliente) return res.status(404).json({ mensaje: 'Cliente no encontrado' });
     res.json({ mensaje: 'Cliente actualizado con éxito', cliente });
@@ -186,7 +185,7 @@ export const crearproveedor = async (req, res) => {
     });
     const saveproveedor = await newproveedor.save();
     res.json(saveproveedor);
-  } catch (error) { // Capture the error here
+  } catch (error) { 
     res.status(500).json({ mensaje: error.message });
   }
 };
@@ -232,12 +231,12 @@ export const crearservicios = async (req, res) => {
   try {
     const { ServicioID, Nombre, Descripcion, Precio, Tipo, Cantidad, Estado } = req.body;
 
-    // Verifica que todos los campos obligatorios estén presentes
+    
     if (!ServicioID || !Nombre || !Descripcion || !Precio || !Tipo) {
       return res.status(400).json({ error: 'Todos los campos obligatorios deben estar presentes' });
     }
 
-    // Crear un nuevo servicio con los valores proporcionados
+    
     const servicio = new Servicio({
       ServicioID,
       Nombre,
@@ -268,13 +267,13 @@ export const eliminarservicios = async (req, res) => {
   try {
     const servicio = await Servicio.findOneAndDelete({ ServicioID: req.params.ServicioID });
     if (!servicio) return res.status(404).json({ mensaje: 'Servicio no encontrado' });
-    res.sendStatus(204); // Eliminar correctamente, sin contenido
+    res.sendStatus(204); 
   } catch (error) {
     res.status(500).json({ mensaje: error.message });
   }
 };
 export const modificarservicios = async (req, res) => {
-  console.log('Received update request for ServicioID:', req.params.ServicioID); // Log para seguimiento
+  console.log('Received update request for ServicioID:', req.params.ServicioID); 
   try {
     const { ServicioID, Nombre, Descripcion, Precio, Tipo, Cantidad, Estado } = req.body;
 
@@ -286,11 +285,11 @@ export const modificarservicios = async (req, res) => {
           Descripcion,
           Precio,
           Tipo,
-          Cantidad: Cantidad !== undefined ? Cantidad : 0, // Actualizar solo si es proporcionado
-          Estado: Estado || 'activo' // Si no se proporciona, se usa el valor por defecto
+          Cantidad: Cantidad !== undefined ? Cantidad : 0, 
+          Estado: Estado || 'activo' 
         }
       },
-      { new: true } // Devolver el documento actualizado
+      { new: true } 
     );
 
     if (!servicio) return res.status(404).json({ mensaje: 'Servicio no encontrado' });
@@ -336,7 +335,7 @@ export const crearventas = async (req, res) => {
 
 export const getventas = async (req, res) => {
   try {
-    const venta = await Ventas.findOne({ VentaID: req.params.VentaID }); // Cambié a VentaID
+    const venta = await Ventas.findOne({ VentaID: req.params.VentaID }); 
     if (!venta) return res.status(404).json({ mensaje: "Venta no encontrada" });
     res.json(venta);
   } catch (error) {
@@ -346,7 +345,7 @@ export const getventas = async (req, res) => {
 
 export const eliminarventas = async (req, res) => {
   try {
-    const venta = await Ventas.findOneAndDelete({ VentaID: req.params.VentaID }); // Cambié a VentaID
+    const venta = await Ventas.findOneAndDelete({ VentaID: req.params.VentaID });
     if (!venta) return res.status(404).json({ mensaje: "Venta no encontrada" });
     return res.sendStatus(204);
   } catch (error) {
