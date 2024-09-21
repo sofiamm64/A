@@ -239,17 +239,14 @@ export const getsservicios = async (req, res) => {
 //
 export const crearservicios = async (req, res) => {
   try {
-    const { ServicioID, Nombre, Descripción, Precio, Tipo, Duracion } = req.body;
+    const { ServicioID, Nombre, Descripción, Precio, Tipo } = req.body;
 
     // Verifica que todos los campos obligatorios estén presentes
     if (!ServicioID || !Nombre || !Descripción || !Precio || !Tipo) {
         return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
 
-    // Asegúrate de que Duracion sea un número válido
-    if (Duracion !== undefined && (isNaN(Duracion) || Duracion < 0)) {
-        return res.status(400).json({ error: 'La duración debe ser un número positivo' });
-    }
+    const duracion = 1; // Valor predeterminado para Duración
 
     // Crear un nuevo servicio
     const servicio = new Servicio({
@@ -258,8 +255,7 @@ export const crearservicios = async (req, res) => {
         Descripción,
         Precio,
         Tipo,
-        Duracion,
-        Total: Precio * (Duracion || 1) // Calcular el Total como Precio * Duracion
+        Total: Precio * duracion // Calcular el Total como Precio * Duración
     });
 
     await servicio.save();

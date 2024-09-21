@@ -6,8 +6,7 @@ const modelserv = new mongoose.Schema({
     Descripción: { type: String, required: true },
     Precio: { type: Number, required: true },
     Tipo: { type: String, required: true },
-    Duracion: { type: Number},
-    Total: { type: String, default: 'cero' },
+    Total: { type: Number, default: 0 },
 }, {
     timestamps: true
 });
