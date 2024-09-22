@@ -420,9 +420,14 @@ export const getcompras = async (req, res) => {
 
 export const eliminarcompras = async (req, res) => {
   try {
-    const compra = await Compras.findByIdAndDelete(req.params.id);
-    if (!compra) return res.status(404).json({ mensaje: "compra no encontrada" });
-    return res.sendStatus(204);
+    const { id } = req.params;
+    const compraEliminada = await Compras.findByIdAndDelete(id);
+    
+    if (!compraEliminada) {
+      return res.status(404).json({ mensaje: 'Compra no encontrada' });
+    }
+    
+    res.status(200).json({ mensaje: 'Compra eliminada con éxito' });
   } catch (error) {
     res.status(500).json({ mensaje: error.message });
   }
