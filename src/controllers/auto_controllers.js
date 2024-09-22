@@ -312,7 +312,6 @@ export const getsventas = async (req, res) => {
 
 export const crearventas = async (req, res) => {
   try {
-    console.log(req.body);
     const { VentaID, ClienteID, ServicioID, FechaVenta, Cantidad, PrecioU, Total, Estado } = req.body;
 
     const nuevaVenta = new Ventas({
@@ -320,10 +319,10 @@ export const crearventas = async (req, res) => {
       ClienteID,
       ServicioID,
       FechaVenta: new Date(FechaVenta),
-      Cantidad: Cantidad || 0, 
-      PrecioU: PrecioU || 0, 
-      Total: Total || 0, 
-      Estado: Estado || 'pendiente', 
+      Cantidad: Cantidad || 0,
+      PrecioU: PrecioU || 0,
+      Total: Total || 0,
+      Estado: Estado || 'pendiente',
     });
 
     await nuevaVenta.save();
@@ -335,7 +334,7 @@ export const crearventas = async (req, res) => {
 
 export const getventas = async (req, res) => {
   try {
-    const venta = await Ventas.findOne({ VentaID: req.params.VentaID }); 
+    const venta = await Ventas.findOne({ VentaID: req.params.VentaID });
     if (!venta) return res.status(404).json({ mensaje: "Venta no encontrada" });
     res.json(venta);
   } catch (error) {
@@ -360,10 +359,10 @@ export const modificarventas = async (req, res) => {
       { VentaID: req.params.VentaID },
       {
         ...req.body,
-        Cantidad: Cantidad || 0, 
-        PrecioU: PrecioU || 0, 
-        Total: Total || 0, 
-        Estado: Estado || 'pendiente', 
+        Cantidad: Cantidad || 0,
+        PrecioU: PrecioU || 0,
+        Total: Total || 0,
+        Estado: Estado || 'pendiente',
       },
       { new: true }
     );
