@@ -310,9 +310,12 @@ export const getsventas = async (req, res) => {
     res.status(500).json({ mensaje: error.message });
   }
 };
+
 export const crearventas = async (req, res) => {
   try {
-    const { VentaID, ClienteID, ServicioID, FechaVenta, Cantidad, PrecioU, Total, Estado } = req.body;
+    const { VentaID, ClienteID, ServicioID, FechaVenta, Cantidad, PrecioU, Estado } = req.body;
+
+    const total = (Cantidad || 0) * (PrecioU || 0); // Calcular el total aquí
 
     const nuevaVenta = new Ventas({
       VentaID,
@@ -321,7 +324,7 @@ export const crearventas = async (req, res) => {
       FechaVenta: new Date(FechaVenta),
       Cantidad: Cantidad || 0,
       PrecioU: PrecioU || 0,
-      Total: Total || ((Cantidad || 0) * (PrecioU || 0)), // Calcular el total si no se proporciona
+      Total: total, // Usar el total calculado
       Estado: Estado || 'pendiente',
     });
 
@@ -331,6 +334,7 @@ export const crearventas = async (req, res) => {
     res.status(500).json({ mensaje: error.message });
   }
 };
+
 export const getventas = async (req, res) => {
   try {
     const venta = await Ventas.findOne({ VentaID: req.params.VentaID });
@@ -340,6 +344,7 @@ export const getventas = async (req, res) => {
     res.status(500).json({ mensaje: error.message });
   }
 };
+
 export const eliminarventas = async (req, res) => {
   try {
     const venta = await Ventas.findOneAndDelete({ VentaID: req.params.VentaID });
@@ -349,15 +354,18 @@ export const eliminarventas = async (req, res) => {
     res.status(500).json({ mensaje: error.message });
   }
 };
+
 export const modificarventas = async (req, res) => {
   try {
     const { Cantidad, PrecioU, Estado } = req.body;
+    const total = (Cantidad || 0) * (PrecioU || 0); // Calcular el total aquí
+
     const venta = await Ventas.findOneAndUpdate(
       { VentaID: req.params.VentaID },
       {
         Cantidad: Cantidad || 0,
         PrecioU: PrecioU || 0,
-        Total: Total || ((Cantidad || 0) * (PrecioU || 0)), // Calcular el total si no se proporciona
+        Total: total, // Usar el total calculado
         Estado: Estado || 'pendiente',
       },
       { new: true }
