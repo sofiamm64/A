@@ -439,10 +439,25 @@ export const eliminarcompras = async (req, res) => {
 
 export const modificarcompras = async (req, res) => {
   try {
-    const compra = await Compras.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!compra) return res.status(404).json({ mensaje: "Compra no encontrada" });
+    // Usa el nombre correcto del parámetro
+    const { compraID } = req.params;
+
+    // Validar que se reciban datos en el cuerpo
+    if (!req.body || Object.keys(req.body).length === 0) {
+      return res.status(400).json({ mensaje: "Datos para actualizar son requeridos." });
+    }
+
+    const compra = await Compras.findByIdAndUpdate(compraID, req.body, { new: true });
+    
+    // Verifica si la compra fue encontrada y actualizada
+    if (!compra) {
+      return res.status(404).json({ mensaje: "Compra no encontrada" });
+    }
+    
     res.json(compra);
   } catch (error) {
+    // Manejo de errores más específico
+    console.error(error);
     res.status(500).json({ mensaje: error.message });
   }
 };
