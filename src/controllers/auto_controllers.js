@@ -403,6 +403,7 @@ export const crearcompras = async (req, res) => {
     const savecompras = await newcompras.save();
     res.status(201).json(savecompras);
   } catch (error) {
+    console.error(error); // Muestra el error en la consola del servidor
     res.status(500).json({ mensaje: error.message });
   }
 };
