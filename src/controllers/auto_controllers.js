@@ -304,7 +304,6 @@ export const modificarservicios = async (req, res) => {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
 export const getsventas = async (req, res) => {
   try {
     const ventas = await Ventas.find();
@@ -316,12 +315,11 @@ export const getsventas = async (req, res) => {
 
 export const crearventas = async (req, res) => {
   try {
-    const { VentaID, ClienteID, ServicioID, FechaVenta, Cantidad, PrecioU, Estado } = req.body;
+    const { ClienteID, ServicioID, FechaVenta, Cantidad, PrecioU, Estado } = req.body;
 
     const total = (Cantidad || 0) * (PrecioU || 0); // Calcular el total aquí
 
     const nuevaVenta = new Ventas({
-      VentaID,
       ClienteID,
       ServicioID,
       FechaVenta: new Date(FechaVenta),
@@ -352,7 +350,7 @@ export const eliminarventas = async (req, res) => {
   try {
     const venta = await Ventas.findOneAndDelete({ VentaID: req.params.VentaID });
     if (!venta) return res.status(404).json({ mensaje: "Venta no encontrada" });
-    return res.sendStatus(204);
+    res.sendStatus(204);
   } catch (error) {
     res.status(500).json({ mensaje: error.message });
   }
