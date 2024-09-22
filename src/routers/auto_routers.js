@@ -71,9 +71,9 @@ router.delete('/ventas/:VentaID', autenticacion, eliminarventas);
 router.put('/ventas/:VentaID', autenticacion, modificarventas);
 
 router.get('/compras',autenticacion,getscompras);
-router.get('/compras/:id',autenticacion, getcompras);
+router.get('/compras/:compraID',autenticacion, getcompras);
 router.post('/compras',autenticacion, crearcompras);
-router.delete('/compras/:id',autenticacion, eliminarcompras);
-router.put('/compras/:id',autenticacion, modificarcompras);
+router.delete('/compras/:compraID',autenticacion, eliminarcompras);
+router.put('/compras/:compraID',autenticacion, modificarcompras);
  
 export default router;
