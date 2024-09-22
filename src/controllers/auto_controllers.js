@@ -423,19 +423,17 @@ export const getcompras = async (req, res) => {
 };
 
 export const eliminarcompras = async (req, res) => {
+  const { compraID } = req.params; 
   try {
-    const { id } = req.params; // Obtener el ID de los parámetros
-    const compra = await Compras.findByIdAndDelete(id); // Eliminar la compra por ID
-
-    if (!compra) {
+    const compraEliminada = await Compras.findByIdAndDelete(compraID); 
+    if (!compraEliminada) {
       return res.status(404).json({ mensaje: "Compra no encontrada" });
     }
-
-    res.status(204).send(); // Responder con 204 No Content
+    res.status(204).send();
   } catch (error) {
     console.error(error);
     res.status(500).json({ mensaje: error.message });
-  }
+  } 
 };
 export const modificarcompras = async (req, res) => {
   try {
