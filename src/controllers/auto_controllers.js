@@ -301,6 +301,7 @@ export const modificarservicios = async (req, res) => {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// Obtener todas las ventas
 export const getsventas = async (req, res) => {
   try {
     const ventas = await Ventas.find();
@@ -310,6 +311,7 @@ export const getsventas = async (req, res) => {
   }
 };
 
+// Crear una nueva venta
 export const crearventas = async (req, res) => {
   try {
     const { VentaID, ClienteID, ServicioID, FechaVenta, Cantidad, PrecioU, Total, Estado } = req.body;
@@ -321,7 +323,7 @@ export const crearventas = async (req, res) => {
       FechaVenta: new Date(FechaVenta),
       Cantidad: Cantidad || 0,
       PrecioU: PrecioU || 0,
-      Total: Total || 0,
+      Total: Total || ((Cantidad || 0) * (PrecioU || 0)), // Calcular el total si no se proporciona
       Estado: Estado || 'pendiente',
     });
 
@@ -332,6 +334,7 @@ export const crearventas = async (req, res) => {
   }
 };
 
+// Obtener una venta específica
 export const getventas = async (req, res) => {
   try {
     const venta = await Ventas.findOne({ VentaID: req.params.VentaID });
@@ -342,6 +345,7 @@ export const getventas = async (req, res) => {
   }
 };
 
+// Eliminar una venta
 export const eliminarventas = async (req, res) => {
   try {
     const venta = await Ventas.findOneAndDelete({ VentaID: req.params.VentaID });
@@ -352,16 +356,16 @@ export const eliminarventas = async (req, res) => {
   }
 };
 
+// Modificar una venta existente
 export const modificarventas = async (req, res) => {
   try {
     const { Cantidad, PrecioU, Estado } = req.body;
     const venta = await Ventas.findOneAndUpdate(
       { VentaID: req.params.VentaID },
       {
-        ...req.body,
         Cantidad: Cantidad || 0,
         PrecioU: PrecioU || 0,
-        Total: Total || 0,
+        Total: Total || ((Cantidad || 0) * (PrecioU || 0)), // Calcular el total si no se proporciona
         Estado: Estado || 'pendiente',
       },
       { new: true }
