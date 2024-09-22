@@ -53,10 +53,10 @@ router.put('/clientes/:clienteID', autenticacion, modificarclientes);
 
 
 router.get('/proveedor',autenticacion,getsproveedor);
-router.get('/proveedor/:id',autenticacion, getproveedor);
+router.get('/proveedor/:ProveedorID',autenticacion, getproveedor);
 router.post('/proveedor',autenticacion, crearproveedor);
-router.delete('/proveedor/:id',autenticacion, eliminarproveedor);
-router.put('/proveedor/:id',autenticacion, modificarproveedor);
+router.delete('/proveedor/:ProveedorID',autenticacion, eliminarproveedor);
+router.put('/proveedor/:ProveedorID',autenticacion, modificarproveedor);
 
 router.get('/servicios', autenticacion, getsservicios);
 router.get('/servicios/:id', autenticacion, getservicios);

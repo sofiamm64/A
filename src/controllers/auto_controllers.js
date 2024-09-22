@@ -172,6 +172,7 @@ export const getsproveedor = async (req, res) => {
     res.status(500).json({ mensaje: error.message });
   }
 };
+
 export const crearproveedor = async (req, res) => {
   try {
     const { ProveedorID, nombre, apellido, telefono, email, Direccion } = req.body;
@@ -189,34 +190,36 @@ export const crearproveedor = async (req, res) => {
     res.status(500).json({ mensaje: error.message });
   }
 };
+
 export const getproveedor = async (req, res) => {
-  try{
-  const proveedor = await Proveedor.findById(req.params.id);
-  if (!proveedor) return res.status(404).json({ mensaje: "Provedor no encontrado" });
-  res.json(proveedor);
-  } catch {
-    res.status(500).json({mesaje: error.mesaje})
-  }
-};
-export const eliminarproveedor = async (req, res) => {
-  try{
-  const proveedor = await Proveedor.findByIdAndDelete(req.params.id);
-  if (!proveedor) return res.status(404).json({ mensaje: "Provedor no encontrado" });
-  return res.sendStatus(204);
-  } catch {
-    res.status(500).json({mesaje: error.mesaje})
-  }
-};
-export const modificarproveedor = async (req, res) => {
-  try{
-  const proveedor = await Proveedor.findByIdAndUpdate(req.params.id, req.body,{new: true});
-    if (!proveedor) return res.status(404).json({ mensaje: "Provedor no encontrado" });
+  try {
+    const proveedor = await Proveedor.findOne({ ProveedorID: req.params.ProveedorID });
+    if (!proveedor) return res.status(404).json({ mensaje: "Proveedor no encontrado" });
     res.json(proveedor);
-    } catch {
-    res.status(500).json({mesaje: error.mesaje})
-    }
+  } catch (error) {
+    res.status(500).json({ mensaje: error.message });
+  }
 };
 
+export const eliminarproveedor = async (req, res) => {
+  try {
+    const proveedor = await Proveedor.findOneAndDelete({ ProveedorID: req.params.ProveedorID });
+    if (!proveedor) return res.status(404).json({ mensaje: "Proveedor no encontrado" });
+    return res.sendStatus(204);
+  } catch (error) {
+    res.status(500).json({ mensaje: error.message });
+  }
+};
+
+export const modificarproveedor = async (req, res) => {
+  try {
+    const proveedor = await Proveedor.findOneAndUpdate({ ProveedorID: req.params.ProveedorID }, req.body, { new: true });
+    if (!proveedor) return res.status(404).json({ mensaje: "Proveedor no encontrado" });
+    res.json(proveedor);
+  } catch (error) {
+    res.status(500).json({ mensaje: error.message });
+  }
+};
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export const getsservicios = async (req, res) => {
