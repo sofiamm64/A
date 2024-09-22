@@ -315,23 +315,25 @@ export const getsventas = async (req, res) => {
 
 export const crearventas = async (req, res) => {
   try {
-    const { ClienteID, ServicioID, FechaVenta, Cantidad, PrecioU, Estado } = req.body;
+    const { VentaID, ClienteID, ServicioID, FechaVenta, Cantidad, PrecioU, Estado } = req.body;
 
-    const total = (Cantidad || 0) * (PrecioU || 0); // Calcular el total aquí
+    const total = (Cantidad || 0) * (PrecioU || 0);
 
     const nuevaVenta = new Ventas({
+      VentaID,  // Se asegura de que VentaID es único
       ClienteID,
       ServicioID,
       FechaVenta: new Date(FechaVenta),
       Cantidad: Cantidad || 0,
       PrecioU: PrecioU || 0,
-      Total: total, // Usar el total calculado
-      Estado: Estado || 'pendiente',
+      Total: total, // Calcula el total
+      Estado: Estado || 'pendiente', // Estado predeterminado
     });
 
     await nuevaVenta.save();
     res.status(201).json(nuevaVenta);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ mensaje: error.message });
   }
 };
@@ -347,33 +349,38 @@ export const getventas = async (req, res) => {
 };
 
 export const eliminarventas = async (req, res) => {
+  const { VentaID } = req.params; // Uso de VentaID
   try {
-    const venta = await Ventas.findOneAndDelete({ VentaID: req.params.VentaID });
-    if (!venta) return res.status(404).json({ mensaje: "Venta no encontrada" });
-    res.sendStatus(204);
+    const ventaEliminada = await Ventas.findOneAndDelete({ VentaID }); // Búsqueda por VentaID
+    if (!ventaEliminada) return res.status(404).json({ mensaje: "Venta no encontrada" });
+    res.status(204).send();
   } catch (error) {
+    console.error(error);
     res.status(500).json({ mensaje: error.message });
   }
 };
 
 export const modificarventas = async (req, res) => {
+  const { VentaID } = req.params;
+
+  if (!req.body || Object.keys(req.body).length === 0) {
+    return res.status(400).json({ mensaje: "Datos para actualizar son requeridos." });
+  }
+
   try {
     const { Cantidad, PrecioU, Estado } = req.body;
-    const total = (Cantidad || 0) * (PrecioU || 0); // Calcular el total aquí
+    const total = (Cantidad || 0) * (PrecioU || 0);
 
     const venta = await Ventas.findOneAndUpdate(
-      { VentaID: req.params.VentaID },
-      {
-        Cantidad: Cantidad || 0,
-        PrecioU: PrecioU || 0,
-        Total: total, // Usar el total calculado
-        Estado: Estado || 'pendiente',
-      },
+      { VentaID }, 
+      { Cantidad, PrecioU, Total: total, Estado: Estado || 'pendiente' }, 
       { new: true }
     );
+
     if (!venta) return res.status(404).json({ mensaje: "Venta no encontrada" });
     res.json(venta);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ mensaje: error.message });
   }
 };

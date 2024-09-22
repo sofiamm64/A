@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const modelvent = new mongoose.Schema({
-  VentaID: { type: Number, required: true, trim: true },
+  VentaID: { type: Number, required: true, unique: true }, 
   ClienteID: { type: String, required: true },
   ServicioID: { type: String, required: true },
   FechaVenta: { type: Date, required: true },
