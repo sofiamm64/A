@@ -393,7 +393,7 @@ export const getscompras = async (req, res) => {
 
 export const crearcompras = async (req, res) => {
   try {
-    const { compraID, ProveedorID, ServicioID, Cantidad, PrecioU, Fechacomp, Total } = req.body;
+    const { compraID, ProveedorID, ServicioID, Cantidad, PrecioU, Fechacomp, Total, Estado } = req.body;
     const newcompras = new Compras({
       compraID,
       ProveedorID,
@@ -402,11 +402,12 @@ export const crearcompras = async (req, res) => {
       PrecioU,
       Fechacomp,
       Total,
+      Estado: Estado || 'pendiente', // Default state if not provided
     });
     const savecompras = await newcompras.save();
     res.status(201).json(savecompras);
   } catch (error) {
-    console.error(error); // Muestra el error en la consola del servidor
+    console.error(error);
     res.status(500).json({ mensaje: error.message });
   }
 };
@@ -414,7 +415,7 @@ export const crearcompras = async (req, res) => {
 export const getcompras = async (req, res) => {
   try {
     const compra = await Compras.findById(req.params.id);
-    if (!compra) return res.status(404).json({ mensaje: "compra no encontrada" });
+    if (!compra) return res.status(404).json({ mensaje: "Compra no encontrada" });
     res.json(compra);
   } catch (error) {
     res.status(500).json({ mensaje: error.message });
@@ -439,7 +440,7 @@ export const eliminarcompras = async (req, res) => {
 export const modificarcompras = async (req, res) => {
   try {
     const compra = await Compras.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!compra) return res.status(404).json({ mensaje: "compra no encontrada" });
+    if (!compra) return res.status(404).json({ mensaje: "Compra no encontrada" });
     res.json(compra);
   } catch (error) {
     res.status(500).json({ mensaje: error.message });
