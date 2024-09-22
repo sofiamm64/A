@@ -301,7 +301,7 @@ export const modificarservicios = async (req, res) => {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Obtener todas las ventas
+
 export const getsventas = async (req, res) => {
   try {
     const ventas = await Ventas.find();
@@ -310,8 +310,6 @@ export const getsventas = async (req, res) => {
     res.status(500).json({ mensaje: error.message });
   }
 };
-
-// Crear una nueva venta
 export const crearventas = async (req, res) => {
   try {
     const { VentaID, ClienteID, ServicioID, FechaVenta, Cantidad, PrecioU, Total, Estado } = req.body;
@@ -333,8 +331,6 @@ export const crearventas = async (req, res) => {
     res.status(500).json({ mensaje: error.message });
   }
 };
-
-// Obtener una venta específica
 export const getventas = async (req, res) => {
   try {
     const venta = await Ventas.findOne({ VentaID: req.params.VentaID });
@@ -344,8 +340,6 @@ export const getventas = async (req, res) => {
     res.status(500).json({ mensaje: error.message });
   }
 };
-
-// Eliminar una venta
 export const eliminarventas = async (req, res) => {
   try {
     const venta = await Ventas.findOneAndDelete({ VentaID: req.params.VentaID });
@@ -355,8 +349,6 @@ export const eliminarventas = async (req, res) => {
     res.status(500).json({ mensaje: error.message });
   }
 };
-
-// Modificar una venta existente
 export const modificarventas = async (req, res) => {
   try {
     const { Cantidad, PrecioU, Estado } = req.body;
