@@ -315,23 +315,23 @@ export const getsventas = async (req, res) => {
 
 export const crearventas = async (req, res) => {
   try {
-    const { VentaID, ClienteID, ServicioID, FechaVenta, Cantidad, PrecioU, Estado } = req.body;
+    const { VentaID, ClienteID, ServicioID, Cantidad, PrecioU, FechaVenta, Estado } = req.body;
 
     const total = (Cantidad || 0) * (PrecioU || 0);
 
     const nuevaVenta = new Ventas({
-      VentaID,  // Se asegura de que VentaID es único
+      VentaID,  // Asegurarse de que VentaID es único
       ClienteID,
       ServicioID,
-      FechaVenta: new Date(FechaVenta),
       Cantidad: Cantidad || 0,
       PrecioU: PrecioU || 0,
-      Total: total, // Calcula el total
+      Total: total, // Calcular el total
+      FechaVenta: new Date(FechaVenta), // Formato de fecha
       Estado: Estado || 'pendiente', // Estado predeterminado
     });
 
-    await nuevaVenta.save();
-    res.status(201).json(nuevaVenta);
+    const saveVenta = await nuevaVenta.save();
+    res.status(201).json(saveVenta);
   } catch (error) {
     console.error(error);
     res.status(500).json({ mensaje: error.message });
