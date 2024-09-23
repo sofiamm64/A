@@ -445,7 +445,7 @@ export const modificarcompras = async (req, res) => {
 
     const { compraID } = req.params;
 
-
+    
     if (!req.body || Object.keys(req.body).length === 0) {
       return res.status(400).json({ mensaje: "Datos para actualizar son requeridos." });
     }
