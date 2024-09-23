@@ -398,7 +398,7 @@ export const getscompras = async (req, res) => {
 
 export const crearcompras = async (req, res) => {
   try {
-    const { compraID, ProveedorID, ServicioID, Cantidad, PrecioU, Fechacomp, Total, Estado } = req.body;
+    const { compraID, ProveedorID, ServicioID, Cantidad, PrecioU, Fechacomp, Total, Tipo } = req.body; 
     const newcompras = new Compras({
       compraID,
       ProveedorID,
@@ -407,7 +407,7 @@ export const crearcompras = async (req, res) => {
       PrecioU,
       Fechacomp,
       Total,
-      Estado: Estado || 'pendiente',
+      Tipo: Tipo || 'pendiente',
     });
     const savecompras = await newcompras.save();
     res.status(201).json(savecompras);
@@ -445,7 +445,7 @@ export const modificarcompras = async (req, res) => {
 
     const { compraID } = req.params;
 
-    
+
     if (!req.body || Object.keys(req.body).length === 0) {
       return res.status(400).json({ mensaje: "Datos para actualizar son requeridos." });
     }
