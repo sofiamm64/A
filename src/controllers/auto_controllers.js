@@ -313,12 +313,12 @@ export const Acantidad = async (req, res) => {
   }
 
   try {
-    const servicio = await Servicio.findOne({ ServicioID });
+    const servicio = await Servicio.findOne({ ServicioID: Number(ServicioID) });
 
     if (!servicio) {
       return res.status(404).json({ message: 'Servicio no encontrado.' });
     }
-    
+
     if (tipo === 'completada') {
       servicio.Cantidad += cantidad;
     } else if (tipo === 'pendiente' || tipo === 'cancelado') {
