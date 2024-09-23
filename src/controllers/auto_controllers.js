@@ -306,32 +306,35 @@ export const modificarservicios = async (req, res) => {
 
 export const Acantidad = async (req, res) => {
   const { ServicioID } = req.params;
-const { cantidad } = req.body;
+  const { cantidad, tipo } = req.body;
 
-// Validar que la cantidad sea un número positivo
-if (!cantidad || isNaN(cantidad) || cantidad <= 0) {
-  return res.status(400).json({ message: 'La cantidad debe ser un número positivo.' });
-}
-
-try {
-  // Buscar el servicio por ServicioID
-  const servicio = await Servicio.findOne({ ServicioID });
-  
-  if (!servicio) {
-    return res.status(404).json({ message: 'Servicio no encontrado.' });
+  if (!cantidad || isNaN(cantidad) || cantidad <= 0) {
+    return res.status(400).json({ message: 'La cantidad debe ser un número positivo.' });
   }
 
-  // Actualizar la cantidad sumando la cantidad proporcionada
-  servicio.Cantidad += cantidad; // Aquí se suma la cantidad
+  try {
+    const servicio = await Servicio.findOne({ ServicioID });
 
-  // Guardar el servicio actualizado
-  await servicio.save();
+    if (!servicio) {
+      return res.status(404).json({ message: 'Servicio no encontrado.' });
+    }
+    
+    if (tipo === 'completada') {
+      servicio.Cantidad += cantidad;
+    } else if (tipo === 'pendiente' || tipo === 'cancelado') {
+      servicio.Cantidad -= cantidad;
+    } else {
+      return res.status(400).json({ message: 'Tipo de operación inválido.' });
+    }
 
-  res.status(200).json({ message: 'Cantidad actualizada exitosamente.', servicio });
-} catch (error) {
-  res.status(500).json({ message: 'Error al actualizar la cantidad.', error: error.message });
-}
-}
+    await servicio.save();
+
+    res.status(200).json({ message: 'Cantidad actualizada exitosamente.', servicio });
+  } catch (error) {
+    res.status(500).json({ message: 'Error al actualizar la cantidad.', error: error.message });
+  }
+};
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
