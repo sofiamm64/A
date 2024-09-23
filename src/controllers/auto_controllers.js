@@ -477,8 +477,17 @@ export const Acantidad = async (req, res) => {
       return res.status(404).json({ message: 'Servicio no encontrado.' });
     }
 
-    // Actualizar la cantidad sumando la cantidad proporcionada
-    servicio.Cantidad += cantidad;
+    // Sumar si el estado es "completada", restar si es "pendiente" o "cancelada"
+    if (servicio.Estado === 'completada') {
+      servicio.Cantidad += cantidad; // Sumar
+    } else if (servicio.Estado === 'pendiente' || servicio.Estado === 'cancelado') {
+      if (servicio.Cantidad < cantidad) {
+        return res.status(400).json({ message: 'No hay suficiente cantidad para restar.' });
+      }
+      servicio.Cantidad -= cantidad; // Restar
+    } else {
+      return res.status(400).json({ message: 'Estado del servicio no válido para esta operación.' });
+    }
 
     // Guardar el servicio actualizado
     await servicio.save();
@@ -487,4 +496,4 @@ export const Acantidad = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Error al actualizar la cantidad.', error: error.message });
   }
-}; 
+};
