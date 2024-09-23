@@ -315,19 +315,19 @@ export const getsventas = async (req, res) => {
 
 export const crearventas = async (req, res) => {
   try {
-    const { VentaID, ClienteID, ServicioID, Cantidad, PrecioU, FechaVenta, Tipo } = req.body;
+    const { VentaID, ClienteID, ServicioID, Cantidad, PrecioU, FechaVenta, Estado } = req.body;
 
     const total = (Cantidad || 0) * (PrecioU || 0);
 
     const nuevaVenta = new Ventas({
-      VentaID,
+      VentaID,  // Asegurarse de que VentaID es único
       ClienteID,
       ServicioID,
       Cantidad: Cantidad || 0,
       PrecioU: PrecioU || 0,
-      Total: total,
-      FechaVenta: new Date(FechaVenta),
-      Tipo: Tipo || 'pendiente', // Corrige aquí a 'Tipo'
+      Total: total, // Calcular el total
+      FechaVenta: new Date(FechaVenta), // Formato de fecha
+      Estado: Estado || 'pendiente', // Estado predeterminado
     });
 
     const saveVenta = await nuevaVenta.save();
@@ -349,9 +349,9 @@ export const getventas = async (req, res) => {
 };
 
 export const eliminarventas = async (req, res) => {
-  const { VentaID } = req.params;
+  const { VentaID } = req.params; // Uso de VentaID
   try {
-    const ventaEliminada = await Ventas.findOneAndDelete({ VentaID });
+    const ventaEliminada = await Ventas.findOneAndDelete({ VentaID }); // Búsqueda por VentaID
     if (!ventaEliminada) return res.status(404).json({ mensaje: "Venta no encontrada" });
     res.status(204).send();
   } catch (error) {
@@ -361,23 +361,23 @@ export const eliminarventas = async (req, res) => {
 };
 
 export const modificarventas = async (req, res) => {
-  try {
-    const { VentaID } = req.params;
+  const { VentaID } = req.params;
 
-    if (!req.body || Object.keys(req.body).length === 0) {
-      return res.status(400).json({ mensaje: "Datos para actualizar son requeridos." });
-    }
+  if (!req.body || Object.keys(req.body).length === 0) {
+    return res.status(400).json({ mensaje: "Datos para actualizar son requeridos." });
+  }
+
+  try {
+    const { Cantidad, PrecioU, Estado } = req.body;
+    const total = (Cantidad || 0) * (PrecioU || 0);
 
     const venta = await Ventas.findOneAndUpdate(
-      { VentaID },
-      req.body,
+      { VentaID }, 
+      { Cantidad, PrecioU, Total: total, Estado: Estado || 'pendiente' }, 
       { new: true }
     );
 
-    if (!venta) {
-      return res.status(404).json({ mensaje: "Venta no encontrada" });
-    }
-
+    if (!venta) return res.status(404).json({ mensaje: "Venta no encontrada" });
     res.json(venta);
   } catch (error) {
     console.error(error);
@@ -463,35 +463,31 @@ export const modificarcompras = async (req, res) => {
 
 export const Acantidad = async (req, res) => {
   const { ServicioID } = req.params;
-  const { cantidad, tipo } = req.body;
+  const { cantidad } = req.body; // El nuevo valor de cantidad que se quiere establecer
 
   try {
     const servicio = await Servicio.findById(ServicioID);
     
     if (!servicio) {
-      return res.status(404).json({ mensaje: 'Servicio no encontrado' });
+      return res.status(404).send('Servicio no encontrado');
     }
 
-    switch (tipo) {
-      case 'completada':
-        servicio.cantidad += cantidad;
-        break;
-      case 'cancelado':
-        servicio.cantidad -= cantidad;
-        if (servicio.cantidad < 0) {
-          servicio.cantidad = 0;
-        }
-        break;
-      case 'pendiente':
-        break;
-      default:
-        return res.status(400).json({ mensaje: 'Tipo de compra no válido' });
+    // Lógica según el tipo de compra
+    if (req.body.tipo === 'completada') {
+      servicio.cantidad += cantidad; // Sumar la cantidad
+    } else if (req.body.tipo === 'cancelado') {
+      servicio.cantidad -= cantidad; // Restar la cantidad
+      // Asegúrate de que no se vuelva negativo
+      if (servicio.cantidad < 0) {
+        servicio.cantidad = 0;
+      }
+    } else if (req.body.tipo === 'pendiente') {
+      // No hacer cambios en la cantidad
     }
 
     await servicio.save();
-    res.status(200).json({ mensaje: 'Cantidad actualizada con éxito' });
+    res.status(200).send('Cantidad actualizada con éxito');
   } catch (error) {
-    console.error('Error en Acantidad:', error); 
-    res.status(500).json({ mensaje: 'Error al actualizar la cantidad', error: error.message });
+    res.status(500).send('Error al actualizar la cantidad');
   }
 };
