@@ -463,37 +463,31 @@ export const modificarcompras = async (req, res) => {
 
 export const Acantidad = async (req, res) => {
   const { ServicioID } = req.params;
-  const { cantidad } = req.body;
-
-  if (!cantidad || isNaN(cantidad) || cantidad <= 0) {
-    return res.status(400).json({ message: 'La cantidad debe ser un número positivo.' });
-  }
+  const { cantidad } = req.body; // El nuevo valor de cantidad que se quiere establecer
 
   try {
-    // Buscar el servicio por ServicioID
-    const servicio = await Servicio.findOne({ ServicioID });
+    const servicio = await Servicio.findById(ServicioID);
     
     if (!servicio) {
-      return res.status(404).json({ message: 'Servicio no encontrado.' });
+      return res.status(404).send('Servicio no encontrado');
     }
 
-    // Sumar si el estado es "completada", restar si es "pendiente" o "cancelada"
-    if (servicio.Estado === 'completada') {
-      servicio.Cantidad += cantidad; // Sumar
-    } else if (servicio.Estado === 'pendiente' || servicio.Estado === 'cancelado') {
-      if (servicio.Cantidad < cantidad) {
-        return res.status(400).json({ message: 'No hay suficiente cantidad para restar.' });
+    // Lógica según el tipo de compra
+    if (req.body.tipo === 'completada') {
+      servicio.cantidad += cantidad; // Sumar la cantidad
+    } else if (req.body.tipo === 'cancelado') {
+      servicio.cantidad -= cantidad; // Restar la cantidad
+      // Asegúrate de que no se vuelva negativo
+      if (servicio.cantidad < 0) {
+        servicio.cantidad = 0;
       }
-      servicio.Cantidad -= cantidad; // Restar
-    } else {
-      return res.status(400).json({ message: 'Estado del servicio no válido para esta operación.' });
+    } else if (req.body.tipo === 'pendiente') {
+      // No hacer cambios en la cantidad
     }
 
-    // Guardar el servicio actualizado
     await servicio.save();
-
-    res.status(200).json({ message: 'Cantidad actualizada exitosamente.', servicio });
+    res.status(200).send('Cantidad actualizada con éxito');
   } catch (error) {
-    res.status(500).json({ message: 'Error al actualizar la cantidad.', error: error.message });
+    res.status(500).send('Error al actualizar la cantidad');
   }
-};
+});
