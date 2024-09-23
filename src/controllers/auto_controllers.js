@@ -312,6 +312,12 @@ export const Acantidad = async (req, res) => {
     return res.status(400).json({ message: 'La cantidad debe ser un número positivo.' });
   }
 
+  const tiposValidos = ['completada', 'pendiente', 'cancelado'];
+
+  if (!tiposValidos.includes(tipo)) {
+    return res.status(400).json({ message: 'Tipo de operación inválido.' });
+  }
+
   try {
     const servicio = await Servicio.findOne({ ServicioID: Number(ServicioID) });
 
@@ -322,9 +328,10 @@ export const Acantidad = async (req, res) => {
     if (tipo === 'completada') {
       servicio.Cantidad += cantidad;
     } else if (tipo === 'pendiente' || tipo === 'cancelado') {
+      if (servicio.Cantidad < cantidad) {
+        return res.status(400).json({ message: 'La cantidad a restar no puede ser mayor que la cantidad actual.' });
+      }
       servicio.Cantidad -= cantidad;
-    } else {
-      return res.status(400).json({ message: 'Tipo de operación inválido.' });
     }
 
     await servicio.save();

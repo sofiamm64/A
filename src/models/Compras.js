@@ -8,7 +8,7 @@ const modelcomp = new mongoose.Schema({
   PrecioU: { type: Number, required: true, default: 0 },
   Fechacomp: { type: Date, required: true },
   Total: { type: Number},
-  Tipo: { type: String, enum:['pendiente', ' cancelado', 'completado'], default: 'pendiente' },
+  Tipo: { type: String, enum:['pendiente', ' cancelado', 'completada'], default: 'pendiente' },
 },{
   timestamps: true
   });
