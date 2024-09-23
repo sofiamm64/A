@@ -490,4 +490,4 @@ export const Acantidad = async (req, res) => {
   } catch (error) {
     res.status(500).send('Error al actualizar la cantidad');
   }
-});
+};
