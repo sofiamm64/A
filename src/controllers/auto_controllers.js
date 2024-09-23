@@ -361,23 +361,23 @@ export const eliminarventas = async (req, res) => {
 };
 
 export const modificarventas = async (req, res) => {
-  const { VentaID } = req.params;
-
-  if (!req.body || Object.keys(req.body).length === 0) {
-    return res.status(400).json({ mensaje: "Datos para actualizar son requeridos." });
-  }
-
   try {
-    const { Cantidad, PrecioU, Estado } = req.body;
-    const total = (Cantidad || 0) * (PrecioU || 0);
+    const { VentaID } = req.params;
+
+    if (!req.body || Object.keys(req.body).length === 0) {
+      return res.status(400).json({ mensaje: "Datos para actualizar son requeridos." });
+    }
 
     const venta = await Ventas.findOneAndUpdate(
       { VentaID }, 
-      { Cantidad, PrecioU, Total: total, Estado: Estado || 'pendiente' }, 
+      req.body, 
       { new: true }
     );
 
-    if (!venta) return res.status(404).json({ mensaje: "Venta no encontrada" });
+    if (!venta) {
+      return res.status(404).json({ mensaje: "Venta no encontrada" });
+    }
+
     res.json(venta);
   } catch (error) {
     console.error(error);
