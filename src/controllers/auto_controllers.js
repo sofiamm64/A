@@ -439,6 +439,12 @@ export const crearcompras = async (req, res) => {
       return res.status(400).json({ mensaje: 'Datos inválidos' });
     }
 
+    // Verificar si el compraID ya existe
+    const existeCompra = await Compras.findOne({ compraID });
+    if (existeCompra) {
+      return res.status(400).json({ mensaje: 'El compraID ya existe.' });
+    }
+
     const Total = Cantidad * PrecioU;
 
     const newcompras = new Compras({
@@ -449,7 +455,7 @@ export const crearcompras = async (req, res) => {
       PrecioU,
       Fechacomp,
       Total,
-      Estado: 'pendiente', 
+      Estado: 'pendiente', // Estado por defecto
     });
 
     const savecompras = await newcompras.save();
