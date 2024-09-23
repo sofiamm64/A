@@ -432,7 +432,15 @@ export const getscompras = async (req, res) => {
 
 export const crearcompras = async (req, res) => {
   try {
-    const { compraID, ProveedorID, ServicioID, Cantidad, PrecioU, Fechacomp, Total, Estado } = req.body;
+    const { compraID, ProveedorID, ServicioID, Cantidad, PrecioU, Fechacomp } = req.body;
+
+    // Validar datos
+    if (!compraID || !ProveedorID || !ServicioID || Cantidad < 0 || PrecioU < 0 || !Fechacomp) {
+      return res.status(400).json({ mensaje: 'Datos inválidos' });
+    }
+
+    const Total = Cantidad * PrecioU;
+
     const newcompras = new Compras({
       compraID,
       ProveedorID,
@@ -441,12 +449,13 @@ export const crearcompras = async (req, res) => {
       PrecioU,
       Fechacomp,
       Total,
-      Estado: Estado || 'pendiente', // Default state if not provided
+      Estado: 'pendiente', 
     });
+
     const savecompras = await newcompras.save();
     res.status(201).json(savecompras);
   } catch (error) {
-    console.error(error);
+    console.error('Error al crear compra:', error);
     res.status(500).json({ mensaje: error.message });
   }
 };
