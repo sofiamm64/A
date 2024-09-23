@@ -442,7 +442,8 @@ export const crearcompras = async (req, res) => {
     const { compraID, ProveedorID, ServicioID, Cantidad, PrecioU, Fechacomp } = req.body;
 
     // Validar datos
-    if (!compraID || !ProveedorID || !ServicioID || !Cantidad || !PrecioU || !Fechacomp || Cantidad < 0 || PrecioU < 0) {
+    if (!compraID || !ProveedorID || !ServicioID || !Cantidad || !PrecioU || !Fechacomp || 
+        isNaN(Cantidad) || isNaN(PrecioU) || Cantidad < 0 || PrecioU < 0) {
       return res.status(400).json({ mensaje: 'Datos inválidos' });
     }
 
@@ -462,14 +463,14 @@ export const crearcompras = async (req, res) => {
       PrecioU,
       Fechacomp,
       Total,
-      Estado: 'pendiente', // Estado por defecto
+      Estado: 'pendiente', 
     });
 
     const savecompras = await newcompras.save();
     res.status(201).json(savecompras);
   } catch (error) {
     console.error('Error al crear compra:', error);
-    res.status(500).json({ mensaje: error.message });
+    res.status(500).json({ mensaje: 'Error interno del servidor' });
   }
 };
 
