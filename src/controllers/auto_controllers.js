@@ -463,7 +463,7 @@ export const modificarcompras = async (req, res) => {
 
 export const Acantidad = async (req, res) => {
   const { ServicioID } = req.params;
-  const { cantidad, tipo } = req.body; 
+  const { cantidad, tipo } = req.body;
 
   try {
     const servicio = await Servicio.findById(ServicioID);
@@ -472,20 +472,17 @@ export const Acantidad = async (req, res) => {
       return res.status(404).json({ mensaje: 'Servicio no encontrado' });
     }
 
-    // Lógica según el tipo de compra
     switch (tipo) {
       case 'completada':
-        servicio.cantidad += cantidad; // Sumar la cantidad
+        servicio.cantidad += cantidad;
         break;
       case 'cancelado':
-        servicio.cantidad -= cantidad; // Restar la cantidad
-        // Asegúrate de que no se vuelva negativo
+        servicio.cantidad -= cantidad;
         if (servicio.cantidad < 0) {
           servicio.cantidad = 0;
         }
         break;
       case 'pendiente':
-        // No hacer cambios en la cantidad
         break;
       default:
         return res.status(400).json({ mensaje: 'Tipo de compra no válido' });
@@ -494,7 +491,7 @@ export const Acantidad = async (req, res) => {
     await servicio.save();
     res.status(200).json({ mensaje: 'Cantidad actualizada con éxito' });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ mensaje: 'Error al actualizar la cantidad' });
+    console.error('Error en Acantidad:', error); 
+    res.status(500).json({ mensaje: 'Error al actualizar la cantidad', error: error.message });
   }
 };
