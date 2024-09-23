@@ -312,12 +312,6 @@ export const Acantidad = async (req, res) => {
     return res.status(400).json({ message: 'La cantidad debe ser un número positivo.' });
   }
 
-  const tiposValidos = ['completada', 'pendiente', 'cancelado'];
-
-  if (!tiposValidos.includes(tipo)) {
-    return res.status(400).json({ message: 'Tipo de operación inválido.' });
-  }
-
   try {
     const servicio = await Servicio.findOne({ ServicioID: Number(ServicioID) });
 
@@ -328,10 +322,9 @@ export const Acantidad = async (req, res) => {
     if (tipo === 'completada') {
       servicio.Cantidad += cantidad;
     } else if (tipo === 'pendiente' || tipo === 'cancelado') {
-      if (servicio.Cantidad < cantidad) {
-        return res.status(400).json({ message: 'La cantidad a restar no puede ser mayor que la cantidad actual.' });
-      }
       servicio.Cantidad -= cantidad;
+    } else {
+      return res.status(400).json({ message: 'Tipo de operación inválido.' });
     }
 
     await servicio.save();
@@ -442,8 +435,7 @@ export const crearcompras = async (req, res) => {
     const { compraID, ProveedorID, ServicioID, Cantidad, PrecioU, Fechacomp } = req.body;
 
     // Validar datos
-    if (!compraID || !ProveedorID || !ServicioID || !Cantidad || !PrecioU || !Fechacomp || 
-        isNaN(Cantidad) || isNaN(PrecioU) || Cantidad < 0 || PrecioU < 0) {
+    if (!compraID || !ProveedorID || !ServicioID || Cantidad < 0 || PrecioU < 0 || !Fechacomp) {
       return res.status(400).json({ mensaje: 'Datos inválidos' });
     }
 
@@ -463,14 +455,14 @@ export const crearcompras = async (req, res) => {
       PrecioU,
       Fechacomp,
       Total,
-      Estado: 'pendiente', 
+      Estado: 'pendiente', // Estado por defecto
     });
 
     const savecompras = await newcompras.save();
     res.status(201).json(savecompras);
   } catch (error) {
     console.error('Error al crear compra:', error);
-    res.status(500).json({ mensaje: 'Error interno del servidor' });
+    res.status(500).json({ mensaje: error.message });
   }
 };
 
