@@ -24,8 +24,6 @@ import { login,
         eliminarservicios,
         modificarservicios,
 
-        Acantidad,
-
         getsventas,
         getventas,
         crearventas,
@@ -65,8 +63,6 @@ router.get('/servicios/:ServicioID', autenticacion, getservicios);
 router.post('/servicios', autenticacion, crearservicios);
 router.delete('/servicios/:ServicioID', autenticacion, eliminarservicios);
 router.put('/servicios/:ServicioID', autenticacion, modificarservicios);
-
-router.put('/servicios/:ServicioID/cantidad', autenticacion, Acantidad);
 
 router.get('/ventas', autenticacion, getsventas);
 router.get('/ventas/:VentaID', autenticacion, getventas);

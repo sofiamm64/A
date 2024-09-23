@@ -302,40 +302,6 @@ export const modificarservicios = async (req, res) => {
   }
 };
 
-//////////////////////////////////////////////////////////////
-
-export const Acantidad = async (req, res) => {
-  const { ServicioID } = req.params;
-  const { cantidad, tipo } = req.body;
-
-  if (!cantidad || isNaN(cantidad) || cantidad <= 0) {
-    return res.status(400).json({ message: 'La cantidad debe ser un número positivo.' });
-  }
-
-  try {
-    const servicio = await Servicio.findOne({ ServicioID: Number(ServicioID) });
-
-    if (!servicio) {
-      return res.status(404).json({ message: 'Servicio no encontrado.' });
-    }
-
-    if (tipo === 'completada') {
-      servicio.Cantidad += cantidad;
-    } else if (tipo === 'pendiente' || tipo === 'cancelado') {
-      servicio.Cantidad -= cantidad;
-    } else {
-      return res.status(400).json({ message: 'Tipo de operación inválido.' });
-    }
-
-    await servicio.save();
-
-    res.status(200).json({ message: 'Cantidad actualizada exitosamente.', servicio });
-  } catch (error) {
-    res.status(500).json({ message: 'Error al actualizar la cantidad.', error: error.message });
-  }
-};
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export const getsventas = async (req, res) => {
@@ -432,21 +398,7 @@ export const getscompras = async (req, res) => {
 
 export const crearcompras = async (req, res) => {
   try {
-    const { compraID, ProveedorID, ServicioID, Cantidad, PrecioU, Fechacomp } = req.body;
-
-    // Validar datos
-    if (!compraID || !ProveedorID || !ServicioID || Cantidad < 0 || PrecioU < 0 || !Fechacomp) {
-      return res.status(400).json({ mensaje: 'Datos inválidos' });
-    }
-
-    // Verificar si el compraID ya existe
-    const existeCompra = await Compras.findOne({ compraID });
-    if (existeCompra) {
-      return res.status(400).json({ mensaje: 'El compraID ya existe.' });
-    }
-
-    const Total = Cantidad * PrecioU;
-
+    const { compraID, ProveedorID, ServicioID, Cantidad, PrecioU, Fechacomp, Total, Estado } = req.body;
     const newcompras = new Compras({
       compraID,
       ProveedorID,
@@ -455,13 +407,12 @@ export const crearcompras = async (req, res) => {
       PrecioU,
       Fechacomp,
       Total,
-      Estado: 'pendiente', // Estado por defecto
+      Estado: Estado || 'pendiente', // Default state if not provided
     });
-
     const savecompras = await newcompras.save();
     res.status(201).json(savecompras);
   } catch (error) {
-    console.error('Error al crear compra:', error);
+    console.error(error);
     res.status(500).json({ mensaje: error.message });
   }
 };
