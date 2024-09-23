@@ -308,8 +308,8 @@ export const Acantidad = async (req, res) => {
   const { ServicioID } = req.params;
   const { cantidad } = req.body;
 
-  if (!cantidad || isNaN(cantidad) || cantidad <= 0) {
-    return res.status(400).json({ message: 'La cantidad debe ser un número positivo.' });
+  if (!cantidad || isNaN(cantidad) || cantidad >= 0) {
+    return res.status(400).json({ message: 'La cantidad debe ser un número negativo.' });
   }
 
   try {
@@ -321,7 +321,7 @@ export const Acantidad = async (req, res) => {
     }
 
     // Actualizar la cantidad sumando la cantidad proporcionada
-    servicio.Cantidad += cantidad;
+    servicio.Cantidad += cantidad; // Aquí se suma un número negativo, lo que efectivamente resta
 
     // Guardar el servicio actualizado
     await servicio.save();
@@ -331,6 +331,7 @@ export const Acantidad = async (req, res) => {
     res.status(500).json({ message: 'Error al actualizar la cantidad.', error: error.message });
   }
 };
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
