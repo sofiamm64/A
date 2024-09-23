@@ -463,31 +463,29 @@ export const modificarcompras = async (req, res) => {
 
 export const Acantidad = async (req, res) => {
   const { ServicioID } = req.params;
-  const { cantidad } = req.body; // El nuevo valor de cantidad que se quiere establecer
-
+  const { cantidad } = req.body;
+  
+  // Validar que la cantidad sea un número positivo
+  if (!cantidad || isNaN(cantidad) || cantidad <= 0) {
+    return res.status(400).json({ message: 'La cantidad debe ser un número positivo.' });
+  }
+  
   try {
-    const servicio = await Servicio.findById(ServicioID);
+    // Buscar el servicio por ServicioID
+    const servicio = await Servicio.findOne({ ServicioID });
     
     if (!servicio) {
-      return res.status(404).send('Servicio no encontrado');
+      return res.status(404).json({ message: 'Servicio no encontrado.' });
     }
-
-    // Lógica según el tipo de compra
-    if (req.body.tipo === 'completada') {
-      servicio.cantidad += cantidad; // Sumar la cantidad
-    } else if (req.body.tipo === 'cancelado') {
-      servicio.cantidad -= cantidad; // Restar la cantidad
-      // Asegúrate de que no se vuelva negativo
-      if (servicio.cantidad < 0) {
-        servicio.cantidad = 0;
-      }
-    } else if (req.body.tipo === 'pendiente') {
-      // No hacer cambios en la cantidad
-    }
-
+  
+    // Actualizar la cantidad sumando la cantidad proporcionada
+    servicio.Cantidad += cantidad; // Aquí se suma la cantidad
+  
+    // Guardar el servicio actualizado
     await servicio.save();
-    res.status(200).send('Cantidad actualizada con éxito');
+  
+    res.status(200).json({ message: 'Cantidad actualizada exitosamente.', servicio });
   } catch (error) {
-    res.status(500).send('Error al actualizar la cantidad');
+    res.status(500).json({ message: 'Error al actualizar la cantidad.', error: error.message });
   }
-};
+}
