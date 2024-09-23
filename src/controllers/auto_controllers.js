@@ -442,7 +442,7 @@ export const crearcompras = async (req, res) => {
     const { compraID, ProveedorID, ServicioID, Cantidad, PrecioU, Fechacomp } = req.body;
 
     // Validar datos
-    if (!compraID || !ProveedorID || !ServicioID || Cantidad < 0 || PrecioU < 0 || !Fechacomp) {
+    if (!compraID || !ProveedorID || !ServicioID || !Cantidad || !PrecioU || !Fechacomp || Cantidad < 0 || PrecioU < 0) {
       return res.status(400).json({ mensaje: 'Datos inválidos' });
     }
 
