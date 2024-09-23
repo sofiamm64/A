@@ -315,19 +315,19 @@ export const getsventas = async (req, res) => {
 
 export const crearventas = async (req, res) => {
   try {
-    const { VentaID, ClienteID, ServicioID, Cantidad, PrecioU, FechaVenta, Estado } = req.body;
+    const { VentaID, ClienteID, ServicioID, Cantidad, PrecioU, FechaVenta, Tipo } = req.body;
 
     const total = (Cantidad || 0) * (PrecioU || 0);
 
     const nuevaVenta = new Ventas({
-      VentaID,  // Asegurarse de que VentaID es único
+      VentaID,
       ClienteID,
       ServicioID,
       Cantidad: Cantidad || 0,
       PrecioU: PrecioU || 0,
-      Total: total, // Calcular el total
-      FechaVenta: new Date(FechaVenta), // Formato de fecha
-      Estado: Estado || 'pendiente', // Estado predeterminado
+      Total: total,
+      FechaVenta: new Date(FechaVenta),
+      Tipo: Tipo || 'pendiente', // Corrige aquí a 'Tipo'
     });
 
     const saveVenta = await nuevaVenta.save();
@@ -349,9 +349,9 @@ export const getventas = async (req, res) => {
 };
 
 export const eliminarventas = async (req, res) => {
-  const { VentaID } = req.params; // Uso de VentaID
+  const { VentaID } = req.params;
   try {
-    const ventaEliminada = await Ventas.findOneAndDelete({ VentaID }); // Búsqueda por VentaID
+    const ventaEliminada = await Ventas.findOneAndDelete({ VentaID });
     if (!ventaEliminada) return res.status(404).json({ mensaje: "Venta no encontrada" });
     res.status(204).send();
   } catch (error) {
@@ -369,8 +369,8 @@ export const modificarventas = async (req, res) => {
     }
 
     const venta = await Ventas.findOneAndUpdate(
-      { VentaID }, 
-      req.body, 
+      { VentaID },
+      req.body,
       { new: true }
     );
 
