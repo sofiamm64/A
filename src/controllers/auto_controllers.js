@@ -407,7 +407,7 @@ export const crearcompras = async (req, res) => {
       PrecioU,
       Fechacomp,
       Total,
-      Estado: Estado || 'pendiente', // Default state if not provided
+      Estado: Estado || 'pendiente',
     });
     const savecompras = await newcompras.save();
     res.status(201).json(savecompras);
