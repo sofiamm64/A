@@ -302,6 +302,37 @@ export const modificarservicios = async (req, res) => {
   }
 };
 
+//////////////////////////////////////////////////////////////
+
+export const Acantidad = async (req, res) => {
+  const { ServicioID } = req.params;
+  const { cantidad } = req.body;
+
+  if (!cantidad || isNaN(cantidad) || cantidad <= 0) {
+    return res.status(400).json({ message: 'La cantidad debe ser un número positivo.' });
+  }
+
+  try {
+    // Buscar el servicio por ServicioID
+    const servicio = await Servicio.findOne({ ServicioID });
+    
+    if (!servicio) {
+      return res.status(404).json({ message: 'Servicio no encontrado.' });
+    }
+
+    // Actualizar la cantidad sumando la cantidad proporcionada
+    servicio.Cantidad += cantidad;
+
+    // Guardar el servicio actualizado
+    await servicio.save();
+
+    res.status(200).json({ message: 'Cantidad actualizada exitosamente.', servicio });
+  } catch (error) {
+    res.status(500).json({ message: 'Error al actualizar la cantidad.', error: error.message });
+  }
+};
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export const getsventas = async (req, res) => {
