@@ -347,8 +347,8 @@ export const getventas = async (req, res) => {
 
 export const eliminarventas = async (req, res) => {
   try {
-    const { VentaID } = req.params;  // Extrae VentaID de req.params
-    const ventaEliminada = await Ventas.findOneAndDelete({ VentaID });  // Utiliza VentaID como criterio
+    const { id } = req.params;  // Extrae id de req.params
+    const ventaEliminada = await Ventas.findByIdAndDelete(id);  // Utiliza id como criterio
 
     if (!ventaEliminada) {
       return res.status(404).json({ mensaje: "Venta no encontrada" });  // Si no se encuentra la venta
@@ -360,6 +360,7 @@ export const eliminarventas = async (req, res) => {
     res.status(500).json({ mensaje: "Error interno del servidor" });  // Error del servidor
   }
 };
+
 
 export const modificarventas = async (req, res) => {
   try {

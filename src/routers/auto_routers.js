@@ -69,7 +69,7 @@ router.put('/servicios/:ServicioID', autenticacion, modificarservicios);
 router.get('/ventas', autenticacion, getsventas);
 router.get('/ventas/:VentaID', autenticacion, getventas);
 router.post('/ventas', autenticacion, crearventas);
-router.delete('/ventas/:VentaID', autenticacion, eliminarventas);
+router.delete('/ventas/:id', autenticacion, eliminarventas);
 router.put('/ventas/:VentaID', autenticacion, modificarventas);
 
 router.put('/servicios/:ServicioID/cantidad', autenticacion, Acantidad);
