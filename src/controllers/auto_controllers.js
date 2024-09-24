@@ -327,18 +327,29 @@ export const crearventas = async (req, res) => {
     const cantidadNum = Number(Cantidad);
     const precioUNum = Number(PrecioU);
 
+    // Verifica que la conversión a número fue exitosa
+    if (isNaN(cantidadNum) || isNaN(precioUNum)) {
+      return res.status(400).json({ message: 'Cantidad y PrecioU deben ser números válidos' });
+    }
+
     // Calcula el total de la venta
     const Total = cantidadNum * precioUNum;
+
+    // Convierte la fecha
+    const fechaVentaDate = new Date(FechaVenta);
+    if (isNaN(fechaVentaDate.getTime())) {
+      return res.status(400).json({ message: 'FechaVenta debe ser una fecha válida' });
+    }
 
     const nuevaVenta = new Ventas({
       VentaID,
       ClienteID,
       ServicioID,
-      Cantidad: cantidadNum, // Asegúrate de usar el número aquí
-      PrecioU: precioUNum,    // Asegúrate de usar el número aquí
-      FechaVenta: new Date(FechaVenta), // Asegúrate de convertir la fecha correctamente
+      Cantidad: cantidadNum,
+      PrecioU: precioUNum,
+      FechaVenta: fechaVentaDate,
       Total,
-      Tipo: Tipo || 'pendiente', // Valor por defecto
+      Tipo: Tipo || 'pendiente',
     });
 
     const saveVenta = await nuevaVenta.save();
@@ -348,7 +359,6 @@ export const crearventas = async (req, res) => {
     res.status(500).json({ message: 'Error al crear la venta', error }); 
   }
 };
-
 
 export const getventas = async (req, res) => {
   try {
