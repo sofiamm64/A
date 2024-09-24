@@ -100,10 +100,10 @@ export const crearclientes = async (req, res) => {
   try {
     console.log('Datos recibidos en el cuerpo de la petición:', req.body);
 
-    const { clienteID, nombre, apellido, email, telefono } = req.body;
+    const { clienteID, Nombre, apellido, email, telefono } = req.body;
 
     
-    if (!clienteID || !nombre || !apellido || !email || !telefono) {
+    if (!clienteID || !Nombre || !apellido || !email || !telefono) {
       console.log('Faltan campos en la petición');
       return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
@@ -116,7 +116,7 @@ export const crearclientes = async (req, res) => {
     }
 
     
-    const cliente = new Clientes({ clienteID, nombre, apellido, email, telefono });
+    const cliente = new Clientes({ clienteID, Nombre, apellido, email, telefono });
     console.log('Nuevo cliente creado:', cliente);
 
     await cliente.save();
