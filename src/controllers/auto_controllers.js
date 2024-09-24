@@ -333,17 +333,13 @@ export const crearventas = async (req, res) => {
     const saveVenta = await nuevaVenta.save();
 
     if (Tipo === 'completado') {
-      try {
-        await updateStock(ServicioID, -Cantidad); 
-      } catch (stockError) {
-        console.error('Error al actualizar el stock:', stockError);
-        return res.status(500).json({ message: 'Error al actualizar el stock', error: stockError });
-      }
-    } 
+      await updateStock(ServicioID, -Cantidad); 
+    }
+
     res.status(201).json(saveVenta);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Error al obtener las ventas', error });
+    console.error(error); // Log para el servidor
+    res.status(500).json({ message: 'Error al crear la venta', error }); // Mensaje de error más específico
   }
 };
 export const getventas = async (req, res) => {
