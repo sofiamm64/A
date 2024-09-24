@@ -389,14 +389,12 @@ export const eliminarventas = async (req, res) => {
 
 
 export const modificarventas = async (req, res) => {
-  const { id } = req.params;  // Obtener el ID de la venta desde los parámetros de la URL
-    const { ClienteID, ServicioID, Cantidad, PrecioU, FechaVenta, Total, Tipo } = req.body;  // Desestructurar los datos del cuerpo de la solicitud
-
+  const { id } = req.params;  
+    const { ClienteID, ServicioID, Cantidad, PrecioU, FechaVenta, Total, Tipo } = req.body;  
     try {
         // Buscar la venta por ID
-        const venta = await Venta.findById(id);
+        const venta = await Ventas.findById(id);
         
-        // Verificar si la venta existe
         if (!venta) {
             return res.status(404).json({ mensaje: 'Venta no encontrada' });
         }
