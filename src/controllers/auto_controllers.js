@@ -333,9 +333,13 @@ export const crearventas = async (req, res) => {
     const saveVenta = await nuevaVenta.save();
 
     if (Tipo === 'completado') {
-      await updateStock(ServicioID, -Cantidad); 
-    }
-
+      try {
+        await updateStock(ServicioID, -Cantidad); 
+      } catch (stockError) {
+        console.error('Error al actualizar el stock:', stockError);
+        return res.status(500).json({ message: 'Error al actualizar el stock', error: stockError });
+      }
+    } 
     res.status(201).json(saveVenta);
   } catch (error) {
     console.error(error);
