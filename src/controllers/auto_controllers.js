@@ -332,15 +332,14 @@ export const crearventas = async (req, res) => {
 
     const saveVenta = await nuevaVenta.save();
 
-    // Actualizar el stock solo si la venta es completada
     if (Tipo === 'completado') {
-      await updateStock(ServicioID, -Cantidad); // Restar la cantidad vendida
+      await updateStock(ServicioID, -Cantidad); 
     }
 
     res.status(201).json(saveVenta);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ mensaje: error.message });
+    res.status(500).json({ message: 'Error al obtener las ventas', error });
   }
 };
 export const getventas = async (req, res) => {
