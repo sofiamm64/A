@@ -70,7 +70,7 @@ router.get('/ventas', autenticacion, getsventas);
 router.get('/ventas/:VentaID', autenticacion, getventas);
 router.post('/ventas', autenticacion, crearventas);
 router.delete('/ventas/:id', autenticacion, eliminarventas);
-router.put('/ventas/:VentaID', autenticacion, modificarventas);
+router.put('/ventas/:id', autenticacion, modificarventas);
 
 router.put('/servicios/:ServicioID/cantidad', autenticacion, Acantidad);
 router.put('/servicios/:ServicioID/cantidadR', autenticacion, Rcantidad);

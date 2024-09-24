@@ -389,20 +389,29 @@ export const eliminarventas = async (req, res) => {
 
 
 export const modificarventas = async (req, res) => {
-  try {
-    const {VentaID} = req.params;
-    if (!req.body || Object.keys(req.body).length === 0) {
-      return res.status(400).json({ mensaje: "Datos para actualizar son requeridos." });
+  const { id } = req.params;
+    const { ClienteID, ServicioID, Cantidad, PrecioU, FechaVenta, Total, Tipo } = req.body;
+
+    try {
+        const venta = await Venta.findById(id);
+        if (!venta) {
+            return res.status(404).json({ mensaje: 'Compra no encontrada' });
+        }
+        
+        // Actualizar la venta con los nuevos datos
+        venta.ClienteID = ClienteID;
+        venta.ServicioID = ServicioID;
+        venta.Cantidad = Cantidad;
+        venta.PrecioU = PrecioU;
+        venta.FechaVenta = FechaVenta;
+        venta.Total = Total;
+        venta.Tipo = Tipo;
+
+        await venta.save();
+        res.status(200).json(venta);
+    } catch (error) {
+        res.status(500).json({ mensaje: 'Error interno del servidor' });
     }
-    const venta = await Compras.findByIdAndUpdate(VentaID, req.body, { new: true });
-      if (!venta) {
-        return res.status(404).json({ mensaje: "Compra no encontrada" });
-      }
-      res.json(venta)
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Error al actualizar la venta', error });
-  }
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -513,25 +522,33 @@ export const Rcantidad = async (req, res) => {
   const { ServicioID } = req.params;
   const { cantidad } = req.body;
 
-  if (!cantidad || isNaN(cantidad) || cantidad <= 0) {
+  // Validar que 'cantidad' sea un número positivo
+  const cantidadNumerica = Number(cantidad); // Convertir la cantidad a número
+
+  if (!cantidad || isNaN(cantidadNumerica) || cantidadNumerica <= 0) {
     return res.status(400).json({ message: 'La cantidad debe ser un número positivo.' });
   }
 
   try {
+    // Buscar el servicio por ID
     const servicio = await Servicio.findOne({ ServicioID });
 
     if (!servicio) {
       return res.status(404).json({ message: 'Servicio no encontrado.' });
     }
 
-    if (servicio.Cantidad < cantidad) {
+    // Verificar si hay suficiente cantidad para restar
+    if (servicio.Cantidad < cantidadNumerica) {
       return res.status(400).json({ message: 'No hay suficiente cantidad para restar.' });
     }
 
-    servicio.Cantidad -= cantidad;
+    // Restar la cantidad del servicio
+    servicio.Cantidad -= cantidadNumerica; // Restar la cantidad positiva
 
+    // Guardar los cambios en la base de datos
     await servicio.save();
 
+    // Responder con éxito
     res.status(200).json({ message: 'Cantidad actualizada exitosamente.', servicio });
   } catch (error) {
     res.status(500).json({ message: 'Error al actualizar la cantidad.', error: error.message });
