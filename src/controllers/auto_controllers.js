@@ -389,16 +389,19 @@ export const eliminarventas = async (req, res) => {
 
 
 export const modificarventas = async (req, res) => {
-  const { id } = req.params;
-    const { ClienteID, ServicioID, Cantidad, PrecioU, FechaVenta, Total, Tipo } = req.body;
+  const { id } = req.params;  // Obtener el ID de la venta desde los parámetros de la URL
+    const { ClienteID, ServicioID, Cantidad, PrecioU, FechaVenta, Total, Tipo } = req.body;  // Desestructurar los datos del cuerpo de la solicitud
 
     try {
+        // Buscar la venta por ID
         const venta = await Venta.findById(id);
+        
+        // Verificar si la venta existe
         if (!venta) {
-            return res.status(404).json({ mensaje: 'Compra no encontrada' });
+            return res.status(404).json({ mensaje: 'Venta no encontrada' });
         }
         
-        // Actualizar la venta con los nuevos datos
+        // Actualizar los campos de la venta con los nuevos datos
         venta.ClienteID = ClienteID;
         venta.ServicioID = ServicioID;
         venta.Cantidad = Cantidad;
@@ -407,10 +410,15 @@ export const modificarventas = async (req, res) => {
         venta.Total = Total;
         venta.Tipo = Tipo;
 
+        // Guardar los cambios en la base de datos
         await venta.save();
+
+        // Responder con la venta actualizada
         res.status(200).json(venta);
     } catch (error) {
-        res.status(500).json({ mensaje: 'Error interno del servidor' });
+        // Manejo de errores: devolver un mensaje de error en caso de fallo
+        console.error('Error al modificar la venta:', error.message);  // Registrar el error en la consola
+        res.status(500).json({ mensaje: 'Error interno del servidor', error: error.message });
     }
 };
 
