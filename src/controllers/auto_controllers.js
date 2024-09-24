@@ -316,24 +316,34 @@ export const getsventas = async (req, res) => {
 
 export const crearventas = async (req, res) => {
   try {
-    const { VentaID ,ClienteID, ServicioID, Cantidad, PrecioU, FechaVenta, Tipo } = req.body;
+    const { ClienteID, ServicioID, Cantidad, PrecioU, FechaVenta, Tipo } = req.body;
+
+    // Verifica que todos los campos necesarios estén presentes
+    if (!ClienteID || !ServicioID || !Cantidad || !PrecioU || !FechaVenta) {
+      return res.status(400).json({ message: 'Faltan campos requeridos' });
+    }
+
+    // Calcula el total de la venta
+    const Total = Cantidad * PrecioU;
+
     const nuevaVenta = new Ventas({
-      VentaID,
       ClienteID,
       ServicioID,
       Cantidad,
       PrecioU,
-      FechaVenta,
-      Total: total,
-      Tipo: Tipo || 'pendiente',
+      FechaVenta: new Date(FechaVenta), // Asegúrate de convertir la fecha correctamente
+      Total,
+      Tipo: Tipo || 'pendiente', // Valor por defecto
     });
+
     const saveVenta = await nuevaVenta.save();
     res.status(201).json(saveVenta);
   } catch (error) {
-    console.error(error); 
+    console.error('Error al crear la venta:', error); 
     res.status(500).json({ message: 'Error al crear la venta', error }); 
   }
 };
+
 
 export const getventas = async (req, res) => {
   try {
