@@ -38,6 +38,7 @@ import { login,
         crearcompras,
         eliminarcompras,
         modificarcompras 
+        
 } from '../controllers/auto_controllers.js';
 import { registerS, loginS } from '../schemas/validacion.js';
 
