@@ -522,8 +522,7 @@ export const Rcantidad = async (req, res) => {
   const { ServicioID } = req.params;
   const { cantidad } = req.body;
 
-  // Validar que 'cantidad' sea un número positivo
-  const cantidadNumerica = Number(cantidad); // Convertir la cantidad a número
+  const cantidadNumerica = Number(cantidad);
 
   if (!cantidad || isNaN(cantidadNumerica) || cantidadNumerica <= 0) {
     return res.status(400).json({ message: 'La cantidad debe ser un número positivo.' });

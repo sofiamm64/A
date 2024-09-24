@@ -67,7 +67,7 @@ router.delete('/servicios/:ServicioID', autenticacion, eliminarservicios);
 router.put('/servicios/:ServicioID', autenticacion, modificarservicios);
 
 router.get('/ventas', autenticacion, getsventas);
-router.get('/ventas/:VentaID', autenticacion, getventas);
+router.get('/ventas/:id', autenticacion, getventas);
 router.post('/ventas', autenticacion, crearventas);
 router.delete('/ventas/:id', autenticacion, eliminarventas);
 router.put('/ventas/:id', autenticacion, modificarventas);
