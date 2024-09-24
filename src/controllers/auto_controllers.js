@@ -304,6 +304,7 @@ export const modificarservicios = async (req, res) => {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// Obtener todas las ventas
 export const getsventas = async (req, res) => {
   try {
     const ventas = await Ventas.find();
@@ -312,8 +313,6 @@ export const getsventas = async (req, res) => {
     res.status(500).json({ mensaje: error.message });
   }
 };
-
-
 export const crearventas = async (req, res) => {
   try {
     const { VentaID, ClienteID, ServicioID, Cantidad, PrecioU, FechaVenta, Tipo } = req.body;
@@ -321,20 +320,21 @@ export const crearventas = async (req, res) => {
     const total = (Cantidad || 0) * (PrecioU || 0);
 
     const nuevaVenta = new Ventas({
-      VentaID,  
+      VentaID,
       ClienteID,
       ServicioID,
       Cantidad: Cantidad || 0,
       PrecioU: PrecioU || 0,
-      Total: total, 
-      FechaVenta: new Date(FechaVenta), 
-      Tipo: Tipo || 'pendiente', 
+      Total: total,
+      FechaVenta: new Date(FechaVenta),
+      Tipo: Tipo || 'pendiente',
     });
 
     const saveVenta = await nuevaVenta.save();
 
-    if (Tipo === 'completado'){
-      await updateStock (ServicioID, -1)
+    // Actualizar el stock solo si la venta es completada
+    if (Tipo === 'completado') {
+      await updateStock(ServicioID, -Cantidad); // Restar la cantidad vendida
     }
 
     res.status(201).json(saveVenta);
@@ -343,7 +343,6 @@ export const crearventas = async (req, res) => {
     res.status(500).json({ mensaje: error.message });
   }
 };
-
 export const getventas = async (req, res) => {
   try {
     const venta = await Ventas.findOne({ VentaID: req.params.VentaID });
@@ -353,7 +352,6 @@ export const getventas = async (req, res) => {
     res.status(500).json({ mensaje: error.message });
   }
 };
-
 export const eliminarventas = async (req, res) => {
   const { VentaID } = req.params; // Uso de VentaID
   try {
@@ -365,7 +363,6 @@ export const eliminarventas = async (req, res) => {
     res.status(500).json({ mensaje: error.message });
   }
 };
-
 export const modificarventas = async (req, res) => {
   const { VentaID } = req.params;
 
@@ -378,8 +375,8 @@ export const modificarventas = async (req, res) => {
     const total = (Cantidad || 0) * (PrecioU || 0);
 
     const venta = await Ventas.findOneAndUpdate(
-      { VentaID }, 
-      { Cantidad, PrecioU, Total: total, Estado: Estado || 'pendiente' }, 
+      { VentaID },
+      { Cantidad, PrecioU, Total: total, Estado: Estado || 'pendiente' },
       { new: true }
     );
 
