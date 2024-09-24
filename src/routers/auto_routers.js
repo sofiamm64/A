@@ -54,7 +54,6 @@ router.post('/clientes', autenticacion, crearclientes);
 router.delete('/clientes/:clienteID', autenticacion, eliminarclientes);
 router.put('/clientes/:clienteID', autenticacion, modificarclientes);
 
-
 router.get('/proveedor',autenticacion,getsproveedor);
 router.get('/proveedor/:ProveedorID',autenticacion, getproveedor);
 router.post('/proveedor',autenticacion, crearproveedor);

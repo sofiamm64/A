@@ -307,11 +307,12 @@ export const modificarservicios = async (req, res) => {
 export const getsventas = async (req, res) => {
   try {
     const ventas = await Ventas.find();
-    res.json(ventas);
+    res.status(200).json(ventas);
   } catch (error) {
     res.status(500).json({ mensaje: error.message });
   }
 };
+
 
 export const crearventas = async (req, res) => {
   try {
@@ -390,7 +391,7 @@ export const modificarventas = async (req, res) => {
 export const getscompras = async (req, res) => {
   try {
     const compras = await Compras.find();
-    res.json(compras);
+    res.status(200).json(compras);
   } catch (error) {
     res.status(500).json({ mensaje: error.message });
   }
