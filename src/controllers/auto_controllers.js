@@ -323,18 +323,22 @@ export const crearventas = async (req, res) => {
       return res.status(400).json({ message: 'Faltan campos requeridos' });
     }
 
+    // Convierte Cantidad y PrecioU a número
+    const cantidadNum = Number(Cantidad);
+    const precioUNum = Number(PrecioU);
+
     // Calcula el total de la venta
-    const Total = Cantidad * PrecioU;
+    const Total = cantidadNum * precioUNum;
 
     const nuevaVenta = new Ventas({
       VentaID,
-  ClienteID,
-  ServicioID,
-  Cantidad: Number(Cantidad), // Convierte a número
-  PrecioU: Number(PrecioU), // Convierte a número
-  FechaVenta: new Date(FechaVenta), // Asegúrate de convertir la fecha correctamente
-  Total,
-  Tipo: Tipo || 'pendiente',
+      ClienteID,
+      ServicioID,
+      Cantidad: cantidadNum, // Asegúrate de usar el número aquí
+      PrecioU: precioUNum,    // Asegúrate de usar el número aquí
+      FechaVenta: new Date(FechaVenta), // Asegúrate de convertir la fecha correctamente
+      Total,
+      Tipo: Tipo || 'pendiente', // Valor por defecto
     });
 
     const saveVenta = await nuevaVenta.save();
