@@ -316,37 +316,28 @@ export const getsventas = async (req, res) => {
 
 export const crearventas = async (req, res) => {
   try {
-    const { ClienteID, ServicioID, Cantidad, PrecioU, FechaVenta, Tipo } = req.body;
-
-    const total = (Cantidad || 0) * (PrecioU || 0);
-
+    const { VentaID ,ClienteID, ServicioID, Cantidad, PrecioU, FechaVenta, Tipo } = req.body;
     const nuevaVenta = new Ventas({
-      // VentaID se generará automáticamente
+      VentaID,
       ClienteID,
       ServicioID,
-      Cantidad: Cantidad || 0,
-      PrecioU: PrecioU || 0,
+      Cantidad,
+      PrecioU,
+      FechaVenta,
       Total: total,
-      FechaVenta: new Date(FechaVenta),
       Tipo: Tipo || 'pendiente',
     });
-
     const saveVenta = await nuevaVenta.save();
-
-    if (saveVenta.Tipo === 'completado') {
-      await updateStock(ServicioID, -Cantidad); // Lógica para actualizar stock
-    }
-
     res.status(201).json(saveVenta);
   } catch (error) {
-    console.error(error); // Log para el servidor
-    res.status(500).json({ message: 'Error al crear la venta', error }); // Mensaje de error más específico
+    console.error(error); 
+    res.status(500).json({ message: 'Error al crear la venta', error }); 
   }
 };
 
 export const getventas = async (req, res) => {
   try {
-    const venta = await Ventas.findOne({ VentaID: req.params.VentaID });
+    const venta = await Ventas.findById(req.params.id );
     if (!venta) return res.status(404).json({ mensaje: "Venta no encontrada" });
     res.json(venta);
   } catch (error) {
@@ -355,9 +346,9 @@ export const getventas = async (req, res) => {
 };
 
 export const eliminarventas = async (req, res) => {
-  const { VentaID } = req.params; // Uso de VentaID
+  const { VentaID } = req.params; 
   try {
-    const ventaEliminada = await Ventas.findOneAndDelete({ VentaID }); // Búsqueda por VentaID
+    const ventaEliminada = await Ventas.findOneAndDelete({ VentaID });
     if (!ventaEliminada) return res.status(404).json({ mensaje: "Venta no encontrada" });
     res.status(204).send();
   } catch (error) {
@@ -368,23 +359,17 @@ export const eliminarventas = async (req, res) => {
 
 export const modificarventas = async (req, res) => {
   try {
-    const { id } = req.params;
-    const datosActualizados = req.body;
-
-    // Validar datos antes de actualizar
-    if (!datosActualizados.nombre || !datosActualizados.precio) {
-      return res.status(400).json({ message: 'Faltan datos obligatorios' });
+    const {VentaID} = req.params;
+    if (!req.body || Object.keys(req.body).length === 0) {
+      return res.status(400).json({ mensaje: "Datos para actualizar son requeridos." });
     }
-
-    const ventaActualizada = await Venta.findByIdAndUpdate(id, datosActualizados, { new: true });
-
-    if (!ventaActualizada) {
-      return res.status(404).json({ message: 'Venta no encontrada' });
-    }
-
-    res.status(200).json(ventaActualizada);
+    const venta = await Compras.findByIdAndUpdate(VentaID, req.body, { new: true });
+      if (!venta) {
+        return res.status(404).json({ mensaje: "Compra no encontrada" });
+      }
+      res.json(venta)
   } catch (error) {
-    console.error(error); // Muestra el error en la consola del servidor
+    console.error(error);
     res.status(500).json({ message: 'Error al actualizar la venta', error });
   }
 };
