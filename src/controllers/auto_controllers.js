@@ -37,7 +37,6 @@ export const register = async (req, res) => {
       res.status(500).json({ mensaje: error.message });
   }
 };
-
 export const login = async (req, res) => {
   const { email, contraseña } = req.body;
 
@@ -63,7 +62,6 @@ export const login = async (req, res) => {
       res.status(500).json({ mensaje: "Error interno del servidor" });
   }
 };
-
 export const logout = (req, res) => {
   try {
       res.sendStatus(200);
@@ -71,7 +69,6 @@ export const logout = (req, res) => {
       res.status(500).json({ mensaje: error.message });
   }
 };
-
 export const profile = async (req, res) => {
   try {
       const buscarp = await Usuario.findById(req.user.id);
@@ -88,7 +85,6 @@ export const profile = async (req, res) => {
       res.status(500).json({ mensaje: error.message });
   }
 };
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -172,7 +168,6 @@ export const getsproveedor = async (req, res) => {
     res.status(500).json({ mensaje: error.message });
   }
 };
-
 export const crearproveedor = async (req, res) => {
   try {
     const { ProveedorID, nombre, apellido, telefono, email, Direccion } = req.body;
@@ -190,7 +185,6 @@ export const crearproveedor = async (req, res) => {
     res.status(500).json({ mensaje: error.message });
   }
 };
-
 export const getproveedor = async (req, res) => {
   try {
     const proveedor = await Proveedor.findOne({ ProveedorID: req.params.ProveedorID });
@@ -200,7 +194,6 @@ export const getproveedor = async (req, res) => {
     res.status(500).json({ mensaje: error.message });
   }
 };
-
 export const eliminarproveedor = async (req, res) => {
   try {
     const proveedor = await Proveedor.findOneAndDelete({ ProveedorID: req.params.ProveedorID });
@@ -210,7 +203,6 @@ export const eliminarproveedor = async (req, res) => {
     res.status(500).json({ mensaje: error.message });
   }
 };
-
 export const modificarproveedor = async (req, res) => {
   try {
     const proveedor = await Proveedor.findOneAndUpdate({ ProveedorID: req.params.ProveedorID }, req.body, { new: true });
@@ -220,6 +212,7 @@ export const modificarproveedor = async (req, res) => {
     res.status(500).json({ mensaje: error.message });
   }
 };
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export const getsservicios = async (req, res) => {
@@ -304,7 +297,6 @@ export const modificarservicios = async (req, res) => {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Obtener todas las ventas
 export const getsventas = async (req, res) => {
   try {
     const ventas = await Ventas.find();
@@ -313,7 +305,6 @@ export const getsventas = async (req, res) => {
     res.status(500).json({ mensaje: error.message });
   }
 };
-
 export const crearventas = async (req, res) => {
   try {
     const { VentaID, ClienteID, ServicioID, Cantidad, PrecioU, FechaVenta, Tipo } = req.body;
@@ -360,7 +351,6 @@ export const crearventas = async (req, res) => {
     res.status(500).json({ message: 'Error al crear la venta', error: error.message });
   }
 };
-
 export const getventas = async (req, res) => {
   try {
     const venta = await Ventas.findById(req.params.id );
@@ -370,7 +360,6 @@ export const getventas = async (req, res) => {
     res.status(500).json({ mensaje: error.message });
   }
 };
-
 export const eliminarventas = async (req, res) => {
   try {
     const { id } = req.params;  // Extrae id de req.params
@@ -386,21 +375,18 @@ export const eliminarventas = async (req, res) => {
     res.status(500).json({ mensaje: "Error interno del servidor" });  // Error del servidor
   }
 };
-
-
 export const modificarventas = async (req, res) => {
   const { id } = req.params;  
     const { ClienteID, ServicioID, Cantidad, PrecioU, FechaVenta, Total, Tipo } = req.body;  
 
     try {
-        // Buscar la venta por ID
+
         const venta = await Ventas.findById(id);
         
         if (!venta) {
             return res.status(404).json({ mensaje: 'Venta no encontrada' });
         }
-        
-        // Actualizar los campos de la venta con los nuevos datos
+
         venta.ClienteID = ClienteID;
         venta.ServicioID = ServicioID;
         venta.Cantidad = Cantidad;
@@ -409,13 +395,12 @@ export const modificarventas = async (req, res) => {
         venta.Total = Total;
         venta.Tipo = Tipo;
 
-        // Guardar los cambios en la base de datos
         await venta.save();
 
-        // Responder con la venta actualizada
+
         res.status(200).json(venta);
     } catch (error) {
-        // Manejo de errores: devolver un mensaje de error en caso de fallo
+
         console.error('Error al modificar la venta:', error.message);  // Registrar el error en la consola
         res.status(500).json({ mensaje: 'Error interno del servidor', error: error.message });
     }
@@ -431,7 +416,6 @@ export const getscompras = async (req, res) => {
     res.status(500).json({ mensaje: error.message });
   }
 };
-
 export const crearcompras = async (req, res) => {
   try {
     const { compraID, ProveedorID, ServicioID, Cantidad, PrecioU, Fechacomp, Total, Tipo } = req.body; 
@@ -452,7 +436,6 @@ export const crearcompras = async (req, res) => {
     res.status(500).json({ mensaje: error.message });
   }
 };
-
 export const getcompras = async (req, res) => {
   try {
     const compra = await Compras.findById(req.params.id);
@@ -462,7 +445,6 @@ export const getcompras = async (req, res) => {
     res.status(500).json({ mensaje: error.message });
   }
 };
-
 export const eliminarcompras = async (req, res) => {
   const { compraID } = req.params; 
   try {
@@ -497,6 +479,7 @@ export const modificarcompras = async (req, res) => {
   }
 };
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export const Acantidad = async (req, res) => {
   const { ServicioID } = req.params;
@@ -523,8 +506,6 @@ export const Acantidad = async (req, res) => {
     res.status(500).json({ message: 'Error al actualizar la cantidad.', error: error.message });
   }
 };
-
-
 export const Rcantidad = async (req, res) => {
   const { ServicioID } = req.params;
   const { cantidad } = req.body;
