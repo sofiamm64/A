@@ -355,8 +355,9 @@ export const crearventas = async (req, res) => {
     const saveVenta = await nuevaVenta.save();
     res.status(201).json(saveVenta);
   } catch (error) {
-    console.error('Error al crear la venta:', error); 
-    res.status(500).json({ message: 'Error al crear la venta', error }); 
+    console.error('Error al crear la venta:', error.message);
+    console.error('Stack:', error.stack); 
+    res.status(500).json({ message: 'Error al crear la venta', error: error.message });
   }
 };
 
