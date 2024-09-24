@@ -316,7 +316,7 @@ export const getsventas = async (req, res) => {
 
 export const crearventas = async (req, res) => {
   try {
-    const { ClienteID, ServicioID, Cantidad, PrecioU, FechaVenta, Tipo } = req.body;
+    const { VentaID, ClienteID, ServicioID, Cantidad, PrecioU, FechaVenta, Tipo } = req.body;
 
     // Verifica que todos los campos necesarios estén presentes
     if (!ClienteID || !ServicioID || !Cantidad || !PrecioU || !FechaVenta) {
@@ -327,6 +327,7 @@ export const crearventas = async (req, res) => {
     const Total = Cantidad * PrecioU;
 
     const nuevaVenta = new Ventas({
+      VentaID,
       ClienteID,
       ServicioID,
       Cantidad,
