@@ -8,7 +8,7 @@ const modelvent = new mongoose.Schema({
   Cantidad: { type: Number, required: true, default: 0 },
   PrecioU: { type: Number, required: true, default: 0 },
   Total: { type: Number},
-  Tipo: { type: String, enum: [ 'pendiente', 'cancelado', 'completado'], default: 'pendiente' },
+  Tipo: { type: String, enum: ['pendiente', 'cancelado', 'completada'], default: 'pendiente' },
 }, {
   timestamps: true
 });
