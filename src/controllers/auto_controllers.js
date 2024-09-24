@@ -391,6 +391,7 @@ export const eliminarventas = async (req, res) => {
 export const modificarventas = async (req, res) => {
   const { id } = req.params;  
     const { ClienteID, ServicioID, Cantidad, PrecioU, FechaVenta, Total, Tipo } = req.body;  
+
     try {
         // Buscar la venta por ID
         const venta = await Ventas.findById(id);
