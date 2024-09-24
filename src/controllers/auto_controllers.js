@@ -316,22 +316,27 @@ export const getsventas = async (req, res) => {
 
 export const crearventas = async (req, res) => {
   try {
-    const { VentaID, ClienteID, ServicioID, Cantidad, PrecioU, FechaVenta, Estado } = req.body;
+    const { VentaID, ClienteID, ServicioID, Cantidad, PrecioU, FechaVenta, Tipo } = req.body;
 
     const total = (Cantidad || 0) * (PrecioU || 0);
 
     const nuevaVenta = new Ventas({
-      VentaID,  // Asegurarse de que VentaID es único
+      VentaID,  
       ClienteID,
       ServicioID,
       Cantidad: Cantidad || 0,
       PrecioU: PrecioU || 0,
-      Total: total, // Calcular el total
-      FechaVenta: new Date(FechaVenta), // Formato de fecha
-      Estado: Estado || 'pendiente', // Estado predeterminado
+      Total: total, 
+      FechaVenta: new Date(FechaVenta), 
+      Tipo: Tipo || 'pendiente', 
     });
 
     const saveVenta = await nuevaVenta.save();
+
+    if (Tipo === 'completado'){
+      await updateStock (ServicioID, -1)
+    }
+
     res.status(201).json(saveVenta);
   } catch (error) {
     console.error(error);

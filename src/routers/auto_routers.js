@@ -73,7 +73,7 @@ router.delete('/ventas/:VentaID', autenticacion, eliminarventas);
 router.put('/ventas/:VentaID', autenticacion, modificarventas);
 
 router.put('/servicios/:ServicioID/cantidad', autenticacion, Acantidad);
-router.put('/servicios/:ServicioID/cantidad', autenticacion, Rcantidad);
+router.put('/servicios/:ServicioID/cantidadR', autenticacion, Rcantidad);
 
 router.get('/compras',autenticacion,getscompras);
 router.get('/compras/:compraID',autenticacion, getcompras);
