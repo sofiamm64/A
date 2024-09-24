@@ -347,14 +347,19 @@ export const getventas = async (req, res) => {
 
 export const eliminarventas = async (req, res) => {
   try {
-    const ventaEliminada = await Ventas.findOneAndDelete({ VentaID });
-    if (!ventaEliminada) return res.status(404).json({ mensaje: "Venta no encontrada" });
-    res.status(204).send();
+    const { VentaID } = req.params;  // Extrae VentaID de req.params
+    const ventaEliminada = await Ventas.findOneAndDelete({ VentaID });  // Utiliza VentaID como criterio
+
+    if (!ventaEliminada) {
+      return res.status(404).json({ mensaje: "Venta no encontrada" });  // Si no se encuentra la venta
+    }
+
+    res.status(204).send();  // Respuesta exitosa, sin contenido
   } catch (error) {
-    console.error("Error al eliminar la venta:", error.message);
-    res.status(500).json({ mensaje: "Error interno del servidor" });
+    console.error("Error al eliminar la venta:", error.message);  // Loguear el error
+    res.status(500).json({ mensaje: "Error interno del servidor" });  // Error del servidor
   }
-}
+};
 
 export const modificarventas = async (req, res) => {
   try {
