@@ -8,8 +8,11 @@ export const autenticacion = (req, res, next) => {
   if (!token) return res.status(401).json({ mensaje: "No autorizado" });
 
   jwt.verify(token, tokensecreto, (err, user) => {
-    if (err) return res.status(403).json({ mensaje: "Token inválido" });
-    req.user = user;
-    next();
+    if (err) {
+      console.error("Error en la verificación del token:", err.message);
+      return res.status(403).json({ mensaje: "Token inválido o expirado" });
+    }
+    req.user = user; 
+    next(); 
   });
 };
