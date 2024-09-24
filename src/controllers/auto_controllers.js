@@ -328,13 +328,13 @@ export const crearventas = async (req, res) => {
 
     const nuevaVenta = new Ventas({
       VentaID,
-      ClienteID,
-      ServicioID,
-      Cantidad,
-      PrecioU,
-      FechaVenta: new Date(FechaVenta), // Asegúrate de convertir la fecha correctamente
-      Total,
-      Tipo: Tipo || 'pendiente', // Valor por defecto
+  ClienteID,
+  ServicioID,
+  Cantidad: Number(Cantidad), // Convierte a número
+  PrecioU: Number(PrecioU), // Convierte a número
+  FechaVenta: new Date(FechaVenta), // Asegúrate de convertir la fecha correctamente
+  Total,
+  Tipo: Tipo || 'pendiente',
     });
 
     const saveVenta = await nuevaVenta.save();
